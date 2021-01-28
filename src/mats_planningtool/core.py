@@ -228,7 +228,7 @@ def Timeline_analyzer(science_mode_timeline_path, date):
             **Mode** (*str*): The currently scheduled Mode ath the given date. \n
             **Parameters** (*dict*): The parameters of the Mode. \n
     """
-    from TimelineAnalyzer.Core import Timeline_analyzer
+    from mats_planningtool.TimelineAnalyzer.Core import Timeline_analyzer
 
     Mode, Parameters = Timeline_analyzer(science_mode_timeline_path, date)
 
@@ -265,7 +265,7 @@ def Timeline_Plotter(Science_Mode_Path, OHB_H5_Path="", STK_CSV_PATH="", Timeste
 
 
     """
-    from Timeline_Plotter.Core import Timeline_Plotter
+    from mats_planningtool.TimelinePlotter.Core import Timeline_Plotter
 
     Data_MATS, Data_LP, Time, Time_OHB = Timeline_Plotter(
         Science_Mode_Path=Science_Mode_Path,
@@ -315,7 +315,7 @@ def Plot_Timeline_Plotter_Plots(
 
     """
 
-    from Plot_Timeline_Plotter_Plots.Core import Plot_Timeline_Plotter_Plots
+    from mats_planningtool.PlotTimelinePlotterPlots.Core import Plot_Timeline_Plotter_Plots
 
     Plot_Timeline_Plotter_Plots(FigureDirectory, FilesToPlot)
 
@@ -331,7 +331,7 @@ def MinimalScienceXML_gen():
 
     """
 
-    from XMLGenerator.MinimalScienceXML_gen import MinimalScienceXMLGenerator
+    from mats_planningtool.XMLGenerator.MinimalScienceXML_gen import MinimalScienceXMLGenerator
 
     MinimalScienceXMLGenerator()
 
