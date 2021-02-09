@@ -34,17 +34,14 @@ from .Macros_Commands import Commands, Macros
 from mats_planningtool.Library import dict_comparator
 from mats_planningtool import Globals
 
-OPT_Config_File = importlib.import_module(Globals.Config_File)
 
-Logger = logging.getLogger(OPT_Config_File.Logger_name())
-
+Logger = logging.getLogger("OPT_logger")
 
 "################# Procedures ############################"
 
 
 def Payload_Power_Toggle(
-    root, date, duration, relativeTime, Timeline_settings, CMD_settings={}
-):
+        root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
 
     Commands.Payload_Power_Toggle(
         root,
@@ -59,7 +56,7 @@ def Payload_Power_Toggle(
 "A CMD with fixed arguments used to just turn on the CCDs"
 
 
-def TurnONCCDs(root, date, duration, relativeTime, Timeline_settings, CMD_settings={}):
+def TurnONCCDs(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
 
     relativeTime = Commands.TC_pafCCDMain(
         root,
@@ -86,7 +83,7 @@ def TurnONCCDs(root, date, duration, relativeTime, Timeline_settings, CMD_settin
     )
 
 
-def MODE(root, date, duration, relativeTime, Timeline_settings, CMD_settings={}):
+def MODE(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
 
     # CMD_settings_ConfigFile = {'MODE': 0}
     # CMD_settings = dict_comparator(CMD_settings, CMD_settings_ConfigFile)
@@ -101,7 +98,7 @@ def MODE(root, date, duration, relativeTime, Timeline_settings, CMD_settings={})
     )
 
 
-def PWRTOGGLE(root, date, duration, relativeTime, Timeline_settings, CMD_settings={}):
+def PWRTOGGLE(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
 
     # CMD_settings_ConfigFile = OPT_Config_File.PWRTOGGLE_settings()
     # CMD_settings = dict_comparator(CMD_settings, CMD_settings_ConfigFile)
@@ -114,7 +111,7 @@ def PWRTOGGLE(root, date, duration, relativeTime, Timeline_settings, CMD_setting
     )
 
 
-def UPLOAD(root, date, duration, relativeTime, Timeline_settings, CMD_settings={}):
+def UPLOAD(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
 
     # CMD_settings_ConfigFile = {'PINDEX': 0, 'PTOTAL': 0, 'WFLASH': 0, 'NIMG': 0, 'IMG': 0}
     # CMD_settings = dict_comparator(CMD_settings, CMD_settings_ConfigFile)
@@ -131,7 +128,7 @@ def UPLOAD(root, date, duration, relativeTime, Timeline_settings, CMD_settings={
     )
 
 
-def HTR(root, date, duration, relativeTime, Timeline_settings, CMD_settings={}):
+def HTR(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
 
     # CMD_settings_ConfigFile = {'HTRSEL': 1, 'SET': 2000, 'P': 10, 'I': 0, 'D': 0}
     # CMD_settings = dict_comparator(CMD_settings, CMD_settings_ConfigFile)
@@ -148,7 +145,7 @@ def HTR(root, date, duration, relativeTime, Timeline_settings, CMD_settings={}):
     )
 
 
-def CCD(root, date, duration, relativeTime, Timeline_settings, CMD_settings={}):
+def CCD(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
 
     # CMD_settings_ConfigFile = {'CCDSEL': 1, 'PWR': 1, 'WDW': 4, 'JPEGQ': 95, 'SYNC': 0, 'TEXPIMS': 3000, 'TEXPMS': 1000, 'GAIN': 0, 'NFLUSH': 1023,
     #                             'NRSKIP': 0, 'NRBIN': 1, 'NROW': 50, 'NCSKIP': 0, 'NCBIN': 1, 'NCOL': 200, 'NCBINFPGA': 0, 'SIGMODE': 1}
@@ -179,10 +176,9 @@ def CCD(root, date, duration, relativeTime, Timeline_settings, CMD_settings={}):
 
 
 def CCDBadColumn(
-    root, date, duration, relativeTime, Timeline_settings, CMD_settings={}
-):
+        root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
 
-    CMD_settings_ConfigFile = OPT_Config_File.CCDBadColumn_settings()
+    CMD_settings_ConfigFile = configFile.CCDBadColumn_settings()
     CMD_settings = dict_comparator(CMD_settings, CMD_settings_ConfigFile)
     Commands.TC_pafCCDBadColumn(
         root,
@@ -196,10 +192,9 @@ def CCDBadColumn(
 
 
 def CCDFlushBadColumns(
-    root, date, duration, relativeTime, Timeline_settings, CMD_settings={}
-):
+        root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
 
-    CMD_settings_ConfigFile = OPT_Config_File.CCDFlushBadColumns_settings()
+    CMD_settings_ConfigFile = configFile.CCDFlushBadColumns_settings()
     CMD_settings = dict_comparator(CMD_settings, CMD_settings_ConfigFile)
     Commands.TC_pafCCDFlushBadColumns(
         root,
@@ -210,9 +205,9 @@ def CCDFlushBadColumns(
     )
 
 
-def CCDBIAS(root, date, duration, relativeTime, Timeline_settings, CMD_settings={}):
+def CCDBIAS(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
 
-    CMD_settings_ConfigFile = OPT_Config_File.CCDBIAS_settings()
+    CMD_settings_ConfigFile = configFile.CCDBIAS_settings()
     CMD_settings = dict_comparator(CMD_settings, CMD_settings_ConfigFile)
 
     Commands.TC_pafCCDBIAS(
@@ -228,7 +223,7 @@ def CCDBIAS(root, date, duration, relativeTime, Timeline_settings, CMD_settings=
     )
 
 
-def CCDSNAPSHOT(root, date, duration, relativeTime, Timeline_settings, CMD_settings={}):
+def CCDSNAPSHOT(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
 
     # CMD_settings_ConfigFile = {'CCDSEL': 1}
     # CMD_settings = dict_comparator(CMD_settings, CMD_settings_ConfigFile)
@@ -242,7 +237,7 @@ def CCDSNAPSHOT(root, date, duration, relativeTime, Timeline_settings, CMD_setti
 
 
 def CCDTRANSPARENTCMD(
-    root, date, duration, relativeTime, Timeline_settings, CMD_settings={}
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
 ):
 
     # CMD_settings_ConfigFile = {'CCDSEL': 1, 'CHAR': 0}
@@ -257,7 +252,7 @@ def CCDTRANSPARENTCMD(
     )
 
 
-def Dbg(root, date, duration, relativeTime, Timeline_settings, CMD_settings={}):
+def Dbg(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
 
     # CMD_settings_ConfigFile = {'CCDSEL': 1}
     # CMD_settings = dict_comparator(CMD_settings, CMD_settings_ConfigFile)
@@ -270,9 +265,9 @@ def Dbg(root, date, duration, relativeTime, Timeline_settings, CMD_settings={}):
     )
 
 
-def PM(root, date, duration, relativeTime, Timeline_settings, CMD_settings={}):
+def PM(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
 
-    CMD_settings_ConfigFile = OPT_Config_File.PM_settings()
+    CMD_settings_ConfigFile = configFile.PM_settings()
     CMD_settings = dict_comparator(CMD_settings, CMD_settings_ConfigFile)
     Commands.TC_pafPM(
         root,
@@ -285,7 +280,7 @@ def PM(root, date, duration, relativeTime, Timeline_settings, CMD_settings={}):
 
 
 def CCDSynchronize(
-    root, date, duration, relativeTime, Timeline_settings, CMD_settings={}
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
 ):
 
     Commands.TC_pafCCDSYNCHRONIZE(
@@ -303,7 +298,7 @@ def CCDSynchronize(
 
 
 def LimbPointingAltitudeOffset(
-    root, date, duration, relativeTime, Timeline_settings, CMD_settings={}
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
 ):
 
     # CMD_settings_ConfigFile = {'Initial': 92500, 'Final': 92500, 'Rate': 0}
@@ -320,7 +315,7 @@ def LimbPointingAltitudeOffset(
 
 
 def ArgFreezeStart(
-    root, date, duration, relativeTime, Timeline_settings, CMD_settings={}
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
 ):
 
     # CMD_settings_ConfigFile = {'StartTime': 0}
@@ -335,7 +330,7 @@ def ArgFreezeStart(
 
 
 def ArgFreezeDuration(
-    root, date, duration, relativeTime, Timeline_settings, CMD_settings={}
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
 ):
 
     # CMD_settings_ConfigFile = {'FreezeDuration': 0}
@@ -350,7 +345,7 @@ def ArgFreezeDuration(
 
 
 def ArgEnableYawComp(
-    root, date, duration, relativeTime, Timeline_settings, CMD_settings={}
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
 ):
 
     Commands.TC_acfArgEnableYawComp(

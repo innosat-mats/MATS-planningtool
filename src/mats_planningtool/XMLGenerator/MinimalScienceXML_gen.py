@@ -11,15 +11,14 @@ import os
 import importlib
 import datetime
 
-from mats_planningtool import Globals, Library
+from mats_planningtool import Library
 
-OPT_Config_File = importlib.import_module(Globals.Config_File)
 # from mats_planningtool_Config_File import Timeline_settings, initialConditions, Logger_name, Version
 
-Logger = logging.getLogger(OPT_Config_File.Logger_name())
+Logger = logging.getLogger("OPT_logger")
 
 
-def MinimalScienceXMLGenerator():
+def MinimalScienceXMLGenerator(configFile):
     """The Core function of *MinimalScienceXML_gen* part of *OPT*.
 
     The generated XML will: \n
@@ -39,20 +38,20 @@ def MinimalScienceXMLGenerator():
         pass
 
     "Reset temporary Globals"
-    Globals.latestRelativeTime = 0
-    Globals.current_pointing = None
-    Globals.LargestSetTEXPMS = 0
+    configFile.latestRelativeTime = 0
+    configFile.current_pointing = None
+    configFile.LargestSetTEXPMS = 0
 
     "############# Set up Logger #################################"
-    Library.SetupLogger(OPT_Config_File.Logger_name())
+    Library.SetupLogger(configFile.Logger_name())
 
     "############# Get Settings from the Configuration File #########"
-    CCDBIAS_settings = OPT_Config_File.CCDBIAS_settings()
-    CCDFlushBadColumns_settings = OPT_Config_File.CCDFlushBadColumns_settings()
-    CCDBadColumn_settings = OPT_Config_File.CCDBadColumn_settings()
-    Timeline_settings = OPT_Config_File.Timeline_settings()
-    CCD_settings = OPT_Config_File.CCD_macro_settings("HighResIR")
-    PM_settings = OPT_Config_File.PM_settings()
+    CCDBIAS_settings = configFile.CCDBIAS_settings()
+    CCDFlushBadColumns_settings = configFile.CCDFlushBadColumns_settings()
+    CCDBadColumn_settings = configFile.CCDBadColumn_settings()
+    Timeline_settings = configFile.Timeline_settings()
+    CCD_settings = configFile.CCD_macro_settings("HighResIR")
+    PM_settings = configFile.PM_settings()
 
     "######## SET CMD separation to 2 sec #################"
     Timeline_settings["CMD_separation"] = 2
@@ -90,7 +89,7 @@ def MinimalScienceXMLGenerator():
     etree.SubElement(root[0], "comment")
     root[0][3].text = (
         "This command sequence is a 'Minimum Science' Innosat timeline for MATS, created with OPT. Configuration File used: "
-        + Globals.Config_File
+        + configFile.config_file_name
     )
 
     root.append(etree.Element("listOfCommands"))
@@ -148,8 +147,8 @@ def MinimalScienceXMLGenerator():
     f.close()
 
     "Reset temporary Globals"
-    Globals.latestRelativeTime = 0
-    Globals.current_pointing = None
-    Globals.LargestSetTEXPMS = 0
+    configFile.latestRelativeTime = 0
+    configFile.current_pointing = None
+    configFile.LargestSetTEXPMS = 0
 
     logging.shutdown()

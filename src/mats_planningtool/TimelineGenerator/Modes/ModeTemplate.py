@@ -18,15 +18,13 @@ import logging
 import importlib
 
 from mats_planningtool.Library import scheduler
-from mats_planningtool import Globals
 
-OPT_Config_File = importlib.import_module(Globals.Config_File)
-Logger = logging.getLogger(OPT_Config_File.Logger_name())
+Logger = logging.getLogger("OPT_logger")
 
 
-def ModeX(Occupied_Timeline):
+def ModeX(Occupied_Timeline, configFile):
     "Plan to schedule the Mode at the start of the timeline"
-    initial_StartDate = ephem.Date(OPT_Config_File.Timeline_settings()['start_date'])
+    initial_StartDate = ephem.Date(configFile.Timeline_settings()['start_date'])
 
     "Set a duration of the Mode in seconds, which in turns sets the endDate"
     duration = 600

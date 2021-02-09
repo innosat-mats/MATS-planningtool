@@ -45,13 +45,12 @@ import importlib
 import datetime
 
 from mats_planningtool import Globals, Library
-OPT_Config_File = importlib.import_module(Globals.Config_File)
 #from mats_planningtool_Config_File import Timeline_settings, initialConditions, Logger_name, Version
 
-Logger = logging.getLogger(OPT_Config_File.Logger_name())
+Logger = logging.getLogger("OPT_logger")
 
 
-def XML_generator(SCIMOD_Path):
+def XML_generator(configFile, SCIMOD_Path):
     """The core function of the XML_gen program.
 
     Reads a *Science Mode Timeline* .json file. Then chronologically goes though the *Science Mode Timeline*, calling for the *XML_generator_select* function.
@@ -72,17 +71,14 @@ def XML_generator(SCIMOD_Path):
         pass
 
     "Reset temporary Globals"
-    Globals.latestRelativeTime = 0
-    Globals.current_pointing = None
-    Globals.LargestSetTEXPMS = 0
+    configFile.latestRelativeTime = 0
+    configFile.current_pointing = None
+    configFile.LargestSetTEXPMS = 0
 
     ############# Set up Logger #################################
-    Library.SetupLogger(OPT_Config_File.Logger_name())
+    Library.SetupLogger(configFile.Logger_name())
 
     Logger.info('Start of Program')
-    Logger.info('')
-    Version = OPT_Config_File.Version()
-    Logger.info('Configuration File used: '+Globals.Config_File+', Version: '+Version)
     Logger.info('')
 
     ################# Read Science Mode Timeline json file ############
@@ -96,26 +92,20 @@ def XML_generator(SCIMOD_Path):
     if(str(SCIMOD[0][0]) == 'Timeline_settings'):
         Timeline_settings_from_Timeline = SCIMOD[0][3]
         Timeline_settings = Library.dict_comparator(
-            Timeline_settings_from_Timeline, OPT_Config_File.Timeline_settings())
+            Timeline_settings_from_Timeline, configFile.Timeline_settings())
         Logger.info('Timeline_settings found in Science Mode Timeline. Using them')
 
         TLE_from_Timeline = SCIMOD[0][4]
-        TLE_from_configFile = OPT_Config_File.getTLE()
 
-        if(TLE_from_Timeline[0] != TLE_from_configFile[0] or TLE_from_Timeline[1] != TLE_from_configFile[1]):
-            Logger.error(
-                'Mismatch between TLE in Science Mode Timeline and in ConfigFile. Check your chosen ConfigFile and maybe rerun OPT.Timeline_gen. Exiting...')
-            raise ValueError
     else:
-        Logger.info(
+        raise ValueError(
             'Timeline_settings not found in Science Mode Timeline. Using the ones in the chosen ConfigFile')
-        Timeline_settings = OPT_Config_File.Timeline_settings()
 
     #"Save the Timeline_settings to be used in a Global variable"
     #Globals.Timeline_settings = Timeline_settings
 
     ################ Get settings for Timeline from Config module ############
-    timeline_duration = Timeline_settings['duration']
+    timeline_duration = Timeline_settings['duration']['duration']
     Logger.info('timeline_duration: '+str(timeline_duration))
 
     timeline_start = ephem.Date(Timeline_settings['start_date'])
@@ -163,8 +153,7 @@ def XML_generator(SCIMOD_Path):
 
         Logger.debug('Call XML_generator_select')
         XML_generator_select(root=root, duration=mode_duration, relativeTime=relativeTime,
-                             name=Entry_Name, date=ephem.Date(StartDate), Settings=Settings,
-                             Timeline_settings=Timeline_settings)
+                             name=Entry_Name, date=ephem.Date(StartDate), Settings=Settings,                       Timeline_settings=Timeline_settings, configFile=configFile)
 
     ### Rewrite path string to allow it to be in the name of the generated XML command file ###
     SCIMOD_Path = SCIMOD_Path.replace('\\', '_')
@@ -251,7 +240,7 @@ def XML_Initial_Basis_Creator(timeline_start, timeline_duration, SCIMOD_Path):
 
 ####################### Mode selecter ###################################
 
-def XML_generator_select(name, root, date, duration, relativeTime, Settings, Timeline_settings):
+def XML_generator_select(name, root, date, duration, relativeTime, Settings, Timeline_settings, configFile):
     '''Subfunction, Selects corresponding mode, test or CMD function in the package *Modes_and_Tests* from the variable *name*.
 
     Calls for any function named *X* in the modules *MODES*, *SeparateCmds*, and *Tests*, where X is the string in the input *name*.
@@ -283,11 +272,11 @@ def XML_generator_select(name, root, date, duration, relativeTime, Settings, Tim
 
     "Check if any settings were given in the Science Mode Timeline"
     if(len(Settings.keys()) == 0):
-        Mode_Test_SeparateCmd_func(root, date, duration, relativeTime,
-                                   Timeline_settings)
+        Mode_Test_SeparateCmd_func(
+            root, date, duration, relativeTime, Timeline_settings, configFile)
     else:
         Mode_Test_SeparateCmd_func(root, date, duration, relativeTime,
-                                   Timeline_settings, Settings)
+                                   Timeline_settings, configFile, Settings)
 
 
 ####################### End of Mode selecter #############################

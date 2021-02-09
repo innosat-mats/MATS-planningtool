@@ -18,8 +18,7 @@ from mats_planningtool import Library, Globals
 
 from . import Commands
 
-OPT_Config_File = importlib.import_module(Globals.Config_File)
-Logger = logging.getLogger(OPT_Config_File.Logger_name())
+Logger = logging.getLogger("OPT_logger")
 
 
 def Operational_Limb_Pointing_macro(

@@ -17,14 +17,12 @@ from skyfield import api
 
 
 from mats_planningtool.Library import deg2HMS, Satellite_Simulator
-from mats_planningtool import Globals
 from .Mode12X import UserProvidedDateScheduler
 
-OPT_Config_File = importlib.import_module(Globals.Config_File)
-Logger = logging.getLogger(OPT_Config_File.Logger_name())
+Logger = logging.getLogger("OPT_logger")
 
 
-def Mode120(Occupied_Timeline):
+def Mode120(Occupied_Timeline, configFile):
     """Core function for the scheduling of Mode120.
 
     Determines if the scheduled date should be determined by simulating MATS or be user provided.
@@ -39,18 +37,18 @@ def Mode120(Occupied_Timeline):
 
     """
 
-    Settings = OPT_Config_File.Mode120_settings()
+    Settings = configFile.Mode120_settings()
 
     # for V_offset_Index in range(len(Settings['V_offset'])):
 
     if(Settings['automatic'] == False):
         Occupied_Timeline, comment = UserProvidedDateScheduler(
-            Occupied_Timeline, Settings)
+            Occupied_Timeline, Settings, configFile)
     elif(Settings['automatic'] == True):
-        SpottedStarList = Mode120_date_calculator()
+        SpottedStarList = Mode120_date_calculator(configFile)
 
         Occupied_Timeline, comment = Mode120_date_select(
-            Occupied_Timeline, SpottedStarList)
+            Occupied_Timeline, SpottedStarList, configFile)
 
     return Occupied_Timeline, comment
 
@@ -59,7 +57,7 @@ def Mode120(Occupied_Timeline):
 #####################################################################################################
 
 
-def Mode120_date_calculator():
+def Mode120_date_calculator(configFile):
     """Subfunction, Simulates MATS FOV and stars.
 
     Determines when stars are entering the FOV at an vertical offset-angle equal to *#V-offset*, and also being 
@@ -77,12 +75,12 @@ def Mode120_date_calculator():
 
     """
 
-    Timeline_settings = OPT_Config_File.Timeline_settings()
-    Mode120_settings = OPT_Config_File.Mode120_settings()
+    Timeline_settings = configFile.Timeline_settings()
+    Mode120_settings = configFile.Mode120_settings()
 
     ######################################################
     "Check how many times Mode120 have been scheduled"
-    Mode120Iteration = Globals.Mode120Iteration
+    Mode120Iteration = configFile.Mode120Iteration
     "Make the V_offset_Index go from 0 to len(Mode120_settings['V_offset'] for each time Mode120 is scheduled"
     V_offset_Index = (Mode120Iteration-1) % (len(Mode120_settings['V_offset']))
 
@@ -97,11 +95,11 @@ def Mode120_date_calculator():
     Logger.debug('V_offset set to [degrees]: '+str(V_offset))
     Logger.debug('yaw_correction set to: '+str(yaw_correction))
 
-    TLE = OPT_Config_File.getTLE()
+    TLE = configFile.getTLE()
     Logger.debug('TLE used: '+TLE[0]+TLE[1])
 
     TimeSkips = 0
-    Timeskip = Mode120_settings['TimeSkip']
+    Timeskip = Mode120_settings['TimeSkip']['TimeSkip']
 
     ####################################################
 
@@ -112,10 +110,10 @@ def Mode120_date_calculator():
     timestep = Mode120_settings['timestep']  # In seconds
     Logger.info('timestep set to: '+str(timestep)+' s')
 
-    if(Mode120_settings['TimeToConsider'] <= Timeline_settings['duration']):
-        duration = Mode120_settings['TimeToConsider']
+    if(Mode120_settings['TimeToConsider']['TimeToConsider'] <= Timeline_settings['duration']['duration']):
+        duration = Mode120_settings['TimeToConsider']['TimeToConsider']
     else:
-        duration = Timeline_settings['duration']
+        duration = Timeline_settings['duration']['duration']
     Logger.info('Duration set to: '+str(duration)+' s')
 
     timesteps = int(ceil(duration / timestep)) + 2
@@ -357,7 +355,7 @@ def Mode120_date_calculator():
     while(True):
         try:
             file_directory = os.path.join('Output', sys._getframe(
-                1).f_code.co_name+'_Visible_Stars__'+Globals.Config_File+'__V_offset'+str(V_offset)+'.csv')
+                1).f_code.co_name+'_Visible_Stars__'+os.path.split(configFile.config_file_name)[1]+'__V_offset'+str(V_offset)+'.csv')
             with open(file_directory, 'w', newline='') as write_file:
                 writer = csv.writer(write_file, dialect='excel-tab')
                 writer.writerows(star_list_excel)
@@ -385,7 +383,7 @@ def Mode120_date_calculator():
 #####################################################################################################
 
 
-def Mode120_date_select(Occupied_Timeline, SpottedStarList):
+def Mode120_date_select(Occupied_Timeline, SpottedStarList, configFile):
     """Subfunction, Schedules a simulated date.
 
     A date is selected for which the brightest star is visible at the minimum amount of H-offset in the FOV.
@@ -403,8 +401,8 @@ def Mode120_date_select(Occupied_Timeline, SpottedStarList):
 
     """
 
-    Mode120_settings = OPT_Config_File.Mode120_settings()
-    Timeline_settings = OPT_Config_File.Timeline_settings()
+    Mode120_settings = configFile.Mode120_settings()
+    Timeline_settings = configFile.Timeline_settings()
 
     Logger.info('Start of filtering function')
 
@@ -486,7 +484,7 @@ def Mode120_date_select(Occupied_Timeline, SpottedStarList):
             Mode120_settings['freeze_start'] + Mode120_settings['freeze_duration'] + Timeline_settings['mode_separation']))
 
         "Check that the scheduled date is not before the start of the timeline"
-        if(StartDate < ephem.Date(OPT_Config_File.Timeline_settings()['start_date'])):
+        if(StartDate < ephem.Date(configFile.Timeline_settings()['start_date'])):
             iterations = iterations + 1
             restart = True
             continue

@@ -45,9 +45,7 @@ import ntpath
 from mats_planningtool import Library, MATS_coordinates, Globals
 
 
-OPT_Config_File = importlib.import_module(Globals.Config_File)
-Logger = logging.getLogger(OPT_Config_File.Logger_name())
-
+Logger = logging.getLogger("OPT_logger")
 rcParams["figure.max_open_warning"] = 30
 
 
@@ -72,9 +70,8 @@ def Timeline_Plotter(Science_Mode_Path, OHB_H5_Path, STK_CSV_FILE, Timestep=10):
     """
 
     ############# Set up Logger #################################
-    Library.SetupLogger(OPT_Config_File.Logger_name())
-    Logger = logging.getLogger(OPT_Config_File.Logger_name())
-
+    Library.SetupLogger(configFile.Logger_name())
+    Logger = logging.getLogger("OPT_logger")
     Version = OPT_Config_File.Version()
     Logger.info(
         "Configuration File used: " + Globals.Config_File + ", Version: " + Version

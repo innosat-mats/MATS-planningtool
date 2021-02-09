@@ -83,7 +83,7 @@ On POSIX system: make sure gzip is installed and in your path!On Windows: same f
 
 """
 
-
+'''
 def Copy_ConfigFile(Config_File_Name):
     """Makes a copy of the *_ConfigFile* located in *Operational_Planning_Tool*.
 
@@ -131,8 +131,9 @@ def Copy_ConfigFile(Config_File_Name):
             shutil.copyfile(ConfigFile, Config_File_Name)
         elif answer == "n":
             pass
+'''
 
-
+'''
 def Set_ConfigFile(Config_File_Name, Date=None, TLE1="", TLE2=""):
     """ Sets the name of the *.py* file that shall be used as a *Configuration file* for OPT. 
 
@@ -157,9 +158,10 @@ def Set_ConfigFile(Config_File_Name, Date=None, TLE1="", TLE2=""):
     Globals.StartTime = Date
     "Will be used if not set to ('','')"
     Globals.TLE = (TLE1, TLE2)
+'''
 
 
-def CheckConfigFile():
+def CheckConfigFile(configFile):
     """Checks the values of the settings in the *Configuration File* chosen with *Set_ConfigFile*.
 
     Also prints out the currently selected *Configuration File* and which starting date and TLE it currently uses.
@@ -167,7 +169,7 @@ def CheckConfigFile():
     """
     from mats_planningtool.CheckConfigFile.Core import CheckConfigFile
 
-    CheckConfigFile()
+    CheckConfigFile(configFile)
 
 
 def Timeline_gen():

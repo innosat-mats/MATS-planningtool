@@ -10,11 +10,10 @@ import importlib
 
 from mats_planningtool import Globals
 
-OPT_Config_File = importlib.import_module(Globals.Config_File)
-Logger = logging.getLogger(OPT_Config_File.Logger_name())
+Logger = logging.getLogger("OPT_logger")
 
 
-def Mode1_2_5(Occupied_Timeline):
+def Mode1_2_5(Occupied_Timeline, configFile):
     """Core function for the scheduling of *Operational Science Modes* (Mode 1, 2, and 5).
 
     Which Mode that will be scheduled depends on *Timeline_settings['Choose_Operational_Science_Mode']*.
@@ -31,7 +30,7 @@ def Mode1_2_5(Occupied_Timeline):
 
     """
 
-    Timeline_settings = OPT_Config_File.Timeline_settings()
+    Timeline_settings = configFile.Timeline_settings()
 
     "Earliest possible date an Operational Science Mode is scheduled"
     initial_date = ephem.Date(Timeline_settings['start_date'])
@@ -67,7 +66,7 @@ def Mode1_2_5(Occupied_Timeline):
         # If Occupied_Timeline_values is empty then just schedule until the end of the timeline
         if(len(Occupied_Timeline_values) == 0):
             timeline_end = ephem.Date(ephem.Date(
-                Timeline_settings['start_date'])+ephem.second*Timeline_settings['duration'])
+                Timeline_settings['start_date'])+ephem.second*Timeline_settings['duration']['duration'])
             date = initial_date
             endDate = ephem.Date(timeline_end - ephem.second *
                                  Timeline_settings['mode_separation'])
@@ -89,7 +88,7 @@ def Mode1_2_5(Occupied_Timeline):
         # For last iteration; Check if there is spacing in between end of the last mode and the end of the timeline
         elif(x == len(Occupied_Timeline_values)):
             timeline_end = ephem.Date(ephem.Date(
-                Timeline_settings['start_date'])+ephem.second*Timeline_settings['duration'])
+                Timeline_settings['start_date'])+ephem.second*Timeline_settings['duration']['duration'])
             time_between_modes = timeline_end - Occupied_Timeline_values[-1][1]
             if(time_between_modes > minDuration):
                 date = Occupied_Timeline_values[-1][1]

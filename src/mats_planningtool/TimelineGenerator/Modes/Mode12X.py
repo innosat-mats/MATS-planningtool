@@ -14,11 +14,10 @@ from skyfield import api
 from mats_planningtool.Library import Satellite_Simulator, deg2HMS, scheduler
 from mats_planningtool import Globals, MATS_coordinates
 
-OPT_Config_File = importlib.import_module(Globals.Config_File)
-Logger = logging.getLogger(OPT_Config_File.Logger_name())
+Logger = logging.getLogger("OPT_logger")
 
 
-def UserProvidedDateScheduler(Occupied_Timeline, Settings):
+def UserProvidedDateScheduler(Occupied_Timeline, Settings, configFile):
     """Schedules a single user provided date.
 
     Used by Mode120-124.
@@ -38,7 +37,7 @@ def UserProvidedDateScheduler(Occupied_Timeline, Settings):
     "Get the name of the parent function, which is always defined as the name of the mode"
     Mode_name = sys._getframe(1).f_code.co_name
 
-    Timeline_settings = OPT_Config_File.Timeline_settings()
+    Timeline_settings = configFile.Timeline_settings()
 
     if(Settings['start_date'] == '0'):
         StartDate = ephem.Date(Timeline_settings['start_date'])
@@ -66,7 +65,7 @@ def UserProvidedDateScheduler(Occupied_Timeline, Settings):
     return Occupied_Timeline, comment
 
 
-def date_calculator(Settings):
+def date_calculator(Settings, configFile):
     """Simulates MATS FOV and stars.
 
     Used by Mode121-123.
@@ -81,7 +80,7 @@ def date_calculator(Settings):
 
     """
 
-    Timeline_settings = OPT_Config_File.Timeline_settings()
+    Timeline_settings = configFile.Timeline_settings()
 
     "To either calculate when stars are visible and schedule from that data or just schedule at a given time given by Mode120_settings['start_date']"
     if(Settings['automatic'] == False):
@@ -106,10 +105,10 @@ def date_calculator(Settings):
         timestep = Settings['timestep']  # In seconds
         Logger.info('timestep set to: '+str(timestep)+' s')
 
-        if(Settings['TimeToConsider'] <= Timeline_settings['duration']):
-            duration = Settings['TimeToConsider']
+        if(Settings['TimeToConsider']['TimeToConsider'] <= Timeline_settings['duration']['duration']):
+            duration = Settings['TimeToConsider']['TimeToConsider']
         else:
-            duration = Timeline_settings['duration']
+            duration = Timeline_settings['duration']['duration']
 
         Logger.info('Duration set to: '+str(duration)+' s')
 
@@ -187,7 +186,7 @@ def date_calculator(Settings):
         Logger.debug('V_FOV set to [degrees]: '+str(V_FOV))
         Logger.debug('yaw_correction set to: '+str(yaw_correction))
 
-        TLE = OPT_Config_File.getTLE()
+        TLE = configFile.getTLE()
         Logger.debug('TLE used: '+TLE[0]+TLE[1])
 
         MATS_skyfield = api.EarthSatellite(TLE[0], TLE[1])
@@ -197,7 +196,8 @@ def date_calculator(Settings):
 
         TimeSkips = 0
         #time_skip_counter = 0
-        Timeskip = Settings['TimeSkip']  # Days to skip ahead after each completed orbit
+        # Days to skip ahead after each completed orbit
+        Timeskip = Settings['TimeSkip']['TimeSkip']
         current_time = initial_time
 
         Logger.info('')
@@ -315,7 +315,7 @@ def date_calculator(Settings):
 ##################################################################################################
 
 
-def date_select(Occupied_Timeline, date_magnitude_array, Settings):
+def date_select(Occupied_Timeline, date_magnitude_array, Settings, configFile):
     """Schedules a simulated date.
 
     Used by Mode121-123. A date is selected for when the brightest star visible; has the faintest magntitude compared
@@ -335,7 +335,7 @@ def date_select(Occupied_Timeline, date_magnitude_array, Settings):
     Logger.info('Start of filtering function')
     Logger.debug('date_magnitude_array: '+str(date_magnitude_array))
 
-    Timeline_settings = OPT_Config_File.Timeline_settings()
+    Timeline_settings = configFile.Timeline_settings()
 
     "Get the name of the parent function, which is always defined as the name of the mode"
     Mode_name = sys._getframe(1).f_code.co_name

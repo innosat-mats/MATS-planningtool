@@ -19,7 +19,7 @@ Mode120Iteration = Only applicable to Timeline_gen. Used to keep track of the cu
 Mode124Iteration = Only applicable to Timeline_gen. Used to keep track of the current iteration of the scheduling process for Mode124. Used to cycle through the V_offsets chosen in the Configuration File. \n
 """
 
-Config_File = 'OPT_Config_File'
+Config_File = '/home/olemar/Projects/MATS/MATS-planningtool/data/Config_File_Original.py'
 StartTime = None
 TLE = ('', '')
 current_pointing = None

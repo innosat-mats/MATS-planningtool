@@ -10,10 +10,8 @@ import importlib
 from mats_planningtool import Globals
 from .Mode12X import date_calculator, date_select, UserProvidedDateScheduler
 
-OPT_Config_File = importlib.import_module(Globals.Config_File)
 
-
-def Mode123(Occupied_Timeline):
+def Mode123(Occupied_Timeline, configFile):
     """Core function for the scheduling of Mode121.
 
     Determines if the scheduled date should be determined by simulating MATS or be user provided.
@@ -27,15 +25,15 @@ def Mode123(Occupied_Timeline):
             (str): Comment regarding the result of scheduling of the mode.
 
     """
-    Settings = OPT_Config_File.Mode123_settings()
+    Settings = configFile.Mode123_settings()
 
     if(Settings['automatic'] == False):
         Occupied_Timeline, comment = UserProvidedDateScheduler(
-            Occupied_Timeline, Settings)
+            Occupied_Timeline, Settings, configFile)
     elif(Settings['automatic'] == True):
-        date_magnitude_array = date_calculator(Settings)
+        date_magnitude_array = date_calculator(Settings, configFile)
 
         Occupied_Timeline, comment = date_select(
-            Occupied_Timeline, date_magnitude_array, Settings)
+            Occupied_Timeline, date_magnitude_array, Settings, configFile)
 
     return Occupied_Timeline, comment

@@ -7,9 +7,9 @@ import xmltodict
 
 def read_xml(filename):
     """Reads in the XML to be converted
-    
+
     Reads a *XML-Timeline*  file. And returns a dictionary
-    
+
     Arguments:
         filename (str): A string containing the path to the Timeline-XML file.
     Returns:
@@ -77,13 +77,13 @@ def write_footer(plutopath="tmp.plp"):
 def write_tcArgument(pafCommand, plutopath="tmp.plp"):
     if not check_payload_command(pafCommand):
         raise ValueError(
-            "Command "
+            "Invalid Command "
             + pafCommand["@mnemonic"]
             + " PLUTO generator only supports Platform commands"
         )
     elif pafCommand["@mnemonic"] == "TC_pafPWRTOGGLE":
         raise ValueError(
-            "Command "
+            "Redundant Command "
             + pafCommand["@mnemonic"]
             + " PLUTO generator will remove powertoggles"
         )
@@ -127,11 +127,11 @@ def write_wait(wait_time, plutopath="tmp.plp"):
         f.close()
 
 
-def PLUTO_generator(XML_Path, PLUTO_Path="pluto_script.plp", wait_platform=False):
+def PLUTO_generator(XML_Path, configFile, PLUTO_Path="pluto_script.plp", wait_platform=False):
     """The core function of the PLUTO_gen program.
-    
+
     Reads a *XML-Timeline*  file. And output a PLUTO script for running on the MATS standalone instrument.
-    
+
     Arguments:
         SCIMXML_Path (str): A string containing the path to the Timeline-XML file.
         PLUTO_Path (str): A string containing the path where outputfile should be written (default "pluto_script.plp")
@@ -162,10 +162,12 @@ def PLUTO_generator(XML_Path, PLUTO_Path="pluto_script.plp", wait_platform=False
             )
             write_wait(wait_time, PLUTO_Path)
 
-        except ValueError:
-            print("WARNING: XML contains a ivalid command, the command will be ignored")
+        except ValueError as e:
+            print(e)
             if wait_platform:
                 write_wait(wait_time, PLUTO_Path)
+            else:
+                print('Wait time ignored')
 
     write_footer(PLUTO_Path)
 

@@ -14,11 +14,10 @@ import importlib
 from mats_planningtool.Library import scheduler
 from mats_planningtool import Globals
 
-OPT_Config_File = importlib.import_module(Globals.Config_File)
-Logger = logging.getLogger(OPT_Config_File.Logger_name())
+Logger = logging.getLogger("OPT_logger")
 
 
-def Mode131(Occupied_Timeline):
+def Mode131(Occupied_Timeline, configFile):
     """Core function for the scheduling of Mode131.
 
     Arguments:
@@ -31,8 +30,8 @@ def Mode131(Occupied_Timeline):
 
     """
 
-    Timeline_settings = OPT_Config_File.Timeline_settings()
-    Settings = OPT_Config_File.Mode131_settings()
+    Timeline_settings = configFile.Timeline_settings()
+    Settings = configFile.Mode131_settings()
 
     "Get the initially planned date"
     if Settings["start_date"] != "0":

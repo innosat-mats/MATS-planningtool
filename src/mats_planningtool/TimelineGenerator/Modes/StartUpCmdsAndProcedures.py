@@ -18,11 +18,8 @@ import importlib
 import ephem
 
 from mats_planningtool.Library import scheduler
-from mats_planningtool import Globals
 
-OPT_Config_File = importlib.import_module(Globals.Config_File)
-Logger = logging.getLogger(OPT_Config_File.Logger_name())
-
+Logger = logging.getLogger("OPT_logger")
 
 """
 def PWRTOGGLE(Occupied_Timeline):
@@ -34,51 +31,51 @@ def PWRTOGGLE(Occupied_Timeline):
 #################### StartUpCMDs ########################
 
 
-def CCDBadColumn(Occupied_Timeline):
+def CCDBadColumn(Occupied_Timeline, configFile):
 
-    Occupied_Timeline, comment = CMD_scheduler(Occupied_Timeline)
-
-    return Occupied_Timeline, comment
-
-
-def CCDFlushBadColumns(Occupied_Timeline):
-
-    Occupied_Timeline, comment = CMD_scheduler(Occupied_Timeline)
+    Occupied_Timeline, comment = CMD_scheduler(Occupied_Timeline, configFile)
 
     return Occupied_Timeline, comment
 
 
-def PM(Occupied_Timeline):
+def CCDFlushBadColumns(Occupied_Timeline, configFile):
 
-    Occupied_Timeline, comment = CMD_scheduler(Occupied_Timeline)
-
-    return Occupied_Timeline, comment
-
-
-def CCDBIAS(Occupied_Timeline):
-
-    Occupied_Timeline, comment = CMD_scheduler(Occupied_Timeline)
+    Occupied_Timeline, comment = CMD_scheduler(Occupied_Timeline, configFile)
 
     return Occupied_Timeline, comment
 
 
-def HTR(Occupied_Timeline):
+def PM(Occupied_Timeline, configFile):
 
-    Occupied_Timeline, comment = CMD_scheduler(Occupied_Timeline)
-
-    return Occupied_Timeline, comment
-
-
-def ArgEnableYawComp(Occupied_Timeline):
-
-    Occupied_Timeline, comment = CMD_scheduler(Occupied_Timeline)
+    Occupied_Timeline, comment = CMD_scheduler(Occupied_Timeline, configFile)
 
     return Occupied_Timeline, comment
 
 
-def TurnONCCDs(Occupied_Timeline):
+def CCDBIAS(Occupied_Timeline, configFile):
 
-    Occupied_Timeline, comment = CMD_scheduler(Occupied_Timeline)
+    Occupied_Timeline, comment = CMD_scheduler(Occupied_Timeline, configFile)
+
+    return Occupied_Timeline, comment
+
+
+def HTR(Occupied_Timeline, configFile):
+
+    Occupied_Timeline, comment = CMD_scheduler(Occupied_Timeline, configFile)
+
+    return Occupied_Timeline, comment
+
+
+def ArgEnableYawComp(Occupied_Timeline, configFile):
+
+    Occupied_Timeline, comment = CMD_scheduler(Occupied_Timeline, configFile)
+
+    return Occupied_Timeline, comment
+
+
+def TurnONCCDs(Occupied_Timeline, configFile):
+
+    Occupied_Timeline, comment = CMD_scheduler(Occupied_Timeline, configFile)
 
     return Occupied_Timeline, comment
 
@@ -87,15 +84,15 @@ def TurnONCCDs(Occupied_Timeline):
 #################### PROCEDURES ########################
 
 
-def Payload_Power_Toggle(Occupied_Timeline):
+def Payload_Power_Toggle(Occupied_Timeline, configFile):
 
-    Occupied_Timeline, comment = CMD_scheduler(Occupied_Timeline)
+    Occupied_Timeline, comment = CMD_scheduler(Occupied_Timeline, configFile)
 
     return Occupied_Timeline, comment
 ########################################################
 
 
-def CMD_scheduler(Occupied_Timeline):
+def CMD_scheduler(Occupied_Timeline, configFile):
     """Subfuncton, Schedules a CMD/Procedure and saves it to the *Occupied_Timeline* variable
 
     Arguments:
@@ -110,10 +107,10 @@ def CMD_scheduler(Occupied_Timeline):
     """
 
     Logger.info('Timeline start_time used as initial date')
-    initial_date = ephem.Date(OPT_Config_File.Timeline_settings()['start_date'])
-    duration = OPT_Config_File.Timeline_settings()['CMD_duration']
+    initial_date = ephem.Date(configFile.Timeline_settings()['start_date'])
+    duration = configFile.Timeline_settings()['CMD_duration']
     endDate = ephem.Date(initial_date + ephem.second *
-                         (OPT_Config_File.Timeline_settings()['mode_separation'] + duration))
+                         (configFile.Timeline_settings()['mode_separation'] + duration))
 
     ############### Start of availability schedueler ##########################
 

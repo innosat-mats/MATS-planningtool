@@ -15,12 +15,10 @@ from math import ceil as ceil
 
 from mats_planningtool import Globals, Library
 
-OPT_Config_File = importlib.import_module(Globals.Config_File)
-
-Logger = logging.getLogger(OPT_Config_File.Logger_name())
+Logger = logging.getLogger("OPT_logger")
 
 
-def CheckConfigFile():
+def CheckConfigFile(configFile):
     """ Core function of *CheckConfigFile*.
 
     Checks the values given in the *Configuration File* set by *Set_ConfigFile* and raises an error if any settings are found to be incompatible.
@@ -28,26 +26,26 @@ def CheckConfigFile():
 
     """
 
-    Library.SetupLogger(OPT_Config_File.Logger_name())
+    Library.SetupLogger(configFile.Logger_name())
 
-    Timeline_settings = OPT_Config_File.Timeline_settings()
+    Timeline_settings = configFile.Timeline_settings()
     Operational_Science_Mode_settings = (
-        OPT_Config_File.Operational_Science_Mode_settings()
+        configFile.Operational_Science_Mode_settings()
     )
-    # Mode5_settings = OPT_Config_File.Mode5_settings()
-    Mode100_settings = OPT_Config_File.Mode100_settings()
-    Mode110_settings = OPT_Config_File.Mode110_settings()
-    Mode120_settings = OPT_Config_File.Mode120_settings()
-    Mode121_settings = OPT_Config_File.Mode121_settings()
-    Mode122_settings = OPT_Config_File.Mode122_settings()
-    Mode123_settings = OPT_Config_File.Mode123_settings()
-    Mode121_122_123_settings = OPT_Config_File.Mode121_122_123_settings()
-    Mode124_settings = OPT_Config_File.Mode124_settings()
-    Mode130_settings = OPT_Config_File.Mode130_settings()
-    Mode131_settings = OPT_Config_File.Mode131_settings()
-    Mode132_settings = OPT_Config_File.Mode132_settings()
-    Mode133_settings = OPT_Config_File.Mode133_settings()
-    Mode134_settings = OPT_Config_File.Mode134_settings()
+    # Mode5_settings = configFile.Mode5_settings()
+    Mode100_settings = configFile.Mode100_settings()
+    Mode110_settings = configFile.Mode110_settings()
+    Mode120_settings = configFile.Mode120_settings()
+    Mode121_settings = configFile.Mode121_settings()
+    Mode122_settings = configFile.Mode122_settings()
+    Mode123_settings = configFile.Mode123_settings()
+    Mode121_122_123_settings = configFile.Mode121_122_123_settings()
+    Mode124_settings = configFile.Mode124_settings()
+    Mode130_settings = configFile.Mode130_settings()
+    Mode131_settings = configFile.Mode131_settings()
+    Mode132_settings = configFile.Mode132_settings()
+    Mode133_settings = configFile.Mode133_settings()
+    Mode134_settings = configFile.Mode134_settings()
 
     try:
         Logger.info("Currently used Configuration File: " + Globals.Config_File)
@@ -64,15 +62,16 @@ def CheckConfigFile():
         )
         raise ValueError
     try:
-        Logger.info("Currently used TLE: " + str(OPT_Config_File.getTLE()))
+        Logger.info("Currently used TLE: " + str(configFile.getTLE()))
     except:
         Logger.error("Currently stated TLE is invalid. Try running Set_ConfigFile.")
         raise ValueError
 
     if not (
-        Timeline_settings["duration"] > 0 and type(Timeline_settings["duration"]) == int
+        Timeline_settings["duration"]["duration"] > 0 and type(
+            Timeline_settings["duration"]["duration"]) == int
     ):
-        Logger.error('Timeline_settings["duration"]')
+        Logger.error('Timeline_settings["duration"]["duration"]')
         raise ValueError
     if not (
         43099.5 < ephem.Date(Timeline_settings["start_date"]) < 73049.5
@@ -333,13 +332,13 @@ def CheckConfigFile():
         Logger.error("Mode120_settings['SnapshotSpacing']")
         raise ValueError
     if not (
-        0 < Mode120_settings["TimeSkip"] <= 2 * 3600 * 24
+        0 < Mode120_settings["TimeSkip"]["TimeSkip"] <= 2 * 3600 * 24
         and (
-            type(Mode120_settings["TimeSkip"]) == int
-            or type(Mode120_settings["TimeSkip"]) == float
+            type(Mode120_settings["TimeSkip"]["TimeSkip"]) == int
+            or type(Mode120_settings["TimeSkip"]["TimeSkip"]) == float
         )
     ):
-        Logger.error("Mode120_settings['TimeSkip']")
+        Logger.error("Mode120_settings['TimeSkip']['TimeSkip']")
         raise ValueError
     if not (
         Timeline_settings["StandardPointingAltitude"]
@@ -348,9 +347,9 @@ def CheckConfigFile():
     ):
         Logger.error("Mode120_settings['pointing_altitude']")
         raise ValueError
-    if not (Mode120_settings["TimeToConsider"] <= Timeline_settings["duration"]):
+    if not (Mode120_settings["TimeToConsider"]["TimeToConsider"] <= Timeline_settings["duration"]["duration"]):
         Logger.error(
-            "Mode120_settings['TimeToConsider'] > Timeline_settings['duration']"
+            "Mode120_settings['TimeToConsider']['TimeToConsider'] > Timeline_settings['duration']['duration']"
         )
         raise ValueError
     if not (type(Mode120_settings["CCDSELs"]) == list):
@@ -418,13 +417,13 @@ def CheckConfigFile():
         Logger.error("Mode121_122_123_settings['pointing_altitude']")
         raise ValueError
     if not (
-        0 < Mode121_122_123_settings["TimeSkip"] <= 2 * 3600 * 24
+        0 < Mode121_122_123_settings["TimeSkip"]["TimeSkip"] <= 2 * 3600 * 24
         and (
-            type(Mode121_122_123_settings["TimeSkip"]) == int
-            or type(Mode121_122_123_settings["TimeSkip"]) == float
+            type(Mode121_122_123_settings["TimeSkip"]["TimeSkip"]) == int
+            or type(Mode121_122_123_settings["TimeSkip"]["TimeSkip"]) == float
         )
     ):
-        Logger.error("Mode121_122_123_settings['TimeSkip']")
+        Logger.error("Mode121_122_123_settings['TimeSkip']['TimeSkip']")
         raise ValueError
     if not (
         0 <= Mode121_122_123_settings["SnapshotSpacing"]
@@ -443,10 +442,10 @@ def CheckConfigFile():
         )
         raise ValueError
     if not (
-        Mode121_122_123_settings["TimeToConsider"] <= Timeline_settings["duration"]
+        Mode121_122_123_settings["TimeToConsider"]["TimeToConsider"] <= Timeline_settings["duration"]["duration"]
     ):
         Logger.error(
-            "Mode121_122_123_settings['TimeToConsider'] > Timeline_settings['duration']"
+            "Mode121_122_123_settings['TimeToConsider']['TimeToConsider'] > Timeline_settings['duration']['duration']"
         )
         raise ValueError
 
@@ -586,7 +585,7 @@ def CheckConfigFile():
         if not (CCDSEL in [1, 2, 4, 8, 16, 32]):
             Logger.error("Mode124_settings['CCDSELs'] element != [1,2,4,8,16,32]")
             raise ValueError
-    if not (Mode124_settings["TimeToConsider"] <= Timeline_settings["duration"]):
+    if not (Mode124_settings["TimeToConsider"]["TimeToConsider"] <= Timeline_settings["duration"]["duration"]):
         Logger.error(
             "Mode124_settings['TimeToConsider'] > Timeline_settings['duration']"
         )
@@ -702,29 +701,29 @@ def CheckConfigFile():
 
     # Standard CCDsettings
     _, _, FullReadout_synctime, _ = Library.SyncArgCalculator(
-        OPT_Config_File.CCD_macro_settings("FullReadout"),
+        configFile.CCD_macro_settings("FullReadout"),
         Timeline_settings["CCDSYNC_ExtraOffset"],
         Timeline_settings["CCDSYNC_ExtraIntervalTime"],
     )
     _, _, CustomBinning_synctime, _ = Library.SyncArgCalculator(
-        OPT_Config_File.CCD_macro_settings("CustomBinning"),
+        configFile.CCD_macro_settings("CustomBinning"),
         Timeline_settings["CCDSYNC_ExtraOffset"],
         Timeline_settings["CCDSYNC_ExtraIntervalTime"],
     )
     _, _, HighResUV_synctime, _ = Library.SyncArgCalculator(
-        OPT_Config_File.CCD_macro_settings("HighResUV"),
+        configFile.CCD_macro_settings("HighResUV"),
         Timeline_settings["CCDSYNC_ExtraOffset"],
         Timeline_settings["CCDSYNC_ExtraIntervalTime"],
     )
 
     _, _, HighResIR_syctime, _ = Library.SyncArgCalculator(
-        OPT_Config_File.CCD_macro_settings("HighResIR"),
+        configFile.CCD_macro_settings("HighResIR"),
         Timeline_settings["CCDSYNC_ExtraOffset"],
         Timeline_settings["CCDSYNC_ExtraIntervalTime"],
     )
 
     _, _, BinnedCalibration, _ = Library.SyncArgCalculator(
-        OPT_Config_File.CCD_macro_settings("BinnedCalibration"),
+        configFile.CCD_macro_settings("BinnedCalibration"),
         Timeline_settings["CCDSYNC_ExtraOffset"],
         Timeline_settings["CCDSYNC_ExtraIntervalTime"],
     )

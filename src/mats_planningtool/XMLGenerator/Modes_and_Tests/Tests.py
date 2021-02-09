@@ -34,11 +34,10 @@ from pylab import dot, arccos, zeros, pi, sin, cos, arctan, cross, norm, sqrt
 
 from mats_planningtool import Globals, Library, MATS_coordinates
 
-OPT_Config_File = importlib.import_module(Globals.Config_File)
 #from mats_planningtool_Config_File import Logger_name, Timeline_settings, getTLE
 
 
-Logger = logging.getLogger(OPT_Config_File.Logger_name())
+Logger = logging.getLogger("OPT_logger")
 
 
 def All_Tests(root, date, duration, relativeTime, Timeline_settings, Test_settings=['Limb_functional_test', 'Photometer_test_1', 'CCD_stability_test', 'Nadir_functional_test']):
@@ -50,7 +49,7 @@ def All_Tests(root, date, duration, relativeTime, Timeline_settings, Test_settin
     """
 
     "Set duration to length of timeline to allow all tests to be scheduled"
-    duration = Timeline_settings['duration']
+    duration = Timeline_settings['duration']['duration']
 
     if('Limb_functional_test' in Test_settings):
         relativeTime, date = Limb_functional_test(root, date, duration=duration, relativeTime=relativeTime,

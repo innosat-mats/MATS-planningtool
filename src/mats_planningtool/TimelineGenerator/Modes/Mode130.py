@@ -13,11 +13,10 @@ import importlib
 from mats_planningtool.Library import scheduler
 from mats_planningtool import Globals
 
-OPT_Config_File = importlib.import_module(Globals.Config_File)
-Logger = logging.getLogger(OPT_Config_File.Logger_name())
+Logger = logging.getLogger("OPT_logger")
 
 
-def Mode130(Occupied_Timeline):
+def Mode130(Occupied_Timeline, configFile):
     """Core function for the scheduling of Mode130.
 
     Arguments:
@@ -29,8 +28,8 @@ def Mode130(Occupied_Timeline):
             (str): Comment regarding the result of scheduling of the mode.
     """
 
-    Timeline_settings = OPT_Config_File.Timeline_settings()
-    Settings = OPT_Config_File.Mode130_settings()
+    Timeline_settings = configFile.Timeline_settings()
+    Settings = configFile.Mode130_settings()
 
     "Get the initially planned date"
     if(Settings['start_date'] != '0'):

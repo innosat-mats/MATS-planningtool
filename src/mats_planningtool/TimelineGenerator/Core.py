@@ -17,13 +17,12 @@ import importlib
 
 
 from .Modes import Modes_Header
-from mats_planningtool import Globals, Library
+from mats_planningtool import Library
 
-OPT_Config_File = importlib.import_module(Globals.Config_File)
-Logger = logging.getLogger(OPT_Config_File.Logger_name())
+Logger = logging.getLogger("OPT_logger")
 
 
-def Timeline_generator():
+def Timeline_generator(configFile):
     """The core function of the *Timeline_gen* program, part of Operational Planning Tool.
 
     Returns:
@@ -38,16 +37,17 @@ def Timeline_generator():
         pass
 
     "############# Set up Logger #################################"
-    Library.SetupLogger(OPT_Config_File.Logger_name())
+    Library.SetupLogger(configFile.Logger_name())
     "#############################################################"
 
     Logger.info('Start of program')
 
-    Version = OPT_Config_File.Version()
-    Logger.info('Configuration File used: '+Globals.Config_File+', Version: '+Version)
+    Version = configFile.Version()
+    Logger.info('Configuration File used: ' +
+                configFile.config_file_name+', Version: '+Version)
 
     "Get settings for the timeline"
-    Timeline_settings = OPT_Config_File.Timeline_settings()
+    Timeline_settings = configFile.Timeline_settings()
 
     Timeline_start_date = ephem.Date(Timeline_settings['start_date'])
     Logger.debug('Timeline_settings: '+str(Timeline_settings))
@@ -58,11 +58,11 @@ def Timeline_generator():
     elif(Timeline_settings['yaw_correction'] == False):
         Logger.info('Yaw correction is off')
     else:
-        Logger.error('OPT_Config_File.Timeline_settings["yaw_correction"] is set wrong')
+        Logger.error('configFile.Timeline_settings["yaw_correction"] is set wrong')
         raise TypeError
 
     "Get a List of Modes and CMDs in a prioritized order which are to be scheduled"
-    Scheduling_priority = OPT_Config_File.Scheduling_priority()
+    Scheduling_priority = configFile.Scheduling_priority()
     Logger.info('Scheduling priority list: '+str(Scheduling_priority))
 
     SCIMOD_Timeline_unchronological = []
@@ -73,8 +73,8 @@ def Timeline_generator():
     scheduled_instances = {key: 0 for key in Scheduling_priority}
 
     "Reset"
-    Globals.Mode120Iteration = 1
-    Globals.Mode124Iteration = 1
+    configFile.Mode120Iteration = 1
+    configFile.Mode124Iteration = 1
 
     Logger.debug('')
     Logger.debug('Occupied_Timeline: \n' +
@@ -108,7 +108,7 @@ def Timeline_generator():
             raise NameError
 
         "Call the function of the same name as the string in Scheduling_priority"
-        Occupied_Timeline, Mode_comment = Mode_function(Occupied_Timeline)
+        Occupied_Timeline, Mode_comment = Mode_function(Occupied_Timeline, configFile)
 
         Logger.debug('')
         Logger.debug('Post-'+scimod+' Occupied_Timeline: \n'+"{" + "\n".join(
@@ -124,16 +124,16 @@ def Timeline_generator():
 
             "To allow multiple instances of Mode120/124 to be scheduled using the V_offset settings"
             if(scimod == 'Mode120'):
-                Globals.Mode120Iteration += 1
+                configFile.Mode120Iteration += 1
             elif(scimod == 'Mode124'):
-                Globals.Mode124Iteration += 1
+                configFile.Mode124Iteration += 1
 
             "Check if the scheduled date is within the time defined for the timeline"
             if(Occupied_Timeline[scimod][scheduled_instances[scimod]-1][0] < Timeline_start_date or
-                    Occupied_Timeline[scimod][scheduled_instances[scimod]-1][0] > (Timeline_start_date+ephem.second*Timeline_settings['duration']) or
-                    Occupied_Timeline[scimod][scheduled_instances[scimod]-1][1] - Occupied_Timeline[scimod][scheduled_instances[scimod]-1][0] > Timeline_settings['duration']):
+                    Occupied_Timeline[scimod][scheduled_instances[scimod]-1][0] > (Timeline_start_date+ephem.second*Timeline_settings['duration']['duration']) or
+                    Occupied_Timeline[scimod][scheduled_instances[scimod]-1][1] - Occupied_Timeline[scimod][scheduled_instances[scimod]-1][0] > Timeline_settings['duration']['duration']):
                 Logger.error(
-                    scimod+' scheduled outside of timeline as defined in OPT_Config_File')
+                    scimod+' scheduled outside of timeline as defined in configFile')
 
                 #input('Enter anything to acknowledge and continue\n')
 
@@ -180,7 +180,7 @@ def Timeline_generator():
 
     Occupied_Timeline.update({OpSciMode: []})
 
-    Occupied_Timeline, Mode_comment = Mode1_2_5(Occupied_Timeline)
+    Occupied_Timeline, Mode_comment = Mode1_2_5(Occupied_Timeline, configFile)
     Logger.debug('')
     Logger.debug('Post-'+OpSciMode+' Occupied_Timeline: \n' +
                  "{" + "\n".join("        {}: {}".format(k, v) for k, v in Occupied_Timeline.items()) + "}")
@@ -203,9 +203,9 @@ def Timeline_generator():
 
     "Create a Science Mode Timeline list with the first entry being Timeline_settings"
     SCIMOD_Timeline = []
-    SCIMOD_Timeline.append(['Timeline_settings', 'This Timeline was created using these settings from '+Globals.Config_File,
+    SCIMOD_Timeline.append(['Timeline_settings', 'This Timeline was created using these settings from '+configFile.config_file_name,
                             'Note: These Timeline_settings and TLE will be used when converting into a XML',
-                            Timeline_settings, OPT_Config_File.getTLE()])
+                            Timeline_settings, configFile.getTLE()])
 
     Logger.debug('1 entry in Science Mode list: '+str(SCIMOD_Timeline[0]))
 
@@ -218,13 +218,13 @@ def Timeline_generator():
         Logger.debug(
             'Get the parameters for XML-gen from mats_planningtool_Config_File and add them to Science Mode timeline')
         try:
-            Config_File = getattr(OPT_Config_File, x[2]+'_settings')()
+            Config_File = getattr(configFile, x[2]+'_settings')()
         except AttributeError:
 
             if(x[2] == 'Mode1' or x[2] == 'Mode2' or x[2] == 'Mode5'):
 
                 Config_File = getattr(
-                    OPT_Config_File, 'Operational_Science_Mode_settings')()
+                    configFile, 'Operational_Science_Mode_settings')()
 
             elif(x[2] == 'ArgEnableYawComp'):
                 Config_File = {'EnableYawComp': int(
@@ -255,12 +255,12 @@ def Timeline_generator():
     except:
         pass
     SCIMOD_NAME = os.path.join(
-        'Output', 'Science_Mode_Timeline__'+Globals.Config_File+'.json')
+        'Output', 'Science_Mode_Timeline__'+os.path.split(configFile.config_file_name)[1]+'.json')
     Logger.info('Save mode timeline to file: '+SCIMOD_NAME)
     with open(SCIMOD_NAME, "w") as write_file:
         json.dump(SCIMOD_Timeline, write_file, indent=2)
 
     "Reset temporary Globals"
-    Globals.Mode120Iteration = 1
-    Globals.Mode124Iteration = 1
+    configFile.Mode120Iteration = 1
+    configFile.Mode124Iteration = 1
     logging.shutdown()

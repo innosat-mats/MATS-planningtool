@@ -1,34 +1,29 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Jun  3 16:56:23 2019
+Created on Mon Feb 4 16:56:23 2021
 
 Main test script showcasing how to use the main parts of OPT.
 
-@author: David Skånberg
+@author: Ole Martin Christensen
 """
 
-import mats_planningtool.core as OPT
+from mats_planningtool import configFile as configFile
+from mats_planningtool import timeLine as timeLine
 
+configfile = "./data/config_file_original.json"
 
-# "Make a copy of the defualt Configuration File in OPT and name it 'OPT_Config_File'"
-OPT.Copy_ConfigFile("OPT_Config_File")
+configfile_original = configFile.configFile(configfile,
+                                            "2020/9/25 16:45:00",
+                                            TLE1="1 54321U 19100G   20172.75043981 0.00000000  00000-0  75180-4 0  0014",
+                                            TLE2="2 54321  97.7044   6.9210 0014595 313.2372  91.8750 14.93194142000010",
+                                            )
 
-# "Choose your Configuration File ('OPT_Config_File') and set the start date and TLE"
-OPT.Set_ConfigFile(
-    "OPT_Config_File",
-    "2020/9/25 16:45:00",
-    TLE1="1 54321U 19100G   20172.75043981 0.00000000  00000-0  75180-4 0  0014",
-    TLE2="2 54321  97.7044   6.9210 0014595 313.2372  91.8750 14.93194142000010",
-)
-
-# "Choose your Configuration File ('OPT_Config_File') but optionally use the TLE and start date values given directly in the Configuration File"
-OPT.Set_ConfigFile("OPT_Config_File")
 
 # "Check the currently chosen Configuration File and the plausibility of its values. Prints out the currently used start date and TLE"
-OPT.CheckConfigFile()
+configfile_original.CheckConfigFile()
 
 # "Create a Science Mode Timeline (.json file) depending on the settings in the Configuration File"
-OPT.Timeline_gen()
+configfile_original.Timeline_gen()
 
 # "Predict state and attitude data from the Science Mode Timeline and plot the results"
 # Data_MATS, Data_LP, Time, Time_OHB = OPT.Timeline_Plotter(
@@ -36,10 +31,12 @@ OPT.Timeline_gen()
 # )
 
 # "Convert the Science Mode Timeline into payload and platform CMDs as a .xml file)"
-OPT.XML_gen("Output/Science_Mode_Timeline__OPT_Config_File.json")
+
+configfile_original.XML_gen(
+    'Output/Science_Mode_Timeline__config_file_original.json.json')
 
 # "Plot the example Science Mode Timeline together with the example h5 file and the example STK generated .csv file"
-# Data_MATS, Data_LP, Time, Time_OHB = OPT.Timeline_Plotter(
+# Data_MATS, Data_LP, Timescience_mode_timeline_path, Time_OHB = OPT.Timeline_Plotter(
 #     "OPT/Example_Science_Mode_Timeline__OPT_Config_File.json",
 #     STK_CSV_PATH="OPT/ExampleCSVfile.csv",
 #     OHB_H5_Path="OPT/ExampleH5file_LEVEL_1A_PLATF_20200120-094217_20200120-102136.hdf5",
@@ -51,7 +48,7 @@ OPT.XML_gen("Output/Science_Mode_Timeline__OPT_Config_File.json")
 #     "Output/Science_Mode_Timeline__OPT_Config_File/Timeline_Plotter_PlotsAndData"
 # )
 
-# # "Return the active science mode and its settings at a specfic date from a Science Mode Timeline"
+# # "Return the active science mode andrörglas its settings at a specfic date from a Science Mode Timeline"
 # Mode, Parameters = OPT.Timeline_analyzer(
 #     "Output/Science_Mode_Timeline__OPT_Config_File.json", "2020-06-20 19:30:00"
 # )
@@ -60,13 +57,13 @@ OPT.XML_gen("Output/Science_Mode_Timeline__OPT_Config_File.json")
 # OPT.MinimalScienceXML_gen()
 
 # "Schedule StartUpCMDs and all defined commisioning phase Tests with default settings"
-# OPT.XML_gen("OPT/Example_Science_Mode_Timeline__Commisioning_Phase_Tests.json")
+# configfile_original.XML_gen(
+#    "test_data/Example_Science_Mode_Timeline__Commisioning_Phase_Tests.json")
 
-OPT.PLUTOGenerator(
-    "Output/XML_TIMELINE__FROM__Output_Science_Mode_Timeline__OPT_Config_File.xml",
+configfile_original.PLUTOGenerator(
+    "Output/XML_TIMELINE__FROM__Output_Science_Mode_Timeline__config_file_original.xml",
     "Output/optest_pluto.plp",
 )
 
-# OPT.PLUTOGenerator(
-#     "Output/XML_TIMELINE__MinimalScience_.xml", "Output/minimal_science_pluto.plp",
-# )
+# configfile_original.PLUTOGenerator(
+#    "Output/XML_TIMELINE__MinimalScience_.xml", "Output/minimal_science_pluto.plp")

@@ -17,11 +17,10 @@ from mats_planningtool.Library import Satellite_Simulator, scheduler
 from mats_planningtool import Globals
 from .Mode12X import UserProvidedDateScheduler
 
-OPT_Config_File = importlib.import_module(Globals.Config_File)
-Logger = logging.getLogger(OPT_Config_File.Logger_name())
+Logger = logging.getLogger("OPT_logger")
 
 
-def Mode124(Occupied_Timeline):
+def Mode124(Occupied_Timeline, configFile):
     """Core function for the scheduling of Mode124.
 
     Determines if the scheduled date should be determined by simulating MATS or be user provided.
@@ -36,15 +35,16 @@ def Mode124(Occupied_Timeline):
 
     """
 
-    Settings = OPT_Config_File.Mode124_settings()
+    Settings = configFile.Mode124_settings()
 
     if(Settings['automatic'] == False):
         Occupied_Timeline, comment = UserProvidedDateScheduler(
-            Occupied_Timeline, Settings)
+            Occupied_Timeline, Settings, configFile)
     elif(Settings['automatic'] == True):
-        SpottedMoonList = date_calculator()
+        SpottedMoonList = date_calculator(configFile)
 
-        Occupied_Timeline, comment = date_select(Occupied_Timeline, SpottedMoonList)
+        Occupied_Timeline, comment = date_select(
+            Occupied_Timeline, SpottedMoonList, configFile)
 
     return Occupied_Timeline, comment
 
@@ -53,7 +53,7 @@ def Mode124(Occupied_Timeline):
 ###############################################################################################
 
 
-def date_calculator():
+def date_calculator(configFile):
     """Subfunction, Simulates MATS FOV and the Moon.
 
     Determines when the Moon is entering the FOV at an vertical offset-angle equal to *#V-offset* and also being 
@@ -75,8 +75,8 @@ def date_calculator():
 
     """
 
-    Timeline_settings = OPT_Config_File.Timeline_settings()
-    Mode124_settings = OPT_Config_File.Mode124_settings()
+    Timeline_settings = configFile.Timeline_settings()
+    Mode124_settings = configFile.Mode124_settings()
 
     log_timestep = Mode124_settings['log_timestep']
     Logger.debug('log_timestep: '+str(log_timestep))
@@ -101,7 +101,7 @@ def date_calculator():
     Logger.debug('Moon_orbital_period [s]: '+str(Moon_orbital_period))
     Logger.debug('yaw_correction set to: '+str(yaw_correction))
 
-    TLE = OPT_Config_File.getTLE()
+    TLE = configFile.getTLE()
     Logger.debug('TLE used: '+TLE[0]+TLE[1])
 
     ##########################################################
@@ -111,10 +111,10 @@ def date_calculator():
     timestep = Mode124_settings['timestep']  # In seconds
     Logger.info('Timestep set to [s]: '+str(timestep))
 
-    if(Mode124_settings['TimeToConsider'] <= Timeline_settings['duration']):
-        duration = Mode124_settings['TimeToConsider']
+    if(Mode124_settings['TimeToConsider']['TimeToConsider'] <= Timeline_settings['duration']['duration']):
+        duration = Mode124_settings['TimeToConsider']['TimeToConsider']
     else:
-        duration = Timeline_settings['duration']
+        duration = Timeline_settings['duration']['duration']
     Logger.info('Duration set to [s]: '+str(duration))
 
     timesteps = int(ceil(duration / timestep)) + 2
@@ -324,7 +324,7 @@ def date_calculator():
 ###############################################################################################
 
 
-def date_select(Occupied_Timeline, SpottedMoonList):
+def date_select(Occupied_Timeline, SpottedMoonList, configFile):
     """Subfunction, Schedules a simulated date.
 
     A date is selected for which the Moon is visible at an minimum amount of H-offset in the FOV.
@@ -342,7 +342,7 @@ def date_select(Occupied_Timeline, SpottedMoonList):
     """
     Logger.info('Start of filtering function')
 
-    Mode124_settings = OPT_Config_File.Mode124_settings()
+    Mode124_settings = configFile.Mode124_settings()
 
     if(len(SpottedMoonList) == 0):
 
@@ -388,10 +388,10 @@ def date_select(Occupied_Timeline, SpottedMoonList):
                           (Mode124_settings['freeze_start']))
 
         endDate = ephem.Date(date+ephem.second*(Mode124_settings['freeze_start'] +
-                                                Mode124_settings['freeze_duration'] + OPT_Config_File.Timeline_settings()['mode_separation']))
+                                                Mode124_settings['freeze_duration'] + configFile.Timeline_settings()['mode_separation']))
 
         "Check that the scheduled date is not before the start of the timeline"
-        if(date < ephem.Date(OPT_Config_File.Timeline_settings()['start_date'])):
+        if(date < ephem.Date(configFile.Timeline_settings()['start_date'])):
             iterations = iterations + 1
             restart = True
             continue

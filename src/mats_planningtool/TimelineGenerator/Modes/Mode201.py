@@ -12,17 +12,16 @@ import logging
 import importlib
 
 from mats_planningtool.Library import scheduler
-from mats_planningtool import Globals
 
-OPT_Config_File = importlib.import_module(Globals.Config_File)
-Logger = logging.getLogger(OPT_Config_File.Logger_name())
+Logger = logging.getLogger("OPT_logger")
 
 
-def Mode201(Occupied_Timeline):
+def Mode201(Occupied_Timeline, configFile):
 
-    initial_date = date_calculator()
+    initial_date = date_calculator(configFile)
 
-    Occupied_Timeline, comment = date_select(Occupied_Timeline, initial_date)
+    Occupied_Timeline, comment = date_select(
+        Occupied_Timeline, initial_date, configFile)
 
     return Occupied_Timeline, comment
 
@@ -31,14 +30,14 @@ def Mode201(Occupied_Timeline):
 ##################################################################################################
 
 
-def date_calculator():
+def date_calculator(configFile):
 
-    if(Mode201_settings()['start_date'] != '0'):
-        initial_date = ephem.Date(Mode201_settings()['start_date'])
+    if(configFile.Mode201_settings()['start_date'] != '0'):
+        initial_date = ephem.Date(configFile.Mode201_settings()['start_date'])
         Logger.info('Mode specific start_date used as initial date')
     else:
         Logger.info('Timeline start_date used as initial date')
-        initial_date = ephem.Date(OPT_Config_File.Timeline_settings()['start_date'])
+        initial_date = ephem.Date(configFile.Timeline_settings()['start_date'])
 
     return initial_date
 
@@ -47,18 +46,18 @@ def date_calculator():
 ##################################################################################################
 
 
-def date_select(Occupied_Timeline, initial_date):
+def date_select(Occupied_Timeline, initial_date, configFile):
 
     date = initial_date
 
     try:
         Logger.info('Mode specific mode_duration used as initial date')
-        endDate = ephem.Date(initial_date + ephem.second*OPT_Config_File.Timeline_settings()['mode_separation'] +
-                             ephem.second*Mode201_settings()['mode_duration'])
+        endDate = ephem.Date(initial_date + ephem.second*configFile.Timeline_settings()['mode_separation'] +
+                             ephem.second*configFile.Mode201_settings()['mode_duration'])
     except:
         Logger.info('Timeline mode_duration used as initial date')
-        endDate = ephem.Date(initial_date + ephem.second*OPT_Config_File.Timeline_settings()['mode_separation'] +
-                             ephem.second*OPT_Config_File.Timeline_settings()['mode_duration'])
+        endDate = ephem.Date(initial_date + ephem.second*configFile.Timeline_settings()['mode_separation'] +
+                             ephem.second*configFile.Timeline_settings()['mode_duration'])
 
     ############### Start of availability schedueler ##########################
 

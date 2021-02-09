@@ -12,13 +12,11 @@ import logging
 import importlib
 
 from mats_planningtool.Library import scheduler
-from mats_planningtool import Globals
 
-OPT_Config_File = importlib.import_module(Globals.Config_File)
-Logger = logging.getLogger(OPT_Config_File.Logger_name())
+Logger = logging.getLogger("OPT_logger")
 
 
-def Mode134(Occupied_Timeline):
+def Mode134(Occupied_Timeline, configFile):
     """Core function for the scheduling of Mode134.
 
     Arguments:
@@ -32,19 +30,19 @@ def Mode134(Occupied_Timeline):
     """
 
     "Get the initially planned date"
-    if OPT_Config_File.Mode134_settings()["start_date"] != "0":
-        initialDate = ephem.Date(OPT_Config_File.Mode160_settings()["start_date"])
+    if configFile.Mode134_settings()["start_date"] != "0":
+        initialDate = ephem.Date(configFile.Mode160_settings()["start_date"])
         Logger.info("Mode specific start_date used as initial date")
     else:
         Logger.info("Timeline start_date used as initial date")
-        initialDate = ephem.Date(OPT_Config_File.Timeline_settings()["start_date"])
+        initialDate = ephem.Date(configFile.Timeline_settings()["start_date"])
 
     endDate = ephem.Date(
         initialDate
         + ephem.second
         * (
-            OPT_Config_File.Mode134_settings()["mode_duration"]
-            + OPT_Config_File.Timeline_settings()["mode_separation"]
+            configFile.Mode134_settings()["mode_duration"]
+            + configFile.Timeline_settings()["mode_separation"]
         )
     )
 
