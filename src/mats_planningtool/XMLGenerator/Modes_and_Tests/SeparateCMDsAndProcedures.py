@@ -3,7 +3,7 @@
 
 For the definition of CMDs/Procedures see the "InnoSat Payload Timeline XML Definition" document. \n
 
-For PM, CCDBadColumn, CCDFlushBadColumns: Compares settings given in the Science Mode Timeline to the same 
+For PM, CCDBadColumn, CCDFlushBadColumns: Compares settings given in the Science Mode Timeline to the same
 given in the set *Configuration File* and fills in any values missing in the Science Mode Timeline. \n
 
 For the rest of the CMDS, each setting must be given in the *Science Mode Timeline* as a dictionary with each key representing an argument of the CMD. \n
@@ -11,15 +11,15 @@ For the rest of the CMDS, each setting must be given in the *Science Mode Timeli
 TurnONCCDs will always call TC_pafCCDMain with fixed arguments to turn ON all CCDs. \n
 
 Functions on the form "X", where X is any CMD:
-    
+
     **Arguments:**
         **root** (*lxml.etree.Element*):  XML tree structure. Main container object for the ElementTree API. lxml.etree.Element class \n
         **date** (*ephem.Date*): Starting date of the CMD. On the form of the ephem.Date class. \n
         **duration** (*int*): The duration of the CMD [s] as an integer class. \n
         **relativeTime** (*int*): The starting time [s] of the CMD with regard to the start of the timeline as an integer class \n
-        **Timeline_settings** (*dict*): Dictionary containing the settings of the Timeline given in either the *Science Mode Timeline* or the *Configuration File*. \n 
+        **Timeline_settings** (*dict*): Dictionary containing the settings of the Timeline given in either the *Science Mode Timeline* or the *Configuration File*. \n
         **CMD_settings** (*dict*): Dictionary containing the settings/arguments of the CMD given in the Science Mode Timeline.
-    
+
     Returns:
         None
 
@@ -30,9 +30,8 @@ import logging
 import importlib
 import sys
 
-from .Macros_Commands import Commands, Macros
+from mats_planningtool.XMLGenerator.Modes_and_Tests.Macros_Commands import Commands, Macros
 from mats_planningtool.Library import dict_comparator
-from mats_planningtool import Globals
 
 
 Logger = logging.getLogger("OPT_logger")
@@ -40,15 +39,9 @@ Logger = logging.getLogger("OPT_logger")
 "################# Procedures ############################"
 
 
-def Payload_Power_Toggle(
-        root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
-
-    Commands.Payload_Power_Toggle(
-        root,
-        round(relativeTime, 2),
-        Timeline_settings=Timeline_settings,
-        comment="Payload_Power_Toggle, " + str(date),
-    )
+def Payload_Power_Toggle(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
+    Commands.Payload_Power_Toggle(root, round(relativeTime, 2), Timeline_settings=Timeline_settings,
+                                  configFile=configFile, comment="Payload_Power_Toggle, " + str(date))
 
 
 "################# PAYLOAD COMMANDS ############################"
@@ -78,7 +71,7 @@ def TurnONCCDs(root, date, duration, relativeTime, Timeline_settings, configFile
         GAIN=0,
         NFLUSH=1023,
         NCSKIP=0,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment="TurnONCCDs, " + str(date),
     )
 
@@ -93,7 +86,7 @@ def MODE(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_
         root,
         round(relativeTime, 2),
         MODE=CMD_settings["MODE"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=CMD_name + ", " + str(date),
     )
 
@@ -106,7 +99,7 @@ def PWRTOGGLE(root, date, duration, relativeTime, Timeline_settings, configFile,
         root,
         round(relativeTime, 2),
         CONST=CMD_settings["CONST"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=str(date),
     )
 
@@ -123,7 +116,7 @@ def UPLOAD(root, date, duration, relativeTime, Timeline_settings, configFile, CM
         WFLASH=CMD_settings["WFLASH"],
         NIMG=CMD_settings["NIMG"],
         IMG=CMD_settings["IMG"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=str(date),
     )
 
@@ -140,7 +133,7 @@ def HTR(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_s
         PVALUE=CMD_settings["PVALUE"],
         IVALUE=CMD_settings["IVALUE"],
         DVALUE=CMD_settings["DVALUE"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=str(date),
     )
 
@@ -170,7 +163,7 @@ def CCD(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_s
         NCOL=CMD_settings["NCOL"],
         NCBINFPGA=CMD_settings["NCBINFPGA"],
         SIGMODE=CMD_settings["SIGMODE"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=str(date),
     )
 
@@ -186,7 +179,7 @@ def CCDBadColumn(
         CCDSEL=CMD_settings["CCDSEL"],
         NBC=CMD_settings["NBC"],
         BC=CMD_settings["BC"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=str(date),
     )
 
@@ -200,7 +193,7 @@ def CCDFlushBadColumns(
         root,
         relativeTime,
         CCDSEL=CMD_settings["CCDSEL"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=str(date),
     )
 
@@ -218,7 +211,7 @@ def CCDBIAS(root, date, duration, relativeTime, Timeline_settings, configFile, C
         VSUBST=CMD_settings["VSUBST"],
         VRD=CMD_settings["VRD"],
         VOD=CMD_settings["VOD"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=str(date),
     )
 
@@ -231,13 +224,15 @@ def CCDSNAPSHOT(root, date, duration, relativeTime, Timeline_settings, configFil
         root,
         round(relativeTime, 2),
         CCDSEL=CMD_settings["CCDSEL"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=str(date),
     )
 
 
 def CCDTRANSPARENTCMD(
     root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
+
+
 ):
 
     # CMD_settings_ConfigFile = {'CCDSEL': 1, 'CHAR': 0}
@@ -247,7 +242,7 @@ def CCDTRANSPARENTCMD(
         round(relativeTime, 2),
         CCDSEL=CMD_settings["CCDSEL"],
         CHAR=str(CMD_settings["CHAR"]),
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=str(date),
     )
 
@@ -260,7 +255,7 @@ def Dbg(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_s
         root,
         round(relativeTime, 2),
         CCDSEL=CMD_settings["CCDSEL"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=str(date),
     )
 
@@ -274,7 +269,7 @@ def PM(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_se
         round(relativeTime, 2),
         TEXPMS=CMD_settings["TEXPMS"],
         TEXPIMS=CMD_settings["TEXPIMS"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=str(date),
     )
 
@@ -289,7 +284,7 @@ def CCDSynchronize(
         CCDSEL=CMD_settings["CCDSEL"],
         NCCD=CMD_settings["NCCD"],
         TEXPIOFS=CMD_settings["TEXPIOFS"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=str(date),
     )
 
@@ -309,7 +304,7 @@ def LimbPointingAltitudeOffset(
         Initial=CMD_settings["Initial"],
         Final=CMD_settings["Final"],
         Rate=CMD_settings["Rate"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=str(date),
     )
 
@@ -324,7 +319,7 @@ def ArgFreezeStart(
         root,
         round(relativeTime, 2),
         StartTime=CMD_settings["StartTime"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=str(date),
     )
 
@@ -339,7 +334,7 @@ def ArgFreezeDuration(
         root,
         round(relativeTime, 2),
         FreezeDuration=CMD_settings["FreezeDuration"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=str(date),
     )
 
@@ -352,6 +347,6 @@ def ArgEnableYawComp(
         root,
         round(relativeTime, 2),
         EnableYawComp=CMD_settings["EnableYawComp"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=str(date),
     )

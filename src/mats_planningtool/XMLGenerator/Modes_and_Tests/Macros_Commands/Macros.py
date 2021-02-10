@@ -27,7 +27,7 @@ def Operational_Limb_Pointing_macro(
     CCD_settings,
     PM_settings,
     pointing_altitude,
-    Timeline_settings,
+    Timeline_settings, configFile,
     comment="",
 ):
     """ Macro that corresponds to pointing towards a Limb altitude in Operational Mode.
@@ -60,7 +60,7 @@ def Operational_Limb_Pointing_macro(
     )
 
     relativeTime = Commands.TC_pafMode(
-        root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, comment=comment
+        root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment
     )
 
     # relativeTime_OperationalMode = relativeTime+Timeline_settings['pointing_stabilization']
@@ -70,7 +70,7 @@ def Operational_Limb_Pointing_macro(
         Initial=pointing_altitude,
         Final=pointing_altitude,
         Rate=0,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -79,7 +79,7 @@ def Operational_Limb_Pointing_macro(
         relativeTime,
         TEXPMS=PM_settings["TEXPMS"],
         TEXPIMS=PM_settings["TEXPIMS"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -88,7 +88,7 @@ def Operational_Limb_Pointing_macro(
         relativeTime,
         CCD_settings=CCD_settings,
         TEXPIMS=TEXPIMS,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -98,19 +98,19 @@ def Operational_Limb_Pointing_macro(
         CCDSEL=CCDSEL,
         NCCD=NCCD,
         TEXPIOFS=TEXPIOFS,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
     relativeTime = Commands.TC_pafMode(
-        root, relativeTime, MODE=1, Timeline_settings=Timeline_settings, comment=comment
+        root, relativeTime, MODE=1, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment
     )
 
     return relativeTime
 
 
 """
-def FullReadout_Operational_Limb_Pointing_macro(root, relativeTime, CCD_settings, pointing_altitude, TEXPIMS, Timeline_settings, comment):
+def FullReadout_Operational_Limb_Pointing_macro(root, relativeTime, CCD_settings, pointing_altitude, TEXPIMS, Timeline_settings, configFile=configFile, comment):
     ''' Macro that corresponds to pointing towards a Limb altitude in Operational Mode. 
     
     Has an dedicated set Exposure Interval to prevent CRB-crashes when transferring very large images.
@@ -138,19 +138,19 @@ def FullReadout_Operational_Limb_Pointing_macro(root, relativeTime, CCD_settings
     
     CCDSEL, NCCD, TEXPIOFS, TEXPIMS = Library.SyncArgCalculator(CCD_settings, Timeline_settings['CCDSYNC_ExtraOffset'], Timeline_settings['CCDSYNC_ExtraIntervalTime'])
     
-    relativeTime = Commands.TC_pafMode(root, relativeTime, MODE = 2, Timeline_settings = Timeline_settings, comment = comment)
+    relativeTime = Commands.TC_pafMode(root, relativeTime, MODE = 2, Timeline_settings = Timeline_settings, configFile=configFile, comment = comment)
     
     #relativeTime_OperationalMode = relativeTime+Timeline_settings['pointing_stabilization']
-    relativeTime = Commands.TC_acfLimbPointingAltitudeOffset(root, relativeTime, Initial = pointing_altitude, Final = pointing_altitude, Rate = 0, Timeline_settings = Timeline_settings, comment = comment)
+    relativeTime = Commands.TC_acfLimbPointingAltitudeOffset(root, relativeTime, Initial = pointing_altitude, Final = pointing_altitude, Rate = 0, Timeline_settings = Timeline_settings, configFile=configFile, comment = comment)
     
-    relativeTime = Commands.TC_pafPM(root, relativeTime, Timeline_settings = Timeline_settings, comment = comment)
+    relativeTime = Commands.TC_pafPM(root, relativeTime, Timeline_settings = Timeline_settings, configFile=configFile, comment = comment)
     
     relativeTime = Commands.TC_pafCCDSYNCHRONIZE(root, relativeTime, CCDSEL = CCDSEL, NCCD = NCCD, 
-                                                 TEXPIOFS = TEXPIOFS, Timeline_settings = Timeline_settings, comment = comment )
+                                                 TEXPIOFS = TEXPIOFS, Timeline_settings = Timeline_settings, configFile=configFile, comment = comment )
     
-    relativeTime = SetCCDs_macro(root, relativeTime, CCD_settings, TEXPIMS, Timeline_settings = Timeline_settings, comment = comment)
+    relativeTime = SetCCDs_macro(root, relativeTime, CCD_settings, TEXPIMS, Timeline_settings = Timeline_settings, configFile=configFile, comment = comment)
     
-    relativeTime = Commands.TC_pafMode(root, relativeTime, MODE = 1, Timeline_settings = Timeline_settings, comment = comment)
+    relativeTime = Commands.TC_pafMode(root, relativeTime, MODE = 1, Timeline_settings = Timeline_settings, configFile=configFile, comment = comment)
     
     return relativeTime
 """
@@ -164,7 +164,7 @@ def Operational_Sweep_macro(
     pointing_altitude_from,
     pointing_altitude_to,
     sweep_rate,
-    Timeline_settings,
+    Timeline_settings, configFile,
     comment="",
 ):
     """Macro that corresponds to performing a sweep while in Operational Mode.
@@ -200,7 +200,7 @@ def Operational_Sweep_macro(
     )
 
     relativeTime = Commands.TC_pafMode(
-        root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, comment=comment
+        root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment
     )
 
     # relativeTime_OperationalMode = relativeTime+Timeline_settings['pointing_stabilization']
@@ -210,7 +210,7 @@ def Operational_Sweep_macro(
         Initial=pointing_altitude_from,
         Final=pointing_altitude_from,
         Rate=0,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -219,7 +219,7 @@ def Operational_Sweep_macro(
         relativeTime,
         TEXPMS=PM_settings["TEXPMS"],
         TEXPIMS=PM_settings["TEXPIMS"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -228,7 +228,7 @@ def Operational_Sweep_macro(
         relativeTime,
         CCD_settings,
         TEXPIMS,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -238,12 +238,12 @@ def Operational_Sweep_macro(
         CCDSEL=CCDSEL,
         NCCD=NCCD,
         TEXPIOFS=TEXPIOFS,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
     relativeTime = Commands.TC_pafMode(
-        root, relativeTime, MODE=1, Timeline_settings=Timeline_settings, comment=comment
+        root, relativeTime, MODE=1, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment
     )
 
     relativeTime = Commands.TC_acfLimbPointingAltitudeOffset(
@@ -252,7 +252,7 @@ def Operational_Sweep_macro(
         Initial=pointing_altitude_from,
         Final=pointing_altitude_to,
         Rate=sweep_rate,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -269,7 +269,7 @@ def Snapshot_Inertial_macro(
     StandardPointingAltitude,
     SnapshotSpacing,
     Snapshot_relativeTime,
-    Timeline_settings,
+    Timeline_settings, configFile,
     comment,
 ):
     """ Macro that corresponds to pointing towards an Inertial direction and take a Snapshot with all the CCDs (except Nadir) which do not have TEXPMS set to 0.
@@ -314,7 +314,7 @@ def Snapshot_Inertial_macro(
     CCDSELs = Library.OrderingOfCCDSnapshots(CCD_settings)
 
     relativeTime = Commands.TC_pafMode(
-        root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, comment=comment
+        root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment
     )
 
     relativeTime = Commands.TC_acfLimbPointingAltitudeOffset(
@@ -324,6 +324,7 @@ def Snapshot_Inertial_macro(
         Final=pointing_altitude,
         Rate=0,
         Timeline_settings=Timeline_settings,
+        configFile=configFile,
         comment=comment,
     )
 
@@ -332,7 +333,7 @@ def Snapshot_Inertial_macro(
         relativeTime,
         CCD_settings,
         TEXPIMS,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -340,7 +341,7 @@ def Snapshot_Inertial_macro(
         root,
         relativeTime,
         StartTime=FreezeTime,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -348,7 +349,7 @@ def Snapshot_Inertial_macro(
         root,
         relativeTime,
         FreezeDuration=FreezeDuration,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -357,7 +358,7 @@ def Snapshot_Inertial_macro(
             root,
             Snapshot_relativeTime,
             CCDSEL=CCDSEL,
-            Timeline_settings=Timeline_settings,
+            Timeline_settings=Timeline_settings, configFile=configFile,
             comment=comment,
         )
         Snapshot_relativeTime += SnapshotSpacing
@@ -368,10 +369,10 @@ def Snapshot_Inertial_macro(
         Initial=StandardPointingAltitude,
         Final=StandardPointingAltitude,
         Rate=0,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
-    # relativeTime = Commands.TC_pafMode(root, relativeTime, MODE = 1, Timeline_settings = Timeline_settings, comment = comment)
+    # relativeTime = Commands.TC_pafMode(root, relativeTime, MODE = 1, Timeline_settings = Timeline_settings, configFile=configFile, comment = comment)
 
     return relativeTime
 
@@ -382,7 +383,7 @@ def Snapshot_Limb_Pointing_macro(
     CCD_settings,
     pointing_altitude,
     SnapshotSpacing,
-    Timeline_settings,
+    Timeline_settings, configFile,
     comment,
 ):
     """ Macro that corresponds to pointing towards a Limb altitude and taking a Snapshot with each CCD (except Nadir).
@@ -417,7 +418,7 @@ def Snapshot_Limb_Pointing_macro(
     CCDSELs = Library.OrderingOfCCDSnapshots(CCD_settings)
 
     relativeTime = Commands.TC_pafMode(
-        root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, comment=comment
+        root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment
     )
 
     # relativeTime_SnapShot = relativeTime+Timeline_settings['pointing_stabilization']
@@ -427,7 +428,7 @@ def Snapshot_Limb_Pointing_macro(
         Initial=pointing_altitude,
         Final=pointing_altitude,
         Rate=0,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -436,7 +437,7 @@ def Snapshot_Limb_Pointing_macro(
         relativeTime,
         CCD_settings,
         TEXPIMS=TEXPIMS,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -445,18 +446,18 @@ def Snapshot_Limb_Pointing_macro(
             root,
             relativeTime,
             CCDSEL=CCDSEL,
-            Timeline_settings=Timeline_settings,
+            Timeline_settings=Timeline_settings, configFile=configFile,
             comment=comment,
         )
         relativeTime += SnapshotSpacing
 
-    # relativeTime = Commands.TC_pafMode(root, relativeTime, MODE = 1, Timeline_settings = Timeline_settings, comment = comment)
+    # relativeTime = Commands.TC_pafMode(root, relativeTime, MODE = 1, Timeline_settings = Timeline_settings, configFile=configFile, comment = comment)
 
     return relativeTime
 
 
 def NadirSnapshot_Limb_Pointing_macro(
-    root, relativeTime, CCD_settings, pointing_altitude, Timeline_settings, comment
+    root, relativeTime, CCD_settings, pointing_altitude, Timeline_settings, configFile, comment
 ):
     """ Macro that corresponds to pointing towards a Limb altitude and taking a Snapshot with Nadir.
 
@@ -481,7 +482,7 @@ def NadirSnapshot_Limb_Pointing_macro(
     comment = comment + ", NadirSnapshot_Limb_Pointing_macro"
 
     relativeTime = Commands.TC_pafMode(
-        root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, comment=comment
+        root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment
     )
 
     # relativeTime_SnapShot = relativeTime+Timeline_settings['pointing_stabilization']
@@ -491,7 +492,7 @@ def NadirSnapshot_Limb_Pointing_macro(
         Initial=pointing_altitude,
         Final=pointing_altitude,
         Rate=0,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -517,7 +518,7 @@ def NadirSnapshot_Limb_Pointing_macro(
         NCOL=CCDSEL_64["NCOL"],
         NCBINFPGA=CCDSEL_64["NCBINFPGA"],
         SIGMODE=CCDSEL_64["SIGMODE"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -525,17 +526,17 @@ def NadirSnapshot_Limb_Pointing_macro(
         root,
         relativeTime,
         CCDSEL=64,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
-    # relativeTime = Commands.TC_pafMode(root, relativeTime, MODE = 1, Timeline_settings = Timeline_settings, comment = comment)
+    # relativeTime = Commands.TC_pafMode(root, relativeTime, MODE = 1, Timeline_settings = Timeline_settings, configFile=configFile, comment = comment)
 
     return relativeTime
 
 
 """
-def TurnONCCDs_macro(root, relativeTime, Timeline_settings, comment = ''):
+def TurnONCCDs_macro(root, relativeTime, Timeline_settings, configFile=configFile, comment = ''):
     ''' Macro that corresponds to the TurnONCCDs_macro.
     
     Switches ON all CCDs.
@@ -552,11 +553,11 @@ def TurnONCCDs_macro(root, relativeTime, Timeline_settings, comment = ''):
     
     comment = comment + ', TurnONCCDs_macro'
     
-    relativeTime = Commands.TC_pafMode(root, relativeTime, MODE = 2, Timeline_settings = Timeline_settings, comment = comment)
+    relativeTime = Commands.TC_pafMode(root, relativeTime, MODE = 2, Timeline_settings = Timeline_settings, configFile=configFile, comment = comment)
     
     relativeTime = Commands.TC_pafCCDMain(root, relativeTime, CCDSEL = 127, PWR = 1, TEXPIMS = 6000, TEXPMS = 0, NRSKIP = 0, NRBIN = 1, NROW = 1, 
                                           NCBIN = 1, NCOL=1, WDW = 7, JPEGQ = 110, SYNC = 0, NCBINFPGA = 0, SIGMODE = 1, GAIN = 0, 
-                                          NFLUSH = 1023, NCSKIP = 0, Timeline_settings = Timeline_settings, comment = comment)
+                                          NFLUSH = 1023, NCSKIP = 0, Timeline_settings = Timeline_settings, configFile=configFile, comment = comment)
     
     return relativeTime
 
@@ -564,7 +565,7 @@ def TurnONCCDs_macro(root, relativeTime, Timeline_settings, comment = ''):
 
 
 def SetCCDs_macro(
-    root, relativeTime, CCD_settings, TEXPIMS, Timeline_settings, comment=""
+    root, relativeTime, CCD_settings, TEXPIMS, Timeline_settings, configFile, comment=""
 ):
     """Macro that corresponds to configurating the settings of the CCDs
 
@@ -627,7 +628,7 @@ def SetCCDs_macro(
         NCOL=CCDSEL_16["NCOL"],
         NCBINFPGA=CCDSEL_16["NCBINFPGA"],
         SIGMODE=CCDSEL_16["SIGMODE"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -651,7 +652,7 @@ def SetCCDs_macro(
         NCOL=CCDSEL_32["NCOL"],
         NCBINFPGA=CCDSEL_32["NCBINFPGA"],
         SIGMODE=CCDSEL_32["SIGMODE"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -675,7 +676,7 @@ def SetCCDs_macro(
         NCOL=CCDSEL_1["NCOL"],
         NCBINFPGA=CCDSEL_1["NCBINFPGA"],
         SIGMODE=CCDSEL_1["SIGMODE"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -699,7 +700,7 @@ def SetCCDs_macro(
         NCOL=CCDSEL_8["NCOL"],
         NCBINFPGA=CCDSEL_8["NCBINFPGA"],
         SIGMODE=CCDSEL_8["SIGMODE"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -723,7 +724,7 @@ def SetCCDs_macro(
         NCOL=CCDSEL_2["NCOL"],
         NCBINFPGA=CCDSEL_2["NCBINFPGA"],
         SIGMODE=CCDSEL_2["SIGMODE"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -747,7 +748,7 @@ def SetCCDs_macro(
         NCOL=CCDSEL_4["NCOL"],
         NCBINFPGA=CCDSEL_4["NCBINFPGA"],
         SIGMODE=CCDSEL_4["SIGMODE"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -771,7 +772,7 @@ def SetCCDs_macro(
         NCOL=CCDSEL_64["NCOL"],
         NCBINFPGA=CCDSEL_64["NCBINFPGA"],
         SIGMODE=CCDSEL_64["SIGMODE"],
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -779,7 +780,7 @@ def SetCCDs_macro(
 
 
 """
-def Mode_User_Specified_macro(root, relativeTime, Timeline_settings, comment = ''):
+def Mode_User_Specified_macro(root, relativeTime, Timeline_settings, configFile=configFile, comment = ''):
     "This is a template for a new macro. Exchange '_User_Specified' for the name of the new macro"
     
     

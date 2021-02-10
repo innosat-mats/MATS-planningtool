@@ -44,7 +44,7 @@ import json
 import importlib
 import datetime
 
-from mats_planningtool import Globals, Library
+from mats_planningtool import Library
 #from mats_planningtool_Config_File import Timeline_settings, initialConditions, Logger_name, Version
 
 Logger = logging.getLogger("OPT_logger")
@@ -114,7 +114,8 @@ def XML_generator(configFile, SCIMOD_Path):
     ########    Call function to create XML-tree basis ##########################
     Logger.info('Call function XML_Initial_Basis_Creator')
     Logger.info('')
-    root = XML_Initial_Basis_Creator(timeline_start, timeline_duration, SCIMOD_Path)
+    root = XML_Initial_Basis_Creator(
+        timeline_start, timeline_duration, SCIMOD_Path, configFile)
 
     ######## Loop through SCIMOD TIMELINE lIST, selecting one mode at a time #####
     Logger.info('Loop through Science Mode Timeline List')
@@ -174,15 +175,15 @@ def XML_generator(configFile, SCIMOD_Path):
         input('Size of XML Timeline file exceeds allowed datalimit (20Mb). Press enter to acknowledge')
 
     "Reset temporary Globals"
-    Globals.latestRelativeTime = 0
-    Globals.current_pointing = None
-    Globals.LargestSetTEXPMS = 0
+    configFile.latestRelativeTime = 0
+    configFile.current_pointing = None
+    configFile.LargestSetTEXPMS = 0
     logging.shutdown()
 
 
 ################### XML-tree basis creator ####################################
 
-def XML_Initial_Basis_Creator(timeline_start, timeline_duration, SCIMOD_Path):
+def XML_Initial_Basis_Creator(timeline_start, timeline_duration, SCIMOD_Path, configFile):
     '''Subfunction, Construct Basis of XML document and adds the description container.
 
     Arguments: 
@@ -229,7 +230,7 @@ def XML_Initial_Basis_Creator(timeline_start, timeline_duration, SCIMOD_Path):
 
     etree.SubElement(root[0], 'comment')
     root[0][3].text = "This command sequence is an Innosat timeline for MATS created with OPT. Science Mode Timeline used to generate: " + \
-        SCIMOD_Path+', Configuration File used: '+Globals.Config_File
+        SCIMOD_Path+', Configuration File used: '+configFile.config_file_name
 
     root.append(etree.Element('listOfCommands'))
 

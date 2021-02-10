@@ -1,6 +1,7 @@
 from mats_planningtool import Library
 
 import json
+import os
 
 
 class configFile:
@@ -671,9 +672,9 @@ class configFile:
         self.current_pointing = None
 
         if SCIMOD_Path == None:
-            self.MinimalScienceXML_gen()
-        else:
-            XML_generator(self, SCIMOD_Path)
+            SCIMOD_Path = os.path.join(
+                'Output', 'Science_Mode_Timeline_'+os.path.split(self.config_file_name)[1])
+        XML_generator(self, SCIMOD_Path)
 
     def MinimalScienceXML_gen(self):
         """Invokes the *MinimalScienceXML_gen* part of the *OPT*.

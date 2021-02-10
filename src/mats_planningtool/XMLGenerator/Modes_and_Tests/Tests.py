@@ -40,7 +40,7 @@ from mats_planningtool import Globals, Library, MATS_coordinates
 Logger = logging.getLogger("OPT_logger")
 
 
-def All_Tests(root, date, duration, relativeTime, Timeline_settings, Test_settings=['Limb_functional_test', 'Photometer_test_1', 'CCD_stability_test', 'Nadir_functional_test']):
+def All_Tests(root, date, duration, relativeTime, Timeline_settings, configFile, Test_settings=['Limb_functional_test', 'Photometer_test_1', 'CCD_stability_test', 'Nadir_functional_test']):
     """ Runs all the Test functions which have their function name as a string in the input *Test_settings*.
 
     Allows the tests to be dynamically scheduled. Meaning that when the previous test is done another done starts immediately after. 
@@ -52,23 +52,23 @@ def All_Tests(root, date, duration, relativeTime, Timeline_settings, Test_settin
     duration = Timeline_settings['duration']['duration']
 
     if('Limb_functional_test' in Test_settings):
-        relativeTime, date = Limb_functional_test(root, date, duration=duration, relativeTime=relativeTime,
-                                                  Timeline_settings=Timeline_settings)
+        relativeTime, date = Limb_functional_test(
+            root, date, duration=duration, relativeTime=relativeTime, Timeline_settings=Timeline_settings, configFile=configFile)
     if('Photometer_test_1' in Test_settings):
-        relativeTime, date = Photometer_test_1(root, date, duration=5400, relativeTime=relativeTime,
-                                               Timeline_settings=Timeline_settings)
+        relativeTime, date = Photometer_test_1(
+            root, date, duration=5400, relativeTime=relativeTime, Timeline_settings=Timeline_settings, configFile=configFile)
     if('CCD_stability_test' in Test_settings):
-        relativeTime, date = CCD_stability_test(root, date, duration=duration, relativeTime=relativeTime,
-                                                Timeline_settings=Timeline_settings)
+        relativeTime, date = CCD_stability_test(
+            root, date, duration=duration, relativeTime=relativeTime, Timeline_settings=Timeline_settings, configFile=configFile)
     if('Nadir_functional_test' in Test_settings):
-        relativeTime, date = Nadir_functional_test(root, date, duration=duration, relativeTime=relativeTime,
-                                                   Timeline_settings=Timeline_settings)
+        relativeTime, date = Nadir_functional_test(
+            root, date, duration=duration, relativeTime=relativeTime, Timeline_settings=Timeline_settings, configFile=configFile)
 
     "Update duration in the Timeline"
     root[0][2][1].text = str(relativeTime + Timeline_settings['mode_separation'])
 
 
-def Limb_functional_test(root, date, duration, relativeTime, Timeline_settings, Test_settings={'ExpTimes': [1000, 2000, 4000, 8000, 16000]}):
+def Limb_functional_test(root, date, duration, relativeTime, Timeline_settings, configFile, Test_settings={'ExpTimes': [1000, 2000, 4000, 8000, 16000]}):
     """Limb_functional_test. 
 
     Schedules Limb_functional_test with defined parameters and simulates MATS propagation from TLE.
@@ -83,9 +83,9 @@ def Limb_functional_test(root, date, duration, relativeTime, Timeline_settings, 
     log_timestep = 500
     Logger.debug('log_timestep [s]: '+str(log_timestep))
 
-    TLE = OPT_Config_File.getTLE()
+    TLE = configFile.getTLE()
 
-    CCD_settings = OPT_Config_File.CCD_macro_settings('FullReadout')
+    CCD_settings = configFile.CCD_macro_settings('FullReadout')
 
     duration_flag = 0
 
@@ -202,8 +202,8 @@ def Limb_functional_test(root, date, duration, relativeTime, Timeline_settings, 
                                ', ExpTime = '+str(ExpTime)+', JPEGQ = '+str(JPEGQ))
                     Logger.debug(comment)
 
-                    relativeTime = Macros.Snapshot_Limb_Pointing_macro(root, round(relativeTime, 2), CCD_settings, pointing_altitude=altitude,
-                                                                       SnapshotSpacing=SnapshotSpacing, Timeline_settings=Timeline_settings, comment=comment)
+                    relativeTime = Macros.Snapshot_Limb_Pointing_macro(root, round(
+                        relativeTime, 2), CCD_settings, pointing_altitude=altitude, SnapshotSpacing=SnapshotSpacing, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment)
 
                     # relativeTime = Macros.Limb_functional_test_macro(root = root, relativeTime = str(relativeTime),
                     #                           pointing_altitude = str(altitude), ExpTime = str(ExpTime),
@@ -225,7 +225,7 @@ def Limb_functional_test(root, date, duration, relativeTime, Timeline_settings, 
 #############################################################################################
 
 
-def Photometer_test_1(root, date, relativeTime, duration, Timeline_settings, Test_settings={'ExpTimes': [1000, 2000, 4000, 8000, 16000]}):
+def Photometer_test_1(root, date, relativeTime, duration, Timeline_settings, configFile, Test_settings={'ExpTimes': [1000, 2000, 4000, 8000, 16000]}):
     """Photometer_test_1
 
     Sets the payload in operational mode and then cycles PM settings as defined in the Test.
@@ -238,7 +238,7 @@ def Photometer_test_1(root, date, relativeTime, duration, Timeline_settings, Tes
 
     Logger.debug('')
 
-    CCD_settings = OPT_Config_File.CCD_macro_settings('BinnedCalibration')
+    CCD_settings = configFile.CCD_macro_settings('BinnedCalibration')
     ExpTimes = Test_settings['ExpTimes']
 
     initial_relativeTime = relativeTime
@@ -269,7 +269,7 @@ def Photometer_test_1(root, date, relativeTime, duration, Timeline_settings, Tes
 
             relativeTime = Macros.Operational_Limb_Pointing_macro(root, relativeTime=relativeTime, CCD_settings=CCD_settings,
                                                                   PM_settings=PM_settings, pointing_altitude=pointing_altitude,
-                                                                  Timeline_settings=Timeline_settings,  comment=comment)
+                                                                  Timeline_settings=Timeline_settings,  configFile=configFile, comment=comment)
 
             "Postpone Next PM settings"
             relativeTime = relativeTime + session_duration
@@ -287,7 +287,7 @@ def Photometer_test_1(root, date, relativeTime, duration, Timeline_settings, Tes
 ##############################################################################################
 
 
-def Nadir_functional_test(root, date, duration, relativeTime, Timeline_settings, Test_settings={'ExpTimes': [1000, 2000, 4000, 8000, 16000]}):
+def Nadir_functional_test(root, date, duration, relativeTime, Timeline_settings, configFile, Test_settings={'ExpTimes': [1000, 2000, 4000, 8000, 16000]}):
     """Nadir_functional_test
 
     Schedules Nadir_functional_test with defined parameters and simulates MATS propagation from TLE.
@@ -299,7 +299,7 @@ def Nadir_functional_test(root, date, duration, relativeTime, Timeline_settings,
 
     Logger.debug('Test_settings from Science Mode List: '+str(Test_settings))
 
-    CCD_settings = OPT_Config_File.CCD_macro_settings('FullReadout')
+    CCD_settings = configFile.CCD_macro_settings('FullReadout')
     altitude = Timeline_settings['StandardPointingAltitude']
 
     ExpTimes = Test_settings['ExpTimes']
@@ -314,7 +314,7 @@ def Nadir_functional_test(root, date, duration, relativeTime, Timeline_settings,
 
     initial_relativeTime = relativeTime
 
-    TLE = OPT_Config_File.getTLE()
+    TLE = configFile.getTLE()
     MATS_skyfield = skyfield.api.EarthSatellite(TLE[0], TLE[1])
 
     Altitude_defining_night = 45  # km
@@ -421,9 +421,8 @@ def Nadir_functional_test(root, date, duration, relativeTime, Timeline_settings,
 
                 Logger.debug(comment)
 
-                relativeTime = Macros.NadirSnapshot_Limb_Pointing_macro(root=root, relativeTime=relativeTime,
-                                                                        pointing_altitude=altitude, CCD_settings=CCD_settings,
-                                                                        Timeline_settings=Timeline_settings, comment=comment)
+                relativeTime = Macros.NadirSnapshot_Limb_Pointing_macro(
+                    root=root, relativeTime=relativeTime, pointing_altitude=altitude, CCD_settings=CCD_settings,      Timeline_settings=Timeline_settings, configFile=configFile, comment=comment)
 
                 #"Postpone next command until at least the end of ExpTime"
                 #relativeTime = round(float(relativeTime) + ExpTime/1000,2)
@@ -438,7 +437,7 @@ def Nadir_functional_test(root, date, duration, relativeTime, Timeline_settings,
 
 #######################################################################################################
 
-def CCD_stability_test(root, date, duration, relativeTime, Timeline_settings, Test_settings={'ExpTimes': [1000, 2000, 4000, 8000, 16000, 32000]}):
+def CCD_stability_test(root, date, duration, relativeTime, Timeline_settings, configFile, Test_settings={'ExpTimes': [1000, 2000, 4000, 8000, 16000, 32000]}):
     """CCD_stability_test. 
 
     Schedules CCD_stability_test with defined parameters and simulates MATS propagation from TLE.
@@ -450,7 +449,7 @@ def CCD_stability_test(root, date, duration, relativeTime, Timeline_settings, Te
     Logger.debug('Test_settings from Science Mode List: '+str(Test_settings))
     # Test_settings = params_checker(Test_settings,Mode=X=_settings)
 
-    CCD_settings = OPT_Config_File.CCD_macro_settings('FullReadout')
+    CCD_settings = configFile.CCD_macro_settings('FullReadout')
 
     JPEGQs = [100]
     WDWs = [7]
@@ -485,7 +484,7 @@ def CCD_stability_test(root, date, duration, relativeTime, Timeline_settings, Te
                 Logger.debug(comment)
 
                 relativeTime = Macros.Snapshot_Limb_Pointing_macro(root, round(relativeTime, 2), CCD_settings, pointing_altitude=altitude,
-                                                                   SnapshotSpacing=SnapshotSpacing, Timeline_settings=Timeline_settings, comment=comment)
+                                                                   SnapshotSpacing=SnapshotSpacing, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment)
 
                 #"Postpone next command until at least the end of ExpTime"
                 #relativeTime = round(relativeTime + ExpTime/1000,2)

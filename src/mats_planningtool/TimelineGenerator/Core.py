@@ -255,7 +255,7 @@ def Timeline_generator(configFile):
     except:
         pass
     SCIMOD_NAME = os.path.join(
-        'Output', 'Science_Mode_Timeline__'+os.path.split(configFile.config_file_name)[1]+'.json')
+        'Output', 'Science_Mode_Timeline_'+os.path.split(configFile.config_file_name)[1])
     Logger.info('Save mode timeline to file: '+SCIMOD_NAME)
     with open(SCIMOD_NAME, "w") as write_file:
         json.dump(SCIMOD_Timeline, write_file, indent=2)

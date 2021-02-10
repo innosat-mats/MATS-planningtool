@@ -37,7 +37,7 @@ except ImportError:
     from sphinx import apidoc
 
 output_dir = os.path.join(__location__, "api")
-module_dir = os.path.join(__location__, "../src/OPT")
+module_dir = os.path.join(__location__, "../src/mats_planningtool")
 try:
     shutil.rmtree(output_dir)
 except FileNotFoundError:
@@ -243,7 +243,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-    ("index", "user_guide.tex", "MATS-planningtool Documentation", "Ole Martin Christensen", "manual")
+    ("index", "user_guide.tex", "MATS-planningtool Documentation",
+     "Ole Martin Christensen", "manual")
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

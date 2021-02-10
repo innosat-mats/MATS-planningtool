@@ -32,8 +32,7 @@ configfile_original.Timeline_gen()
 
 # "Convert the Science Mode Timeline into payload and platform CMDs as a .xml file)"
 
-configfile_original.XML_gen(
-    'Output/Science_Mode_Timeline__config_file_original.json.json')
+configfile_original.XML_gen()
 
 # "Plot the example Science Mode Timeline together with the example h5 file and the example STK generated .csv file"
 # Data_MATS, Data_LP, Timescience_mode_timeline_path, Time_OHB = OPT.Timeline_Plotter(
@@ -48,22 +47,22 @@ configfile_original.XML_gen(
 #     "Output/Science_Mode_Timeline__OPT_Config_File/Timeline_Plotter_PlotsAndData"
 # )
 
-# # "Return the active science mode andrörglas its settings at a specfic date from a Science Mode Timeline"
+# # "Return the active science mode and its settings at a specfic date from a Science Mode Timeline"
 # Mode, Parameters = OPT.Timeline_analyzer(
 #     "Output/Science_Mode_Timeline__OPT_Config_File.json", "2020-06-20 19:30:00"
 # )
 
 # "Create a Minimal Science XML which is defined directly in the Source Code under _XMLGenerator.MinimalScienceXML_gen.py"
-# OPT.MinimalScienceXML_gen()
+configfile_original.MinimalScienceXML_gen()
 
 # "Schedule StartUpCMDs and all defined commisioning phase Tests with default settings"
-# configfile_original.XML_gen(
-#    "test_data/Example_Science_Mode_Timeline__Commisioning_Phase_Tests.json")
+configfile_original.XML_gen(
+    "test_data/Example_Science_Mode_Timeline__Commisioning_Phase_Tests.json")
 
 configfile_original.PLUTOGenerator(
     "Output/XML_TIMELINE__FROM__Output_Science_Mode_Timeline__config_file_original.xml",
     "Output/optest_pluto.plp",
 )
 
-# configfile_original.PLUTOGenerator(
-#    "Output/XML_TIMELINE__MinimalScience_.xml", "Output/minimal_science_pluto.plp")
+configfile_original.PLUTOGenerator(
+    "Output/XML_TIMELINE__MinimalScience_.xml", "Output/minimal_science_pluto.plp")

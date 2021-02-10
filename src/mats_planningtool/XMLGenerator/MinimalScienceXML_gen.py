@@ -107,6 +107,7 @@ def MinimalScienceXMLGenerator(configFile):
         VRD=CCDBIAS_settings["VRD"],
         VOD=CCDBIAS_settings["VOD"],
         Timeline_settings=Timeline_settings,
+        configFile=configFile,
     )
 
     relativeTime = Commands.TC_pafCCDFlushBadColumns(
@@ -114,6 +115,7 @@ def MinimalScienceXMLGenerator(configFile):
         relativeTime,
         CCDSEL=CCDFlushBadColumns_settings["CCDSEL"],
         Timeline_settings=Timeline_settings,
+        configFile=configFile,
     )
 
     relativeTime = Commands.TC_pafCCDBadColumn(
@@ -123,6 +125,7 @@ def MinimalScienceXMLGenerator(configFile):
         NBC=CCDBadColumn_settings["NBC"],
         BC=CCDBadColumn_settings["BC"],
         Timeline_settings=Timeline_settings,
+        configFile=configFile,
     )
 
     relativeTime = Macros.Operational_Limb_Pointing_macro(
@@ -132,6 +135,7 @@ def MinimalScienceXMLGenerator(configFile):
         PM_settings,
         pointing_altitude=Timeline_settings["StandardPointingAltitude"],
         Timeline_settings=Timeline_settings,
+        configFile=configFile,
     )
 
     "Update duration in the Timeline"

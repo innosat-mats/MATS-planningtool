@@ -79,7 +79,7 @@ def Mode5(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
         CCD_settings,
         PM_settings=PM_settings,
         pointing_altitude=pointing_altitude,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -221,7 +221,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         CCD_settings,
                         PM_settings=PM_settings,
                         pointing_altitude=pointing_altitude,
-                        Timeline_settings=Timeline_settings,
+                        Timeline_settings=Timeline_settings, configFile=configFile,
                         comment=comment,
                     )
 
@@ -245,6 +245,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         PM_settings=PM_settings,
                         pointing_altitude=pointing_altitude,
                         Timeline_settings=Timeline_settings,
+                        configFile=configFile,
                         comment=comment,
                     )
 
@@ -269,7 +270,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         CCD_settings,
                         PM_settings=PM_settings,
                         pointing_altitude=pointing_altitude,
-                        Timeline_settings=Timeline_settings,
+                        Timeline_settings=Timeline_settings, configFile=configFile,
                         comment=comment,
                     )
 
@@ -292,7 +293,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         CCD_settings,
                         PM_settings=PM_settings,
                         pointing_altitude=pointing_altitude,
-                        Timeline_settings=Timeline_settings,
+                        Timeline_settings=Timeline_settings, configFile=configFile,
                         comment=comment,
                     )
 
@@ -336,6 +337,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                             PM_settings=PM_settings,
                             pointing_altitude=pointing_altitude,
                             Timeline_settings=Timeline_settings,
+                            configFile=configFile,
                             comment=comment,
                         )
 
@@ -375,6 +377,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                             PM_settings=PM_settings,
                             pointing_altitude=pointing_altitude,
                             Timeline_settings=Timeline_settings,
+                            configFile=configFile,
                             comment=comment,
                         )
 
@@ -418,6 +421,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                             PM_settings=PM_settings,
                             pointing_altitude=pointing_altitude,
                             Timeline_settings=Timeline_settings,
+                            configFile=configFile,
                             comment=comment,
                         )
 
@@ -457,6 +461,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                             PM_settings=PM_settings,
                             pointing_altitude=pointing_altitude,
                             Timeline_settings=Timeline_settings,
+                            configFile=configFile,
                             comment=comment,
                         )
 
@@ -586,6 +591,7 @@ def Mode2(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                     PM_settings=PM_settings,
                     pointing_altitude=pointing_altitude,
                     Timeline_settings=Timeline_settings,
+                    configFile=configFile,
                     comment=comment,
                 )
 
@@ -601,6 +607,7 @@ def Mode2(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                     PM_settings=PM_settings,
                     pointing_altitude=pointing_altitude,
                     Timeline_settings=Timeline_settings,
+                    configFile=configFile,
                     comment=comment,
                 )
 
@@ -632,7 +639,7 @@ def Mode2(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         CCD_settings,
                         PM_settings=PM_settings,
                         pointing_altitude=pointing_altitude,
-                        Timeline_settings=Timeline_settings,
+                        Timeline_settings=Timeline_settings, configFile=configFile,
                         comment=comment,
                     )
 
@@ -660,7 +667,7 @@ def Mode2(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         CCD_settings,
                         PM_settings=PM_settings,
                         pointing_altitude=pointing_altitude,
-                        Timeline_settings=Timeline_settings,
+                        Timeline_settings=Timeline_settings, configFile=configFile,
                         comment=comment,
                     )
 
@@ -749,6 +756,7 @@ def Mode100(root, date, duration, relativeTime, Timeline_settings, configFile, M
             PM_settings=PM_settings,
             pointing_altitude=pointing_altitude,
             Timeline_settings=Timeline_settings,
+            configFile=configFile,
             comment=comment,
         )
 
@@ -760,7 +768,7 @@ def Mode100(root, date, duration, relativeTime, Timeline_settings, configFile, M
         root,
         relativeTimeEndOfMode,
         MODE=2,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -818,7 +826,7 @@ def Mode110(root, date, duration, relativeTime, Timeline_settings, configFile, M
         pointing_altitude_from=pointing_altitude_from,
         pointing_altitude_to=pointing_altitude_to,
         sweep_rate=sweep_rate,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -826,7 +834,7 @@ def Mode110(root, date, duration, relativeTime, Timeline_settings, configFile, M
         root,
         relativeTimeEndOfMode,
         MODE=2,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -837,7 +845,7 @@ def Mode110(root, date, duration, relativeTime, Timeline_settings, configFile, M
 
 
 def Mode12X(
-    root, date, duration, relativeTime, Timeline_settings, Mode_settings, CCD_settings
+    root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings, CCD_settings
 ):
     """Subfunction of Mode12X, where X is 0,1,2,3....
 
@@ -882,6 +890,7 @@ def Mode12X(
         SnapshotSpacing=SnapshotSpacing,
         Snapshot_relativeTime=Snapshot_relativeTime,
         Timeline_settings=Timeline_settings,
+        configFile=configFile,
         comment=comment,
     )
 
@@ -917,6 +926,7 @@ def Mode120(root, date, duration, relativeTime, Timeline_settings, configFile, M
         duration,
         relativeTime,
         Timeline_settings=Timeline_settings,
+        configFile=configFile,
         Mode_settings=Mode_settings,
         CCD_settings=CCD_settings,
     )
@@ -955,6 +965,7 @@ def Mode121(root, date, duration, relativeTime, Timeline_settings, configFile, M
         duration,
         relativeTime,
         Timeline_settings=Timeline_settings,
+        configFile=configFile,
         Mode_settings=Mode_settings,
         CCD_settings=CCD_settings,
     )
@@ -992,6 +1003,7 @@ def Mode122(root, date, duration, relativeTime, Timeline_settings, configFile, M
         duration,
         relativeTime,
         Timeline_settings=Timeline_settings,
+        configFile=configFile,
         Mode_settings=Mode_settings,
         CCD_settings=CCD_settings,
     )
@@ -1033,6 +1045,7 @@ def Mode123(root, date, duration, relativeTime, Timeline_settings, configFile, M
         duration,
         relativeTime,
         Timeline_settings=Timeline_settings,
+        configFile=configFile,
         Mode_settings=Mode_settings,
         CCD_settings=CCD_settings,
     )
@@ -1069,6 +1082,7 @@ def Mode124(root, date, duration, relativeTime, Timeline_settings, configFile, M
         duration,
         relativeTime,
         Timeline_settings=Timeline_settings,
+        configFile=configFile,
         Mode_settings=Mode_settings,
         CCD_settings=CCD_settings,
     )
@@ -1108,7 +1122,7 @@ def Mode130(root, date, duration, relativeTime, Timeline_settings, configFile, M
         CCD_settings,
         pointing_altitude=pointing_altitude,
         SnapshotSpacing=SnapshotSpacing,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -1148,7 +1162,7 @@ def Mode131(root, date, duration, relativeTime, Timeline_settings, configFile, M
         CCD_settings,
         PM_settings=PM_settings,
         pointing_altitude=pointing_altitude,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -1156,7 +1170,7 @@ def Mode131(root, date, duration, relativeTime, Timeline_settings, configFile, M
         root,
         relativeTimeEndOfMode,
         MODE=2,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -1204,6 +1218,7 @@ def Mode132_133(
             PM_settings=PM_settings,
             pointing_altitude=pointing_altitude,
             Timeline_settings=Timeline_settings,
+            configFile=configFile,
             comment=comment,
         )
 
@@ -1213,7 +1228,7 @@ def Mode132_133(
         root,
         relativeTimeEndOfMode,
         MODE=2,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -1315,7 +1330,7 @@ def Mode134(root, date, duration, relativeTime, Timeline_settings, configFile, M
         CCD_settings,
         PM_settings=PM_settings,
         pointing_altitude=pointing_altitude,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -1323,7 +1338,7 @@ def Mode134(root, date, duration, relativeTime, Timeline_settings, configFile, M
         root,
         relativeTimeEndOfMode,
         MODE=2,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -1362,7 +1377,7 @@ def X(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_se
         Initial=120000,
         Final=120000,
         Rate=0,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -1373,7 +1388,7 @@ def X(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_se
         CCD_settings=CCD_settings,
         PM_settings=configFile.PM_settings,
         pointing_altitude=120000,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
@@ -1381,7 +1396,7 @@ def X(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_se
         root,
         relativeTimeEndOfMode,
         MODE=2,
-        Timeline_settings=Timeline_settings,
+        Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
 
