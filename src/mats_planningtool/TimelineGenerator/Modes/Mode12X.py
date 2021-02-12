@@ -12,7 +12,7 @@ from astroquery.vizier import Vizier
 from skyfield import api
 
 from mats_planningtool.Library import Satellite_Simulator, deg2HMS, scheduler
-from mats_planningtool import Globals, MATS_coordinates
+from mats_planningtool import MATS_coordinates
 
 Logger = logging.getLogger("OPT_logger")
 

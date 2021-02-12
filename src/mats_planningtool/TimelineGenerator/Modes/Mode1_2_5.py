@@ -8,7 +8,6 @@ import ephem
 import logging
 import importlib
 
-from mats_planningtool import Globals
 
 Logger = logging.getLogger("OPT_logger")
 

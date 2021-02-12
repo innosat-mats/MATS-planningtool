@@ -13,7 +13,7 @@ import ephem
 from pylab import sign
 from math import ceil as ceil
 
-from mats_planningtool import Globals, Library
+from mats_planningtool import Library
 
 Logger = logging.getLogger("OPT_logger")
 
@@ -48,7 +48,7 @@ def CheckConfigFile(configFile):
     Mode134_settings = configFile.Mode134_settings()
 
     try:
-        Logger.info("Currently used Configuration File: " + Globals.Config_File)
+        Logger.info("Currently used Configuration File: " + configFile.config_file_name)
     except:
         Logger.error(
             "Currently stated Configuration File is invalid. Try running Set_ConfigFile."

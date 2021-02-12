@@ -7,7 +7,7 @@ Part of Timeline_generator, as part of OPT.
 
 import importlib
 
-from mats_planningtool import Globals
+
 from .Mode12X import date_calculator, date_select, UserProvidedDateScheduler
 
 

@@ -25,7 +25,7 @@ from pylab import (
 )
 from skyfield import api
 
-from mats_planningtool import Globals, MATS_coordinates
+from mats_planningtool import MATS_coordinates
 
 
 timescale_skyfield = api.load.timescale(builtin=True)

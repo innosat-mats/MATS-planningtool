@@ -8,7 +8,6 @@ Main test script showcasing how to use the main parts of OPT.
 """
 
 from mats_planningtool import configFile as configFile
-from mats_planningtool import timeLine as timeLine
 
 configfile = "./data/config_file_original.json"
 
@@ -25,32 +24,31 @@ configfile_original.CheckConfigFile()
 # "Create a Science Mode Timeline (.json file) depending on the settings in the Configuration File"
 configfile_original.Timeline_gen()
 
-# "Predict state and attitude data from the Science Mode Timeline and plot the results"
-# Data_MATS, Data_LP, Time, Time_OHB = OPT.Timeline_Plotter(
-#     "Output/Science_Mode_Timeline__OPT_Config_File.json", Timestep=20
-# )
+# "Predict state and attitude dataconfig from the Science Mode Timeline and plot the results"
+Data_MATS, Data_LP, Time, Time_OHB = configfile_original.Timeline_Plotter(
+    "Output/Science_Mode_Timeline_config_file_original.json", Timestep=20
+)
 
 # "Convert the Science Mode Timeline into payload and platform CMDs as a .xml file)"
 
 configfile_original.XML_gen()
 
 # "Plot the example Science Mode Timeline together with the example h5 file and the example STK generated .csv file"
-# Data_MATS, Data_LP, Timescience_mode_timeline_path, Time_OHB = OPT.Timeline_Plotter(
-#     "OPT/Example_Science_Mode_Timeline__OPT_Config_File.json",
-#     STK_CSV_PATH="OPT/ExampleCSVfile.csv",
-#     OHB_H5_Path="OPT/ExampleH5file_LEVEL_1A_PLATF_20200120-094217_20200120-102136.hdf5",
-#     Timestep=20,
-# )
+Data_MATS, Data_LP, Timescience_mode_timeline_path, Time_OHB = configfile_original.Timeline_Plotter(
+    "test_data/Example_Science_Mode_Timeline__OPT_Config_File.json",
+    STK_CSV_PATH="test_data/ExampleCSVfile.csv",
+    OHB_H5_Path="test_data/ExampleH5file_LEVEL_1A_PLATF_20200120-094217_20200120-102136.hdf5",
+    Timestep=20, FractionOfDataUsed=0.1)
 
 # "Open plots previously created with Timeline_Plotter"
-# OPT.Plot_Timeline_Plotter_Plots(
-#     "Output/Science_Mode_Timeline__OPT_Config_File/Timeline_Plotter_PlotsAndData"
-# )
+configfile_original.Plot_Timeline_Plotter_Plots(
+    "Output/Science_Mode_Timeline__OPT_Config_File/Timeline_Plotter_PlotsAndData"
+)
 
 # # "Return the active science mode and its settings at a specfic date from a Science Mode Timeline"
-# Mode, Parameters = OPT.Timeline_analyzer(
-#     "Output/Science_Mode_Timeline__OPT_Config_File.json", "2020-06-20 19:30:00"
-# )
+Mode, Parameters = configfile_original.Timeline_analyzer(
+    "Output/Science_Mode_Timeline_config_file_original.json", "2020-06-20 19:30:00"
+)
 
 # "Create a Minimal Science XML which is defined directly in the Source Code under _XMLGenerator.MinimalScienceXML_gen.py"
 configfile_original.MinimalScienceXML_gen()
@@ -60,7 +58,7 @@ configfile_original.XML_gen(
     "test_data/Example_Science_Mode_Timeline__Commisioning_Phase_Tests.json")
 
 configfile_original.PLUTOGenerator(
-    "Output/XML_TIMELINE__FROM__Output_Science_Mode_Timeline__config_file_original.xml",
+    "Output/XML_TIMELINE__FROM__Output_Science_Mode_Timeline_config_file_original.xml",
     "Output/optest_pluto.plp",
 )
 

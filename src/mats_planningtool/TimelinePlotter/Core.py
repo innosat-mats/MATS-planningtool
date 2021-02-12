@@ -42,14 +42,14 @@ import astropy.time
 import sys
 import ntpath
 
-from mats_planningtool import Library, MATS_coordinates, Globals
+from mats_planningtool import Library, MATS_coordinates
 
 
 Logger = logging.getLogger("OPT_logger")
 rcParams["figure.max_open_warning"] = 30
 
 
-def Timeline_Plotter(Science_Mode_Path, OHB_H5_Path, STK_CSV_FILE, Timestep=10):
+def Timeline_Plotter(configFile, Science_Mode_Path, OHB_H5_Path, STK_CSV_FILE, Timestep=10,FractionOfDataUsed=0.1):
     """Core function of the Timeline_Plotter.
 
     Goes through the *Science Mode Timeline*, one mode at a time.
@@ -72,14 +72,14 @@ def Timeline_Plotter(Science_Mode_Path, OHB_H5_Path, STK_CSV_FILE, Timestep=10):
     ############# Set up Logger #################################
     Library.SetupLogger(configFile.Logger_name())
     Logger = logging.getLogger("OPT_logger")
-    Version = OPT_Config_File.Version()
+    Version = configFile.Version()
     Logger.info(
-        "Configuration File used: " + Globals.Config_File + ", Version: " + Version
+        "Configuration File used: " + configFile.config_file_name + ", Version: " + Version
     )
 
     "Get Timeline settings and TLE from Configuration File. Only used if not given in the Science Mode Timeline"
-    Timeline_settings = OPT_Config_File.Timeline_settings()
-    TLE = OPT_Config_File.getTLE()
+    Timeline_settings = configFile.Timeline_settings()
+    TLE = configFile.getTLE()
 
     "Checks whether data from OHB as a .h5 file was given"
     if OHB_H5_Path == "":
@@ -286,6 +286,7 @@ def Timeline_Plotter(Science_Mode_Path, OHB_H5_Path, STK_CSV_FILE, Timestep=10):
         OHB_H5_Path,
         STK_CSV_FILE,
         Science_Mode_Path,
+        FractionOfDataUsed,
     )
 
     return Data_MATS, Data_LP, Time, Time_OHB
@@ -764,7 +765,7 @@ def Simulator(
             )
         )
         dcm_change_of_basis_ECI_to_SLOF = transpose(dcm_SLOF_coordinate_system)
-        r_change_of_basis_ECI_to_SLOF = R.from_dcm(dcm_change_of_basis_ECI_to_SLOF)
+        r_change_of_basis_ECI_to_SLOF = R.from_matrix(dcm_change_of_basis_ECI_to_SLOF)
 
         optical_axis_SLOF = r_change_of_basis_ECI_to_SLOF.apply(optical_axis[t, :])
         r_V_offset_normal_SLOF = r_change_of_basis_ECI_to_SLOF.apply(
@@ -779,7 +780,7 @@ def Simulator(
             ((optical_axis_SLOF), (r_V_offset_normal_SLOF), (r_H_offset_normal_SLOF))
         )
         basis_SLOF = array(((0, 0, -1), (0, 1, 0), (1, 0, 0)))
-        rotation, sensitivity_matrix = R.match_vectors(basis_SBF, basis_SLOF)
+        rotation, sensitivity_matrix = R.align_vectors(basis_SBF, basis_SLOF)
 
         "The intrinsic (ZYZ) Euler angles which corresponds to rotating the Z-axis of the SLOF basis to the Spacecraft body frame -Z-axis (which correspond to the optical axis)"
         Euler_angles[t, :] = rotation.as_euler("ZYZ", degrees=True)
@@ -838,6 +839,7 @@ def Plotter(
     OHB_H5_Path="",
     STK_CSV_FILE="",
     Science_Mode_Path="",
+    FractionOfDataUsed=0.1,
 ):
     """Subfunction, Extracts data and performs calculations and plots the position and attitude data of MATS and LP.
 
@@ -968,26 +970,12 @@ def Plotter(
         ###### !!!!!!!!!!!!!!!! ############
         # FractionOfDataUsed = 1/3
 
-        Continue = True
-        while Continue:
-            Input = input(
-                "Input the fractional amount of the available OHB h5-data to use (0<=X<=1).\n"
-            )
-            try:
-                Input = float(Input)
-                if 0 <= Input <= 1:
-                    FractionOfDataUsed = Input
-                    timesteps = int(timesteps * FractionOfDataUsed - 1)
-                    Logger.info(
-                        "Fractional amount of h5-data used: " + str(FractionOfDataUsed)
-                    )
-                    if timesteps < 1:
-                        timesteps = 1
-                    Continue = False
-                else:
-                    print("Try again!")
-            except:
-                print("Try again!")
+        timesteps = int(timesteps * FractionOfDataUsed - 1)
+        Logger.info(
+            "Fractional amount of h5-data used: " + str(FractionOfDataUsed)
+        )
+        if timesteps < 1:
+            timesteps = 1
         ###### !!!!!!!!!!!!!!!! ############
 
         "To make sure there is enough data to support the amount of timesteps together with the DataIndexStepState"
@@ -1104,7 +1092,8 @@ def Plotter(
                 )
             )
             dcm_change_of_basis_ECI_to_SLOF = transpose(dcm_SLOF_coordinate_system)
-            r_change_of_basis_ECI_to_SLOF = R.from_dcm(dcm_change_of_basis_ECI_to_SLOF)
+            r_change_of_basis_ECI_to_SLOF = R.from_matrix(
+                dcm_change_of_basis_ECI_to_SLOF)
 
             "Create Rotation from quaternions (ECI to SpaceCraft BodyFrame)"
             MATS_ECI_OHB = R.from_quat(
@@ -1657,7 +1646,8 @@ def Plotter(
 
                     "The transpose of a matrix where the columns are basis vectors is a change of basis matrix"
                     dcm_change_of_basis_RCI = transpose(UnitVectorBasis_RCI)
-                    r_change_of_basis_ECI_to_SLOF = R.from_dcm(dcm_change_of_basis_RCI)
+                    r_change_of_basis_ECI_to_SLOF = R.from_matrix(
+                        dcm_change_of_basis_RCI)
 
                     r_MATS_error_OHB_RCI = r_change_of_basis_ECI_to_SLOF.apply(
                         (

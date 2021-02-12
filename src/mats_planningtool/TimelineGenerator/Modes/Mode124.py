@@ -14,7 +14,7 @@ from pylab import cross, ceil, dot, zeros, sqrt, norm, pi, arccos, arctan
 from skyfield import api
 
 from mats_planningtool.Library import Satellite_Simulator, scheduler
-from mats_planningtool import Globals
+
 from .Mode12X import UserProvidedDateScheduler
 
 Logger = logging.getLogger("OPT_logger")
@@ -84,7 +84,7 @@ def date_calculator(configFile):
     ##################################################
 
     "Check how many times Mode124 have been scheduled"
-    Mode124Iteration = Globals.Mode124Iteration
+    Mode124Iteration = configFile.Mode124Iteration
     "Make the V_offset_Index go from 0 to len(Mode124_settings['V_offset']"
     V_offset_Index = (Mode124Iteration-1) % (len(Mode124_settings['V_offset']))
 

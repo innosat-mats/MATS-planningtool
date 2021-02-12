@@ -7,7 +7,7 @@ Created on Tue Jun  4 11:51:44 2019
 
 import importlib
 
-from mats_planningtool import Globals
+
 from .Mode12X import date_calculator, date_select, UserProvidedDateScheduler
 
 

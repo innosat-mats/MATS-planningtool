@@ -13,7 +13,6 @@ import importlib
 import logging
 
 from mats_planningtool.Library import scheduler
-from mats_planningtool import Globals
 
 
 Logger = logging.getLogger("OPT_logger")

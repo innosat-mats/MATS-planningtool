@@ -12,7 +12,7 @@ import importlib
 import logging
 
 
-from mats_planningtool import Library, Globals
+from mats_planningtool import Library
 
 # from .Commands import Commands
 
@@ -599,7 +599,7 @@ def SetCCDs_macro(
     for key in CCD_settings.keys():
         ListOfTEXPMS.append(CCD_settings[key]["TEXPMS"])
 
-    Globals.LargestSetTEXPMS = max(ListOfTEXPMS)
+    configFile.LargestSetTEXPMS = max(ListOfTEXPMS)
 
     # T_readout, T_delay, T_Extra = Library.calculate_time_per_row(NCOL = CCDSEL_64['NCOL'], NCBIN = CCDSEL_64['NCBIN'], NCBINFPGA = CCDSEL_64['NCBINFPGA'],
     #                                                     NRSKIP = CCDSEL_64['NRSKIP'], NROW = CCDSEL_64['NROW'], NRBIN = CCDSEL_64['NRBIN'], NFLUSH = CCDSEL_64['NFLUSH'])

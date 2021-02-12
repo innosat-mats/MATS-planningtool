@@ -37,8 +37,6 @@ import pylab
 import importlib
 import skyfield.api
 
-from mats_planningtool import Globals
-
 
 # Timeline_settings = configFile.Timeline_settings()
 Logger = logging.getLogger("OPT_logger")
