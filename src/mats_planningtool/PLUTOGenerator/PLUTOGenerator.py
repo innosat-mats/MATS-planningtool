@@ -127,7 +127,7 @@ def write_wait(wait_time, plutopath="tmp.plp"):
         f.close()
 
 
-def PLUTO_generator(XML_Path, configFile, PLUTO_Path="pluto_script.plp", wait_platform=False):
+def PLUTO_generator(configFile, XML_Path, PLUTO_Path="pluto_script.plp", wait_platform=False, max_wait_time=None):
     """The core function of the PLUTO_gen program.
 
     Reads a *XML-Timeline*  file. And output a PLUTO script for running on the MATS standalone instrument.
@@ -160,7 +160,10 @@ def PLUTO_generator(XML_Path, configFile, PLUTO_Path="pluto_script.plp", wait_pl
                 timeline_xml["InnoSatTimeline"]["listOfCommands"]["command"][i],
                 PLUTO_Path,
             )
-            write_wait(wait_time, PLUTO_Path)
+            if wait_time == None:
+                write_wait(wait_time, PLUTO_Path)
+            else:
+                write_wait(min(wait_time, max_wait_time), PLUTO_Path)
 
         except ValueError as e:
             print(e)

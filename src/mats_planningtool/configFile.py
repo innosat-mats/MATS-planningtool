@@ -280,7 +280,7 @@ class configFile:
             'TimeSkip': Used only in *Timeline_gen*. Set the amount of seconds to skip ahead after one complete orbit is simulated. Will drastically change the runtime of the simulation. (float) \n
             'log_timestep': Used only in *Timeline_gen*. Sets the timestep of data being logged [s]. Only determines how much of simulated data is logged for debugging purposes. (int) \n
             'freeze_start': Sets in seconds, the time from start of the Mode to when the attitude freezes. Part in determining the estimated duration of the mode. (int) \n
-            'freeze_duration': Sets in seconds the duration of the attitude freeze. Part in determining the estimated duration of the mode. If set to 0, it will be estimated to a 
+            'freeze_duration': Sets in seconds the duration of the attitude freeze. Part in determining the estimated duration of the mode. If set to 0, it will be estimated to a
             value corresponding to the attitude being frozen until realigned with *Timeline_settings['StandardPointingAltitude']* (Normally around 50 s). (int) \n
             'SnapshotTime': Sets in seconds the time, from the start of the attitude freeze, to when the first Snapshot is taken. (int) \n
             'SnapshotSpacing': Sets in seconds the time inbetween Snapshots with individual CCDs. Needs to be larger than any CCD ReadoutTimes to avoid streaks. (int)
@@ -363,7 +363,7 @@ class configFile:
 
         **Keys in returned dict:**
             'pointing_altitude': Sets in meters the altitude of the pointing command. (int) \n
-            'V_offset': Used only in *Timeline_gen*. Sets the Vertical-offset angle (position in FOV) in degrees for the Moon to pass, for when the attitude freeze command is scheduled. 
+            'V_offset': Used only in *Timeline_gen*. Sets the Vertical-offset angle (position in FOV) in degrees for the Moon to pass, for when the attitude freeze command is scheduled.
             Multiple values can be set but additional values will only be used when Mode124 is scheduled several times. (list of int) \n
             'H_offset': Used only in *Timeline_gen*. Sets the maximum H-offset angle from the optical axis in degrees that determines if the Moon is available. (float) \n
             'TimeToConsider': Used only in *Timeline_gen*. Sets the time in seconds for which scheduling is considered. Used to plan calibration at the start of each timeline (useful as TLE accuracy deteriorates). Drastically affects simulation time at the cost of fewer time slots being considered. (int) \n
@@ -372,7 +372,7 @@ class configFile:
             'automatic':  Used only in *Timeline_gen*. Sets if the mode date is to be calculated or user provided. True for calculated or False for user provided. (bool) \n
             'start_date':  Note! only applies if *automatic* is set to False. Used only in *Timeline_gen*. Sets the scheduled date for the mode as a str, (example: '2018/9/3 08:00:40'). If set to '0', Timeline_settings['start_date'] will be used. \n
             'freeze_start': Sets in seconds the time from start of the Mode to when the attitude freeze command is scheduled. Part in determining the estimated duration of the mode. (int) \n
-            'freeze_duration': Sets in seconds the duration of the attitude freeze. Part in determining the estimated duration of the mode. If set to 0, it will be estimated to a 
+            'freeze_duration': Sets in seconds the duration of the attitude freeze. Part in determining the estimated duration of the mode. If set to 0, it will be estimated to a
             value corresponding to the attitude being frozen until realigned with *Timeline_settings['StandardPointingAltitude']*. (int) \n
             'SnapshotTime': Sets in seconds the time, from the start of the attitude freeze, to when the first Snapshot is taken. (int) \n
             'SnapshotSpacing': Sets in seconds the time inbetween Snapshots with individual CCDs. Needs to be larger than any CCD ReadoutTimes to avoid streaks. (int) \n
@@ -473,15 +473,15 @@ class configFile:
     """
     def Mode201_settings():
         '''Returns settings related to Mode201.
-        
+
         **Keys in returned dict:**
             'pointing_altitude': Sets in meters the altitude of the pointing command. \n
             'mode_duration': Sets the scheduled duration of the Mode in seconds. \n
             'start_date': Sets the scheduled date for the mode as a str, (example: '2018/9/3 08:00:40'). If the date is set to '0', Timeline_settings['start_date'] will be used.
-        
+
         Returns:
             (:obj:`dict`): settings
-        
+
         '''
         settings = {'pointing_altitude': 70000, 'mode_duration': 600, 'start_date': '0'}
         return settings
@@ -490,13 +490,13 @@ class configFile:
 
     def Mode203_settings():
         '''Returns settings related to Mode203.
-        
+
         **Keys in returned dict:**
             'pitch': Sets the pitch axis maneuver.
-            
+
         Returns:
             settings (:obj:`dict`)
-        
+
         '''
         settings = {'pitch': 180}
         return settings
@@ -572,17 +572,17 @@ class configFile:
     """
     def HTR_settings():
         '''Returns settings related to the HTR CMD.
-        
+
         **Keys in returned dict:**
             'HTRSEL': HTR select, 1 bit for each HTR (bits 0,1,6,7). (int) \n
             'SET': Heater set point (int) \n
             'PVALUE': Regulator Proportional constant (int) \n
             'IVALUE': Regulator Integral constant (int) \n
             'DVALUE': Regulator Derivative constant (int) \n
-            
+
         Returns:
             (:obj:`dict`): settings
-        
+
         '''
         settings = {'CCDSEL': 3, 'SET': 1402, 'PVALUE': 256, 'IVALUE': 10, 'DVALUE': 0}
         return settings
@@ -637,8 +637,8 @@ class configFile:
         """Invokes the Timeline generator part of Operational Planning Tool.
 
         Creates a *Science Mode Timeline* as a .json file. \n
-        Predicts and schedueles Science Modes that depend on certain events such as position of stars and the moon (Mode120-Mode124). 
-        Other Science Modes and StartUpCMDs are just scheduled at the start of the Timeline or at a given date. 
+        Predicts and schedueles Science Modes that depend on certain events such as position of stars and the moon (Mode120-Mode124).
+        Other Science Modes and StartUpCMDs are just scheduled at the start of the Timeline or at a given date.
         The Science Modes and StartUpCMDs to be scheduled are listed in *Modes_priority* in the chosen *Configuration File*.
 
         *Operational Science Modes* (example: Mode 1,2,5) are scheduled separately wherever time is available at the end of the program.
@@ -659,10 +659,10 @@ class configFile:
         Settings for the operation of the program are stated in the chosen *Configuration File*, set by *Set_ConfigFile*.
         Settings given in the *Science Mode Timeline* override the settings given in the chosen *Configuration file* or set with *Set_ConfigFile*.
 
-        Arguments: 
+        Arguments:
             science_mode_timeline_path (str): Path to the .json file containing the Science Mode Timeline.
 
-        Returns: 
+        Returns:
             None
         """
 
@@ -722,7 +722,7 @@ class configFile:
     def MinimalScienceXML_gen(self):
         """Invokes the *MinimalScienceXML_gen* part of the *OPT*.
 
-        Creates an .xml file with fixed CMDs which purpose is to define a flight procedure which is ran on the satellite 
+        Creates an .xml file with fixed CMDs which purpose is to define a flight procedure which is ran on the satellite
         following unscheduled power termination of the payload.
         Runs startup CMDs and sets the payload in operation mode with the CCD macro *HighResIR*.
         The CMD staggering is fixed. No date is given in the generated XML and will need to be added manually.
@@ -744,7 +744,7 @@ class configFile:
             date (str): A given date and time ('2019/09/05 12:09:25')
 
         Returns:
-            (tuple): tuple containing: 
+            (tuple): tuple containing:
 
                 **Mode** (*str*): The currently scheduled Mode ath the given date. \n
                 **Parameters** (*dict*): The parameters of the Mode. \n
@@ -759,21 +759,21 @@ class configFile:
         """Invokes the *Timeline_Plotter* program part of *Operational_Planning_Tool*.
 
         Simulates the position and attitude of MATS from a given Science Mode Timeline and also optionally compares it to
-        positional and attitude data given in a .h5 data set, located at *OHB_H5_Path*. Plots both the simulated data and given data. 
+        positional and attitude data given in a .h5 data set, located at *OHB_H5_Path*. Plots both the simulated data and given data.
         The attitude data shows only the target pointing orientation and does not mimic MATS's actual attitude control system. This leads to large pointing differences whenever the pointing altitude is changed. \n
         The timesteps of both the .h5 data and the Science Mode is synchronized to allow direct comparison if possible. \n
 
         A .csv file, generated in STK, may also be included to plot the predicted positional error of the satellite compared to STK data. Only data points with equal timestamps to the simulated Science Mode Timeline data will be plotted.
         Saves generated plots as binary files. \n
 
-        Settings for the operation of the program are stated in the chosen *Configuration File*. 
+        Settings for the operation of the program are stated in the chosen *Configuration File*.
         Settings stated in the *Science Mode Timeline* override settings given in the chosen *Configuration file*.
 
         Arguments:
             Science_Mode_Path (str): Path to the Science Mode Timeline to be plotted.
             OHB_H5_Path (str): *Optional*. Path to the .h5 file containing position, time, and attitude data. The .h5 file is defined in the "Ground Segment ICD" document. The timestamps for the attitude and state data is assumed to be synchronized.
-            STK_CSV_PATH (str): *Optional*. Path to the .csv file containing position (column 1-3), velocity (column 4-6), and time (column 7), generated in STK. Position and velocity data is assumed to be in km and in ICRF. 
-            Timestep (int): *Optional*. The chosen timestep of the Science Mode Timeline simulation [s]. Drastically changes runtime of the program. 
+            STK_CSV_PATH (str): *Optional*. Path to the .csv file containing position (column 1-3), velocity (column 4-6), and time (column 7), generated in STK. Position and velocity data is assumed to be in km and in ICRF.
+            Timestep (int): *Optional*. The chosen timestep of the Science Mode Timeline simulation [s]. Drastically changes runtime of the program.
 
         Returns:
             (tuple): tuple containing:
@@ -798,13 +798,21 @@ class configFile:
 
         return Data_MATS, Data_LP, Time, Time_OHB
 
-    def PLUTOGenerator(self, XML_Path, PLUTO_Path="pluto_script.plp", wait_platform=False):
+    def PLUTOGenerator(self, XML_Path=None, PLUTO_Path="pluto_script.plp", wait_platform=False, max_wait_time=None):
         """Invokes PLUTO generator
 
         """
 
         from mats_planningtool.PLUTOGenerator import PLUTOGenerator
 
-        PLUTOGenerator.PLUTO_generator(XML_Path, self, PLUTO_Path, wait_platform)
+        if XML_Path is None:
+            SCIMOD_Path = 'Output_' + 'Science_Mode_Timeline_' + \
+                os.path.splitext(os.path.split(self.config_file_name)[1])[0]
+            print(SCIMOD_Path)
+            XML_Path = os.path.join('Output', 'XML_TIMELINE__' +
+                                    'FROM__'+SCIMOD_Path+'.xml')
+
+        PLUTOGenerator.PLUTO_generator(
+            self, XML_Path, PLUTO_Path, wait_platform, max_wait_time)
 
         return
