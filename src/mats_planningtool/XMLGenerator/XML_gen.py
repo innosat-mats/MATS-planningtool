@@ -180,6 +180,8 @@ def XML_generator(configFile, SCIMOD_Path):
     configFile.LargestSetTEXPMS = 0
     logging.shutdown()
 
+    return XML_TIMELINE
+
 
 ################### XML-tree basis creator ####################################
 

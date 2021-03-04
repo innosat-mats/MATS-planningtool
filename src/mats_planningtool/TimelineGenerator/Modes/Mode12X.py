@@ -371,6 +371,8 @@ def date_select(Occupied_Timeline, date_magnitude_array, Settings, configFile):
 
         "Extract the start and end date of each scheduled mode"
         for busy_dates in Occupied_Timeline.values():
+            if restart:
+                break
             if(busy_dates == []):
                 continue
             else:

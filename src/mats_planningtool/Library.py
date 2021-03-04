@@ -196,6 +196,8 @@ def scheduler(Occupied_Timeline, date, endDate):
 
         "Extract the start and end dates of scheduled mode"
         for busy_dates in Occupied_Timeline.values():
+            if restart:
+                break
             if busy_dates == []:
                 continue
             else:

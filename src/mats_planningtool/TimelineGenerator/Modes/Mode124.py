@@ -398,6 +398,8 @@ def date_select(Occupied_Timeline, SpottedMoonList, configFile):
 
         "Extract Occupied dates and if they clash, restart loop and select new date"
         for busy_dates in Occupied_Timeline.values():
+            if restart:
+                break
             if(busy_dates == []):
                 continue
             else:

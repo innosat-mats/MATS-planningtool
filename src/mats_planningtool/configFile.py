@@ -674,7 +674,9 @@ class configFile:
         if SCIMOD_Path == None:
             SCIMOD_Path = os.path.join(
                 'Output', 'Science_Mode_Timeline_'+os.path.split(self.config_file_name)[1])
-        XML_generator(self, SCIMOD_Path)
+        XML_TIMELINE = XML_generator(self, SCIMOD_Path)
+
+        return XML_TIMELINE
 
     def Plot_Timeline_Plotter_Plots(
         self,
