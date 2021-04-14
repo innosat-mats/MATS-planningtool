@@ -6,9 +6,15 @@ import os
 
 class configFile:
 
-    Library.SetupLogger('configFile')
+    Library.SetupLogger("configFile")
 
-    def __init__(self, config_file_name, date="2020/6/20 18:32:42", TLE1="1 54321U 19100G   20172.75043981 0.00000000  00000-0  75180-4 0  0014", TLE2="2 54321  97.7044   6.9210 0014595 313.2372  91.8750 14.93194142000010"):
+    def __init__(
+        self,
+        config_file_name,
+        date="2020/6/20 18:32:42",
+        TLE1="1 54321U 19100G   20172.75043981 0.00000000  00000-0  75180-4 0  0014",
+        TLE2="2 54321  97.7044   6.9210 0014595 313.2372  91.8750 14.93194142000010",
+    ):
 
         self.config_file_name = config_file_name
         self.TLE1 = TLE1
@@ -20,24 +26,41 @@ class configFile:
 
         self.OPT_Config_File = OPT_Config_File
 
-        self.OPT_Config_File["Timeline_settings"]["duration"]["duration"] = self.OPT_Config_File["Timeline_settings"]["duration"]["day"]*24*3600 + \
-            self.OPT_Config_File["Timeline_settings"]["duration"]["hours"]*3600 + \
-            self.OPT_Config_File["Timeline_settings"]["duration"]["seconds"]
+        self.OPT_Config_File["Timeline_settings"]["duration"]["duration"] = (
+            self.OPT_Config_File["Timeline_settings"]["duration"]["day"] * 24 * 3600
+            + self.OPT_Config_File["Timeline_settings"]["duration"]["hours"] * 3600
+            + self.OPT_Config_File["Timeline_settings"]["duration"]["seconds"]
+        )
 
-        self.OPT_Config_File["Mode120_settings"]["TimeToConsider"]["TimeToConsider"] = self.OPT_Config_File["Mode120_settings"]["TimeToConsider"]["hours"]*3600 + \
-            self.OPT_Config_File["Mode120_settings"]["TimeToConsider"]["seconds"]
+        self.OPT_Config_File["Mode120_settings"]["TimeToConsider"]["TimeToConsider"] = (
+            self.OPT_Config_File["Mode120_settings"]["TimeToConsider"]["hours"] * 3600
+            + self.OPT_Config_File["Mode120_settings"]["TimeToConsider"]["seconds"]
+        )
 
-        self.OPT_Config_File["Mode120_settings"]["TimeSkip"]["TimeSkip"] = self.OPT_Config_File["Mode120_settings"]["TimeSkip"]["hours"]*3600 + \
-            self.OPT_Config_File["Mode120_settings"]["TimeSkip"]["seconds"]
+        self.OPT_Config_File["Mode120_settings"]["TimeSkip"]["TimeSkip"] = (
+            self.OPT_Config_File["Mode120_settings"]["TimeSkip"]["hours"] * 3600
+            + self.OPT_Config_File["Mode120_settings"]["TimeSkip"]["seconds"]
+        )
 
-        self.OPT_Config_File["Mode121_122_123_settings"]["TimeToConsider"]["TimeToConsider"] = self.OPT_Config_File["Mode121_122_123_settings"]["TimeToConsider"]["hours"]*3600 + \
-            self.OPT_Config_File["Mode121_122_123_settings"]["TimeToConsider"]["seconds"]
+        self.OPT_Config_File["Mode121_122_123_settings"]["TimeToConsider"][
+            "TimeToConsider"
+        ] = (
+            self.OPT_Config_File["Mode121_122_123_settings"]["TimeToConsider"]["hours"]
+            * 3600
+            + self.OPT_Config_File["Mode121_122_123_settings"]["TimeToConsider"][
+                "seconds"
+            ]
+        )
 
-        self.OPT_Config_File["Mode121_122_123_settings"]["TimeSkip"]["TimeSkip"] = self.OPT_Config_File["Mode121_122_123_settings"]["TimeSkip"]["hours"]*3600 + \
-            self.OPT_Config_File["Mode121_122_123_settings"]["TimeSkip"]["seconds"]
+        self.OPT_Config_File["Mode121_122_123_settings"]["TimeSkip"]["TimeSkip"] = (
+            self.OPT_Config_File["Mode121_122_123_settings"]["TimeSkip"]["hours"] * 3600
+            + self.OPT_Config_File["Mode121_122_123_settings"]["TimeSkip"]["seconds"]
+        )
 
-        self.OPT_Config_File["Mode124_settings"]["TimeToConsider"]["TimeToConsider"] = self.OPT_Config_File["Mode124_settings"]["TimeToConsider"]["hours"]*3600 + \
-            self.OPT_Config_File["Mode124_settings"]["TimeToConsider"]["seconds"]
+        self.OPT_Config_File["Mode124_settings"]["TimeToConsider"]["TimeToConsider"] = (
+            self.OPT_Config_File["Mode124_settings"]["TimeToConsider"]["hours"] * 3600
+            + self.OPT_Config_File["Mode124_settings"]["TimeToConsider"]["seconds"]
+        )
 
         self.current_pointing = None
         self.latestRelativeTime = 0
@@ -53,7 +76,7 @@ class configFile:
 
         """
 
-        return self.OPT_Config_File['Logger_name']
+        return self.OPT_Config_File["Logger_name"]
 
     def Version(self):
         """'Returns the version ID of this Configuration File.
@@ -65,7 +88,7 @@ class configFile:
 
         """
 
-        return self.OPT_Config_File['version_ID']
+        return self.OPT_Config_File["version_ID"]
 
     def Scheduling_priority(self):
         """Returns the Modes (except *Operational Science Modes* (Mode 1,2,5)) and StartUpCMDs planned to be schedueled in a *Science Mode Timeline* using *Timeline_gen*.
@@ -110,7 +133,7 @@ class configFile:
 
         """
 
-        return self.OPT_Config_File['Modes_priority']
+        return self.OPT_Config_File["Modes_priority"]
 
     def getTLE(self):
         """Returns the TLE as two strings in a list.
@@ -124,12 +147,16 @@ class configFile:
         """
 
         if (not self.TLE1 == ("")) and (not self.TLE2 == ("")):
-            TLE1 = self.OPT_Config_File['TLE1']
-            TLE2 = self.OPT_Config_File['TLE2']
+            TLE1 = self.OPT_Config_File["TLE1"]
+            TLE2 = self.OPT_Config_File["TLE2"]
         else:
             "If no TLE has been chosen with *Set_ConfigFile*, these values are used instead."
-            TLE1 = "1 54321U 19100G   20172.75043981 0.00000000  00000-0  75180-4 0  0014"
-            TLE2 = "2 54321  97.7044   6.9210 0014595 313.2372  91.8750 14.93194142000010"
+            TLE1 = (
+                "1 54321U 19100G   20172.75043981 0.00000000  00000-0  75180-4 0  0014"
+            )
+            TLE2 = (
+                "2 54321  97.7044   6.9210 0014595 313.2372  91.8750 14.93194142000010"
+            )
 
         return [TLE1, TLE2]
 
@@ -212,7 +239,7 @@ class configFile:
 
         """
 
-        return self.OPT_Config_File['Mode100_settings']
+        return self.OPT_Config_File["Mode100_settings"]
 
     def Mode110_settings(self):
         """Returns settings related to Mode110.
@@ -230,7 +257,7 @@ class configFile:
 
         """
 
-        return self.OPT_Config_File['Mode110_settings']
+        return self.OPT_Config_File["Mode110_settings"]
 
     def Mode120_settings(self):
         """Returns settings related to Mode120.
@@ -258,14 +285,16 @@ class configFile:
             (:obj:`dict`): settings
 
         """
-        if self.OPT_Config_File['Mode120_settings']["freeze_duration"] == 0:
-            self.OPT_Config_File['Mode120_settings']["freeze_duration"] = Library.FreezeDuration_calculator(
-                self.OPT_Config_File['Timeline_settings']["StandardPointingAltitude"],
-                self.OPT_Config_File['Mode120_settings']["pointing_altitude"],
+        if self.OPT_Config_File["Mode120_settings"]["freeze_duration"] == 0:
+            self.OPT_Config_File["Mode120_settings"][
+                "freeze_duration"
+            ] = Library.FreezeDuration_calculator(
+                self.OPT_Config_File["Timeline_settings"]["StandardPointingAltitude"],
+                self.OPT_Config_File["Mode120_settings"]["pointing_altitude"],
                 self.getTLE()[1],
             )
 
-        return self.OPT_Config_File['Mode120_settings']
+        return self.OPT_Config_File["Mode120_settings"]
 
     def Mode121_122_123_settings(self):
         """Returns settings shared between Mode121-123.
@@ -290,14 +319,16 @@ class configFile:
 
         """
 
-        if self.OPT_Config_File['Mode121_122_123_settings']["freeze_duration"] == 0:
-            self.OPT_Config_File['Mode121_122_123_settings']["freeze_duration"] = Library.FreezeDuration_calculator(
-                self.OPT_Config_File['Timeline_settings']["StandardPointingAltitude"],
-                self.OPT_Config_File['Mode121_122_123_settings']["pointing_altitude"],
+        if self.OPT_Config_File["Mode121_122_123_settings"]["freeze_duration"] == 0:
+            self.OPT_Config_File["Mode121_122_123_settings"][
+                "freeze_duration"
+            ] = Library.FreezeDuration_calculator(
+                self.OPT_Config_File["Timeline_settings"]["StandardPointingAltitude"],
+                self.OPT_Config_File["Mode121_122_123_settings"]["pointing_altitude"],
                 self.getTLE()[1],
             )
 
-        return self.OPT_Config_File['Mode121_122_123_settings']
+        return self.OPT_Config_File["Mode121_122_123_settings"]
 
     def Mode121_settings(self):
         """Returns settings related to Mode121.
@@ -311,7 +342,7 @@ class configFile:
             (:obj:`dict`): settings
         """
 
-        Settings = self.OPT_Config_File['Mode121_settings']
+        Settings = self.OPT_Config_File["Mode121_settings"]
         CommonSettings = self.Mode121_122_123_settings()
 
         settings = {**CommonSettings, **Settings}
@@ -331,7 +362,7 @@ class configFile:
             (:obj:`dict`): settings
         """
 
-        Settings = self.OPT_Config_File['Mode122_settings']
+        Settings = self.OPT_Config_File["Mode122_settings"]
         CommonSettings = self.Mode121_122_123_settings()
 
         settings = {**CommonSettings, **Settings}
@@ -351,7 +382,7 @@ class configFile:
             (:obj:`dict`): settings
         """
 
-        Settings = self.OPT_Config_File['Mode123_settings']
+        Settings = self.OPT_Config_File["Mode123_settings"]
         CommonSettings = self.Mode121_122_123_settings()
 
         settings = {**CommonSettings, **Settings}
@@ -382,14 +413,16 @@ class configFile:
             (:obj:`dict`): settings
 
         """
-        if self.OPT_Config_File['Mode124_settings']["freeze_duration"] == 0:
-            self.OPT_Config_File['Mode124_settings']["freeze_duration"] = Library.FreezeDuration_calculator(
-                self.OPT_Config_File['Timeline_settings']["StandardPointingAltitude"],
-                self.OPT_Config_File['Mode124_settings']["pointing_altitude"],
+        if self.OPT_Config_File["Mode124_settings"]["freeze_duration"] == 0:
+            self.OPT_Config_File["Mode124_settings"][
+                "freeze_duration"
+            ] = Library.FreezeDuration_calculator(
+                self.OPT_Config_File["Timeline_settings"]["StandardPointingAltitude"],
+                self.OPT_Config_File["Mode124_settings"]["pointing_altitude"],
                 self.getTLE()[1],
             )
 
-        return self.OPT_Config_File['Mode124_settings']
+        return self.OPT_Config_File["Mode124_settings"]
 
     def Mode130_settings(self):
         """Returns settings related to Mode130.
@@ -404,7 +437,7 @@ class configFile:
 
         """
 
-        return self.OPT_Config_File['Mode130_settings']
+        return self.OPT_Config_File["Mode130_settings"]
 
     def Mode131_settings(self):
         """Returns settings related to Mode131.
@@ -419,7 +452,7 @@ class configFile:
 
         """
 
-        return self.OPT_Config_File['Mode131_settings']
+        return self.OPT_Config_File["Mode131_settings"]
 
     def Mode132_settings(self):
         """Returns settings related to Mode132.
@@ -436,7 +469,7 @@ class configFile:
 
         """
 
-        return self.OPT_Config_File['Mode132_settings']
+        return self.OPT_Config_File["Mode132_settings"]
 
     def Mode133_settings(self):
         """Returns settings related to Mode133.
@@ -453,7 +486,7 @@ class configFile:
 
         """
 
-        return self.OPT_Config_File['Mode133_settings']
+        return self.OPT_Config_File["Mode133_settings"]
 
     def Mode134_settings(self):
         """Returns settings related to Mode134.
@@ -468,7 +501,7 @@ class configFile:
 
         """
 
-        return self.OPT_Config_File['Mode134_settings']
+        return self.OPT_Config_File["Mode134_settings"]
 
     """
     def Mode201_settings():
@@ -512,7 +545,7 @@ class configFile:
             (:obj:`dict`): settings
 
         """
-        return self.OPT_Config_File['PWRTOGGLE_settings']
+        return self.OPT_Config_File["PWRTOGGLE_settings"]
 
     def CCDFlushBadColumns_settings(self):
         """Returns settings related to the CCDFlushBadColumns CMD.
@@ -524,7 +557,7 @@ class configFile:
             (:obj:`dict`): settings
 
         """
-        return self.OPT_Config_File['CCDFlushBadColumns_settings']
+        return self.OPT_Config_File["CCDFlushBadColumns_settings"]
 
     def CCDBadColumn_settings(self):
         """Returns settings related to CCDBadColumn CMD.
@@ -538,7 +571,7 @@ class configFile:
             (:obj:`dict`): settings
 
         """
-        return self.OPT_Config_File['CCDBadColumn_settings']
+        return self.OPT_Config_File["CCDBadColumn_settings"]
 
     def PM_settings(self):
         """Returns settings related to the PM (photometer) CMD.
@@ -551,7 +584,7 @@ class configFile:
             (:obj:`dict`): settings
 
         """
-        return self.OPT_Config_File['PM_settings']
+        return self.OPT_Config_File["PM_settings"]
 
     def CCDBIAS_settings(self):
         """Returns settings related to the CCDBIAS CMD.
@@ -567,7 +600,7 @@ class configFile:
             (:obj:`dict`): settings
 
         """
-        return self.OPT_Config_File['CCDBIAS_settings']
+        return self.OPT_Config_File["CCDBIAS_settings"]
 
     """
     def HTR_settings():
@@ -613,13 +646,27 @@ class configFile:
         """
 
         CCD_settings = {16: {}, 32: {}, 1: {}, 8: {}, 2: {}, 4: {}, 64: {}}
-        CCD_settings[16] = self.OPT_Config_File['CCD_macro_settings'][CCDMacroSelect]["CCD_settings_UV1"]
-        CCD_settings[32] = self.OPT_Config_File['CCD_macro_settings'][CCDMacroSelect]["CCD_settings_UV2"]
-        CCD_settings[1] = self.OPT_Config_File['CCD_macro_settings'][CCDMacroSelect]["CCD_settings_IR1"]
-        CCD_settings[8] = self.OPT_Config_File['CCD_macro_settings'][CCDMacroSelect]["CCD_settings_IR2"]
-        CCD_settings[2] = self.OPT_Config_File['CCD_macro_settings'][CCDMacroSelect]["CCD_settings_IR3"]
-        CCD_settings[4] = self.OPT_Config_File['CCD_macro_settings'][CCDMacroSelect]["CCD_settings_IR4"]
-        CCD_settings[64] = self.OPT_Config_File['CCD_macro_settings'][CCDMacroSelect]["CCD_settings_Nadir"]
+        CCD_settings[16] = self.OPT_Config_File["CCD_macro_settings"][CCDMacroSelect][
+            "CCD_settings_UV1"
+        ]
+        CCD_settings[32] = self.OPT_Config_File["CCD_macro_settings"][CCDMacroSelect][
+            "CCD_settings_UV2"
+        ]
+        CCD_settings[1] = self.OPT_Config_File["CCD_macro_settings"][CCDMacroSelect][
+            "CCD_settings_IR1"
+        ]
+        CCD_settings[8] = self.OPT_Config_File["CCD_macro_settings"][CCDMacroSelect][
+            "CCD_settings_IR2"
+        ]
+        CCD_settings[2] = self.OPT_Config_File["CCD_macro_settings"][CCDMacroSelect][
+            "CCD_settings_IR3"
+        ]
+        CCD_settings[4] = self.OPT_Config_File["CCD_macro_settings"][CCDMacroSelect][
+            "CCD_settings_IR4"
+        ]
+        CCD_settings[64] = self.OPT_Config_File["CCD_macro_settings"][CCDMacroSelect][
+            "CCD_settings_Nadir"
+        ]
 
         return CCD_settings
 
@@ -673,7 +720,9 @@ class configFile:
 
         if SCIMOD_Path == None:
             SCIMOD_Path = os.path.join(
-                'Output', 'Science_Mode_Timeline_'+os.path.split(self.config_file_name)[1])
+                "Output",
+                "Science_Mode_Timeline_" + os.path.split(self.config_file_name)[1],
+            )
         XML_TIMELINE = XML_generator(self, SCIMOD_Path)
 
         return XML_TIMELINE
@@ -717,7 +766,9 @@ class configFile:
 
         """
 
-        from mats_planningtool.PlotTimelinePlotterPlots.Core import Plot_Timeline_Plotter_Plots
+        from mats_planningtool.PlotTimelinePlotterPlots.Core import (
+            Plot_Timeline_Plotter_Plots,
+        )
 
         Plot_Timeline_Plotter_Plots(FigureDirectory, FilesToPlot)
 
@@ -732,7 +783,9 @@ class configFile:
 
         """
 
-        from mats_planningtool.XMLGenerator.MinimalScienceXML_gen import MinimalScienceXMLGenerator
+        from mats_planningtool.XMLGenerator.MinimalScienceXML_gen import (
+            MinimalScienceXMLGenerator,
+        )
 
         MinimalScienceXMLGenerator(self)
 
@@ -757,7 +810,14 @@ class configFile:
 
         return Mode, Parameters
 
-    def Timeline_Plotter(self, Science_Mode_Path, OHB_H5_Path="", STK_CSV_PATH="", Timestep=16, FractionOfDataUsed=0.1):
+    def Timeline_Plotter(
+        self,
+        Science_Mode_Path,
+        OHB_H5_Path="",
+        STK_CSV_PATH="",
+        Timestep=16,
+        FractionOfDataUsed=0.1,
+    ):
         """Invokes the *Timeline_Plotter* program part of *Operational_Planning_Tool*.
 
         Simulates the position and attitude of MATS from a given Science Mode Timeline and also optionally compares it to
@@ -800,7 +860,13 @@ class configFile:
 
         return Data_MATS, Data_LP, Time, Time_OHB
 
-    def PLUTOGenerator(self, XML_Path=None, PLUTO_Path="pluto_script.plp", wait_platform=False, max_wait_time=None):
+    def PLUTOGenerator(
+        self,
+        XML_Path=None,
+        PLUTO_Path="Output/pluto_script.plp",
+        wait_platform=False,
+        max_wait_time=None,
+    ):
         """Invokes PLUTO generator
 
         """
@@ -808,13 +874,18 @@ class configFile:
         from mats_planningtool.PLUTOGenerator import PLUTOGenerator
 
         if XML_Path is None:
-            SCIMOD_Path = 'Output_' + 'Science_Mode_Timeline_' + \
-                os.path.splitext(os.path.split(self.config_file_name)[1])[0]
+            SCIMOD_Path = (
+                "Output_"
+                + "Science_Mode_Timeline_"
+                + os.path.splitext(os.path.split(self.config_file_name)[1])[0]
+            )
             print(SCIMOD_Path)
-            XML_Path = os.path.join('Output', 'XML_TIMELINE__' +
-                                    'FROM__'+SCIMOD_Path+'.xml')
+            XML_Path = os.path.join(
+                "Output", "XML_TIMELINE__" + "FROM__" + SCIMOD_Path + ".xml"
+            )
 
         PLUTOGenerator.PLUTO_generator(
-            self, XML_Path, PLUTO_Path, wait_platform, max_wait_time)
+            self, XML_Path, PLUTO_Path, wait_platform, max_wait_time
+        )
 
         return
