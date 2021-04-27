@@ -30,7 +30,10 @@ import logging
 import importlib
 import sys
 
-from mats_planningtool.XMLGenerator.Modes_and_Tests.Macros_Commands import Commands, Macros
+from mats_planningtool.XMLGenerator.Modes_and_Tests.Macros_Commands import (
+    Commands,
+    Macros,
+)
 from mats_planningtool.Library import dict_comparator
 
 
@@ -39,9 +42,16 @@ Logger = logging.getLogger("OPT_logger")
 "################# Procedures ############################"
 
 
-def Payload_Power_Toggle(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
-    Commands.Payload_Power_Toggle(root, round(relativeTime, 2), Timeline_settings=Timeline_settings,
-                                  configFile=configFile, comment="Payload_Power_Toggle, " + str(date))
+def Payload_Power_Toggle(
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
+):
+    Commands.Payload_Power_Toggle(
+        root,
+        round(relativeTime, 2),
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
+        comment="Payload_Power_Toggle, " + str(date),
+    )
 
 
 "################# PAYLOAD COMMANDS ############################"
@@ -49,7 +59,9 @@ def Payload_Power_Toggle(root, date, duration, relativeTime, Timeline_settings, 
 "A CMD with fixed arguments used to just turn on the CCDs"
 
 
-def TurnONCCDs(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
+def TurnONCCDs(
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
+):
 
     relativeTime = Commands.TC_pafCCDMain(
         root,
@@ -71,12 +83,15 @@ def TurnONCCDs(root, date, duration, relativeTime, Timeline_settings, configFile
         GAIN=0,
         NFLUSH=1023,
         NCSKIP=0,
-        Timeline_settings=Timeline_settings, configFile=configFile,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
         comment="TurnONCCDs, " + str(date),
     )
 
 
-def MODE(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
+def MODE(
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
+):
 
     # CMD_settings_ConfigFile = {'MODE': 0}
     # CMD_settings = dict_comparator(CMD_settings, CMD_settings_ConfigFile)
@@ -86,27 +101,32 @@ def MODE(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_
         root,
         round(relativeTime, 2),
         MODE=CMD_settings["MODE"],
-        Timeline_settings=Timeline_settings, configFile=configFile,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
         comment=CMD_name + ", " + str(date),
     )
 
 
-def PWRTOGGLE(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
+def PWRTOGGLE(
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
+):
 
     # CMD_settings_ConfigFile = OPT_Config_File.PWRTOGGLE_settings()
     # CMD_settings = dict_comparator(CMD_settings, CMD_settings_ConfigFile)
-    Commands.TC_pafPWRToggle(
+    Commands.Payload_Power_Toggle(
         root,
         round(relativeTime, 2),
-        CONST=CMD_settings["CONST"],
-        Timeline_settings=Timeline_settings, configFile=configFile,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
         comment=str(date),
     )
 
 
-def UPLOAD(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
+def UPLOAD(
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
+):
 
-    # CMD_settings_ConfigFile = {'PINDEX': 0, 'PTOTAL': 0, 'WFLASH': 0, 'NIMG': 0, 'IMG': 0}
+    # CMD_settings_ConfigFile = {'PINDEX': 0,ole.martin.christensen@qamcom.se 'PTOTAL': 0, 'WFLASH': 0, 'NIMG': 0, 'IMG': 0}
     # CMD_settings = dict_comparator(CMD_settings, CMD_settings_ConfigFile)
     Commands.TC_pafUpload(
         root,
@@ -116,12 +136,15 @@ def UPLOAD(root, date, duration, relativeTime, Timeline_settings, configFile, CM
         WFLASH=CMD_settings["WFLASH"],
         NIMG=CMD_settings["NIMG"],
         IMG=CMD_settings["IMG"],
-        Timeline_settings=Timeline_settings, configFile=configFile,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
         comment=str(date),
     )
 
 
-def HTR(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
+def HTR(
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
+):
 
     # CMD_settings_ConfigFile = {'HTRSEL': 1, 'SET': 2000, 'P': 10, 'I': 0, 'D': 0}
     # CMD_settings = dict_comparator(CMD_settings, CMD_settings_ConfigFile)
@@ -133,12 +156,15 @@ def HTR(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_s
         PVALUE=CMD_settings["PVALUE"],
         IVALUE=CMD_settings["IVALUE"],
         DVALUE=CMD_settings["DVALUE"],
-        Timeline_settings=Timeline_settings, configFile=configFile,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
         comment=str(date),
     )
 
 
-def CCD(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
+def CCD(
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
+):
 
     # CMD_settings_ConfigFile = {'CCDSEL': 1, 'PWR': 1, 'WDW': 4, 'JPEGQ': 95, 'SYNC': 0, 'TEXPIMS': 3000, 'TEXPMS': 1000, 'GAIN': 0, 'NFLUSH': 1023,
     #                             'NRSKIP': 0, 'NRBIN': 1, 'NROW': 50, 'NCSKIP': 0, 'NCBIN': 1, 'NCOL': 200, 'NCBINFPGA': 0, 'SIGMODE': 1}
@@ -163,13 +189,15 @@ def CCD(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_s
         NCOL=CMD_settings["NCOL"],
         NCBINFPGA=CMD_settings["NCBINFPGA"],
         SIGMODE=CMD_settings["SIGMODE"],
-        Timeline_settings=Timeline_settings, configFile=configFile,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
         comment=str(date),
     )
 
 
 def CCDBadColumn(
-        root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
+):
 
     CMD_settings_ConfigFile = configFile.CCDBadColumn_settings()
     CMD_settings = dict_comparator(CMD_settings, CMD_settings_ConfigFile)
@@ -179,13 +207,15 @@ def CCDBadColumn(
         CCDSEL=CMD_settings["CCDSEL"],
         NBC=CMD_settings["NBC"],
         BC=CMD_settings["BC"],
-        Timeline_settings=Timeline_settings, configFile=configFile,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
         comment=str(date),
     )
 
 
 def CCDFlushBadColumns(
-        root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
+):
 
     CMD_settings_ConfigFile = configFile.CCDFlushBadColumns_settings()
     CMD_settings = dict_comparator(CMD_settings, CMD_settings_ConfigFile)
@@ -193,12 +223,15 @@ def CCDFlushBadColumns(
         root,
         relativeTime,
         CCDSEL=CMD_settings["CCDSEL"],
-        Timeline_settings=Timeline_settings, configFile=configFile,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
         comment=str(date),
     )
 
 
-def CCDBIAS(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
+def CCDBIAS(
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
+):
 
     CMD_settings_ConfigFile = configFile.CCDBIAS_settings()
     CMD_settings = dict_comparator(CMD_settings, CMD_settings_ConfigFile)
@@ -211,12 +244,15 @@ def CCDBIAS(root, date, duration, relativeTime, Timeline_settings, configFile, C
         VSUBST=CMD_settings["VSUBST"],
         VRD=CMD_settings["VRD"],
         VOD=CMD_settings["VOD"],
-        Timeline_settings=Timeline_settings, configFile=configFile,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
         comment=str(date),
     )
 
 
-def CCDSNAPSHOT(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
+def CCDSNAPSHOT(
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
+):
 
     # CMD_settings_ConfigFile = {'CCDSEL': 1}
     # CMD_settings = dict_comparator(CMD_settings, CMD_settings_ConfigFile)
@@ -224,15 +260,14 @@ def CCDSNAPSHOT(root, date, duration, relativeTime, Timeline_settings, configFil
         root,
         round(relativeTime, 2),
         CCDSEL=CMD_settings["CCDSEL"],
-        Timeline_settings=Timeline_settings, configFile=configFile,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
         comment=str(date),
     )
 
 
 def CCDTRANSPARENTCMD(
     root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
-
-
 ):
 
     # CMD_settings_ConfigFile = {'CCDSEL': 1, 'CHAR': 0}
@@ -242,12 +277,15 @@ def CCDTRANSPARENTCMD(
         round(relativeTime, 2),
         CCDSEL=CMD_settings["CCDSEL"],
         CHAR=str(CMD_settings["CHAR"]),
-        Timeline_settings=Timeline_settings, configFile=configFile,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
         comment=str(date),
     )
 
 
-def Dbg(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
+def Dbg(
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
+):
 
     # CMD_settings_ConfigFile = {'CCDSEL': 1}
     # CMD_settings = dict_comparator(CMD_settings, CMD_settings_ConfigFile)
@@ -255,12 +293,15 @@ def Dbg(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_s
         root,
         round(relativeTime, 2),
         CCDSEL=CMD_settings["CCDSEL"],
-        Timeline_settings=Timeline_settings, configFile=configFile,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
         comment=str(date),
     )
 
 
-def PM(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}):
+def PM(
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
+):
 
     CMD_settings_ConfigFile = configFile.PM_settings()
     CMD_settings = dict_comparator(CMD_settings, CMD_settings_ConfigFile)
@@ -269,7 +310,8 @@ def PM(root, date, duration, relativeTime, Timeline_settings, configFile, CMD_se
         round(relativeTime, 2),
         TEXPMS=CMD_settings["TEXPMS"],
         TEXPIMS=CMD_settings["TEXPIMS"],
-        Timeline_settings=Timeline_settings, configFile=configFile,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
         comment=str(date),
     )
 
@@ -284,7 +326,8 @@ def CCDSynchronize(
         CCDSEL=CMD_settings["CCDSEL"],
         NCCD=CMD_settings["NCCD"],
         TEXPIOFS=CMD_settings["TEXPIOFS"],
-        Timeline_settings=Timeline_settings, configFile=configFile,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
         comment=str(date),
     )
 
@@ -304,7 +347,8 @@ def LimbPointingAltitudeOffset(
         Initial=CMD_settings["Initial"],
         Final=CMD_settings["Final"],
         Rate=CMD_settings["Rate"],
-        Timeline_settings=Timeline_settings, configFile=configFile,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
         comment=str(date),
     )
 
@@ -319,7 +363,8 @@ def ArgFreezeStart(
         root,
         round(relativeTime, 2),
         StartTime=CMD_settings["StartTime"],
-        Timeline_settings=Timeline_settings, configFile=configFile,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
         comment=str(date),
     )
 
@@ -334,7 +379,8 @@ def ArgFreezeDuration(
         root,
         round(relativeTime, 2),
         FreezeDuration=CMD_settings["FreezeDuration"],
-        Timeline_settings=Timeline_settings, configFile=configFile,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
         comment=str(date),
     )
 
@@ -347,6 +393,8 @@ def ArgEnableYawComp(
         root,
         round(relativeTime, 2),
         EnableYawComp=CMD_settings["EnableYawComp"],
-        Timeline_settings=Timeline_settings, configFile=configFile,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
         comment=str(date),
     )
+

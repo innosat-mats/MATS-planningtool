@@ -274,6 +274,10 @@ def TC_pafPWRToggle(
     root, relativeTime, CONST, Timeline_settings, configFile, comment=""
 ):
 
+    # OMC: This command is not avalible to be called via the platform (2021-04-27)
+    Logger.error("The TC_pafPWRToggle command not avalible via platform")
+    raise NotImplementedError
+
     if not (
         configFile.latestRelativeTime
         <= relativeTime
