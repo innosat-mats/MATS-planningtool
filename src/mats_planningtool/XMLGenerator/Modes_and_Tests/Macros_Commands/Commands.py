@@ -33,7 +33,9 @@ Logger = logging.getLogger("OPT_logger")
 def TC_pafMode(root, relativeTime, MODE, Timeline_settings, configFile, comment=""):
 
     if not (
-        configFile.latestRelativeTime <= relativeTime <= Timeline_settings["duration"]["duration"]
+        configFile.latestRelativeTime
+        <= relativeTime
+        <= Timeline_settings["duration"]["duration"]
     ):
         Logger.error(
             "Invalid argument: negative relativeTime, decreasing relativeTime, exceeding timeline duration"
@@ -75,7 +77,9 @@ def TC_acfLimbPointingAltitudeOffset(
     """
 
     if not (
-        configFile.latestRelativeTime <= relativeTime <= Timeline_settings["duration"]["duration"]
+        configFile.latestRelativeTime
+        <= relativeTime
+        <= Timeline_settings["duration"]["duration"]
     ):
         Logger.error(
             "Invalid argument: negative relativeTime, decreasing relativeTime, exceeding timeline duration"
@@ -156,10 +160,14 @@ def TC_acfLimbPointingAltitudeOffset(
     return incremented_time
 
 
-def TC_affArgFreezeStart(root, relativeTime, StartTime, Timeline_settings, configFile, comment=""):
+def TC_affArgFreezeStart(
+    root, relativeTime, StartTime, Timeline_settings, configFile, comment=""
+):
 
     if not (
-        configFile.latestRelativeTime <= relativeTime <= Timeline_settings["duration"]["duration"]
+        configFile.latestRelativeTime
+        <= relativeTime
+        <= Timeline_settings["duration"]["duration"]
     ):
         Logger.error(
             "Invalid argument: negative relativeTime, decreasing relativeTime, exceeding timeline duration"
@@ -193,7 +201,9 @@ def TC_affArgFreezeDuration(
 ):
 
     if not (
-        configFile.latestRelativeTime <= relativeTime <= Timeline_settings["duration"]["duration"]
+        configFile.latestRelativeTime
+        <= relativeTime
+        <= Timeline_settings["duration"]["duration"]
     ):
         Logger.error(
             "Invalid argument: negative relativeTime, decreasing relativeTime, exceeding timeline duration"
@@ -228,7 +238,9 @@ def TC_acfArgEnableYawComp(
 ):
 
     if not (
-        configFile.latestRelativeTime <= relativeTime <= Timeline_settings["duration"]["duration"]
+        configFile.latestRelativeTime
+        <= relativeTime
+        <= Timeline_settings["duration"]["duration"]
     ):
         Logger.error(
             "Invalid argument: negative relativeTime, decreasing relativeTime, exceeding timeline duration"
@@ -258,10 +270,14 @@ def TC_acfArgEnableYawComp(
     return incremented_time
 
 
-def TC_pafPWRToggle(root, relativeTime, CONST, Timeline_settings, configFile, comment=""):
+def TC_pafPWRToggle(
+    root, relativeTime, CONST, Timeline_settings, configFile, comment=""
+):
 
     if not (
-        configFile.latestRelativeTime <= relativeTime <= Timeline_settings["duration"]["duration"]
+        configFile.latestRelativeTime
+        <= relativeTime
+        <= Timeline_settings["duration"]["duration"]
     ):
         Logger.error(
             "Invalid argument: negative relativeTime, decreasing relativeTime, exceeding timeline duration"
@@ -290,11 +306,22 @@ def TC_pafPWRToggle(root, relativeTime, CONST, Timeline_settings, configFile, co
 
 
 def TC_pafUpload(
-    root, relativeTime, PINDEX, PTOTAL, WFLASH, NIMG, IMG, Timeline_settings, configFile, comment=""
+    root,
+    relativeTime,
+    PINDEX,
+    PTOTAL,
+    WFLASH,
+    NIMG,
+    IMG,
+    Timeline_settings,
+    configFile,
+    comment="",
 ):
 
     if not (
-        configFile.latestRelativeTime <= relativeTime <= Timeline_settings["duration"]["duration"]
+        configFile.latestRelativeTime
+        <= relativeTime
+        <= Timeline_settings["duration"]["duration"]
     ):
         Logger.error(
             "Invalid argument: negative relativeTime, decreasing relativeTime, exceeding timeline duration"
@@ -366,7 +393,9 @@ def TC_pafHTR(
 ):
 
     if not (
-        configFile.latestRelativeTime <= relativeTime <= Timeline_settings["duration"]["duration"]
+        configFile.latestRelativeTime
+        <= relativeTime
+        <= Timeline_settings["duration"]["duration"]
     ):
         Logger.error(
             "Invalid argument: negative relativeTime, decreasing relativeTime, exceeding timeline duration"
@@ -452,7 +481,9 @@ def TC_pafCCDMain(
 ):
 
     if not (
-        configFile.latestRelativeTime <= relativeTime <= Timeline_settings["duration"]["duration"]
+        configFile.latestRelativeTime
+        <= relativeTime
+        <= Timeline_settings["duration"]["duration"]
     ):
         Logger.error(
             "Invalid argument: negative relativeTime, decreasing relativeTime, exceeding timeline duration"
@@ -606,12 +637,21 @@ def TC_pafCCDMain(
 
 
 def TC_pafCCDSYNCHRONIZE(
-    root, relativeTime, CCDSEL, NCCD, TEXPIOFS, Timeline_settings, configFile, comment=""
+    root,
+    relativeTime,
+    CCDSEL,
+    NCCD,
+    TEXPIOFS,
+    Timeline_settings,
+    configFile,
+    comment="",
 ):
     "Note: CCDSYNCHRONIZE takes one TEXPIMS cycle to execute."
 
     if not (
-        configFile.latestRelativeTime <= relativeTime <= Timeline_settings["duration"]["duration"]
+        configFile.latestRelativeTime
+        <= relativeTime
+        <= Timeline_settings["duration"]["duration"]
     ):
         Logger.error(
             "Invalid argument: negative relativeTime, decreasing relativeTime, exceeding timeline duration"
@@ -697,7 +737,9 @@ def TC_pafCCDBadColumn(
 ):
 
     if not (
-        configFile.latestRelativeTime <= relativeTime <= Timeline_settings["duration"]["duration"]
+        configFile.latestRelativeTime
+        <= relativeTime
+        <= Timeline_settings["duration"]["duration"]
     ):
         Logger.error(
             "Invalid argument: negative relativeTime, decreasing relativeTime, exceeding timeline duration"
@@ -747,10 +789,14 @@ def TC_pafCCDBadColumn(
     return incremented_time
 
 
-def TC_pafCCDFlushBadColumns(root, relativeTime, CCDSEL, Timeline_settings, configFile, comment=""):
+def TC_pafCCDFlushBadColumns(
+    root, relativeTime, CCDSEL, Timeline_settings, configFile, comment=""
+):
 
     if not (
-        configFile.latestRelativeTime <= relativeTime <= Timeline_settings["duration"]["duration"]
+        configFile.latestRelativeTime
+        <= relativeTime
+        <= Timeline_settings["duration"]["duration"]
     ):
         Logger.error(
             "Invalid argument: negative relativeTime, decreasing relativeTime, exceeding timeline duration"
@@ -778,11 +824,22 @@ def TC_pafCCDFlushBadColumns(root, relativeTime, CCDSEL, Timeline_settings, conf
 
 
 def TC_pafCCDBIAS(
-    root, relativeTime, CCDSEL, VGATE, VSUBST, VRD, VOD, Timeline_settings, configFile, comment=""
+    root,
+    relativeTime,
+    CCDSEL,
+    VGATE,
+    VSUBST,
+    VRD,
+    VOD,
+    Timeline_settings,
+    configFile,
+    comment="",
 ):
 
     if not (
-        configFile.latestRelativeTime <= relativeTime <= Timeline_settings["duration"]["duration"]
+        configFile.latestRelativeTime
+        <= relativeTime
+        <= Timeline_settings["duration"]["duration"]
     ):
         Logger.error(
             "Invalid argument: negative relativeTime, decreasing relativeTime, exceeding timeline duration"
@@ -836,10 +893,14 @@ def TC_pafCCDBIAS(
     return incremented_time
 
 
-def TC_pafCCDSnapshot(root, relativeTime, CCDSEL, Timeline_settings, configFile, comment=""):
+def TC_pafCCDSnapshot(
+    root, relativeTime, CCDSEL, Timeline_settings, configFile, comment=""
+):
 
     if not (
-        configFile.latestRelativeTime <= relativeTime <= Timeline_settings["duration"]["duration"]
+        configFile.latestRelativeTime
+        <= relativeTime
+        <= Timeline_settings["duration"]["duration"]
     ):
         Logger.error(
             "Invalid argument: negative relativeTime, decreasing relativeTime, exceeding timeline duration"
@@ -871,7 +932,9 @@ def TC_pafCCDTRANSPARENTCMD(
 ):
 
     if not (
-        configFile.latestRelativeTime <= relativeTime <= Timeline_settings["duration"]["duration"]
+        configFile.latestRelativeTime
+        <= relativeTime
+        <= Timeline_settings["duration"]["duration"]
     ):
         Logger.error(
             "Invalid argument: negative relativeTime, decreasing relativeTime, exceeding timeline duration"
@@ -908,7 +971,9 @@ def TC_pafCCDTRANSPARENTCMD(
 def TC_pafDbg(root, relativeTime, CCDSEL, Timeline_settings, configFile, comment=""):
 
     if not (
-        configFile.latestRelativeTime <= relativeTime <= Timeline_settings["duration"]["duration"]
+        configFile.latestRelativeTime
+        <= relativeTime
+        <= Timeline_settings["duration"]["duration"]
     ):
         Logger.error(
             "Invalid argument: negative relativeTime, decreasing relativeTime, exceeding timeline duration"
@@ -936,10 +1001,14 @@ def TC_pafDbg(root, relativeTime, CCDSEL, Timeline_settings, configFile, comment
     return incremented_time
 
 
-def TC_pafPM(root, relativeTime, TEXPMS, TEXPIMS, Timeline_settings, configFile, comment=""):
+def TC_pafPM(
+    root, relativeTime, TEXPMS, TEXPIMS, Timeline_settings, configFile, comment=""
+):
 
     if not (
-        configFile.latestRelativeTime <= relativeTime <= Timeline_settings["duration"]["duration"]
+        configFile.latestRelativeTime
+        <= relativeTime
+        <= Timeline_settings["duration"]["duration"]
     ):
         Logger.error(
             "Invalid argument: negative relativeTime, decreasing relativeTime, exceeding timeline duration"
@@ -982,7 +1051,9 @@ def TC_pafPM(root, relativeTime, TEXPMS, TEXPIMS, Timeline_settings, configFile,
 def Payload_Power_Toggle(root, relativeTime, Timeline_settings, configFile, comment=""):
 
     if not (
-        configFile.latestRelativeTime <= relativeTime <= Timeline_settings["duration"]["duration"]
+        configFile.latestRelativeTime
+        <= relativeTime
+        <= Timeline_settings["duration"]["duration"]
     ):
         Logger.error(
             "Invalid argument: negative relativeTime, decreasing relativeTime, or exceeding timeline duration"
