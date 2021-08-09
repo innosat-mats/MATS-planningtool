@@ -1,0 +1,39 @@
+procedure
+	initiate and confirm step myStep
+		main
+			log "------------------------------------------------------------------------------------------------------------------";
+			log "Starting tests";
+			log to string (current time());
+
+			initiate TC_pafMODE with arguments
+				MODE:=2
+			end with;
+
+			wait for 5s;
+
+			initiate TC_pcfPLTMControl with arguments
+				Enable:=1,
+				Partition:=0
+			end with;
+
+			wait for 5s;
+
+			initiate TC_pafPWRTOGGLE with arguments
+				CONST:=165
+			end with;
+
+			wait for 30s;
+
+			initiate TC_pcfPLTMControl with arguments
+				Enable:=1,
+				Partition:=0
+			end with;
+
+			wait for 5s;
+
+			log "2020/6/20 18:34:12";
+			log to string (current time());
+			initiate TC_pafCCDFlushBadColumns with arguments
+				CCDSEL:=127
+			end with;
+
