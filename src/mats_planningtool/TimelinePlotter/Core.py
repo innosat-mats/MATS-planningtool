@@ -49,7 +49,14 @@ Logger = logging.getLogger("OPT_logger")
 rcParams["figure.max_open_warning"] = 30
 
 
-def Timeline_Plotter(configFile, Science_Mode_Path, OHB_H5_Path, STK_CSV_FILE, Timestep=10,FractionOfDataUsed=0.1):
+def Timeline_Plotter(
+    configFile,
+    Science_Mode_Path,
+    OHB_H5_Path,
+    STK_CSV_FILE,
+    Timestep=10,
+    FractionOfDataUsed=0.1,
+):
     """Core function of the Timeline_Plotter.
 
     Goes through the *Science Mode Timeline*, one mode at a time.
@@ -74,7 +81,10 @@ def Timeline_Plotter(configFile, Science_Mode_Path, OHB_H5_Path, STK_CSV_FILE, T
     Logger = logging.getLogger("OPT_logger")
     Version = configFile.Version()
     Logger.info(
-        "Configuration File used: " + configFile.config_file_name + ", Version: " + Version
+        "Configuration File used: "
+        + configFile.config_file_name
+        + ", Version: "
+        + Version
     )
 
     "Get Timeline settings and TLE from Configuration File. Only used if not given in the Science Mode Timeline"
@@ -971,9 +981,7 @@ def Plotter(
         # FractionOfDataUsed = 1/3
 
         timesteps = int(timesteps * FractionOfDataUsed - 1)
-        Logger.info(
-            "Fractional amount of h5-data used: " + str(FractionOfDataUsed)
-        )
+        Logger.info("Fractional amount of h5-data used: " + str(FractionOfDataUsed))
         if timesteps < 1:
             timesteps = 1
         ###### !!!!!!!!!!!!!!!! ############
@@ -1093,7 +1101,8 @@ def Plotter(
             )
             dcm_change_of_basis_ECI_to_SLOF = transpose(dcm_SLOF_coordinate_system)
             r_change_of_basis_ECI_to_SLOF = R.from_matrix(
-                dcm_change_of_basis_ECI_to_SLOF)
+                dcm_change_of_basis_ECI_to_SLOF
+            )
 
             "Create Rotation from quaternions (ECI to SpaceCraft BodyFrame)"
             MATS_ECI_OHB = R.from_quat(
@@ -1298,6 +1307,7 @@ def Plotter(
         legend()
         figurePath = os.path.join(figureDirectory, "PosErrorMATS_STK")
         pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+        close()
 
     "########################## End of STK DATA ################################################"
     "####################################################################################"
@@ -1333,6 +1343,7 @@ def Plotter(
         "Positional data in m (ECEF) from Science Mode Timeline of LP and MATS for 3/4 of an orbit"
     )
     legend()
+    close()
 
     fig = figure()
     plot_date(
@@ -1346,6 +1357,7 @@ def Plotter(
     legend()
     figurePath = os.path.join(figureDirectory, "ActiveScienceMode")
     pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+    close()
 
     """
     figure()
@@ -1389,6 +1401,7 @@ def Plotter(
     legend()
     figurePath = os.path.join(figureDirectory, "Yaw")
     pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+    close()
 
     fig = figure()
     plot_date(
@@ -1406,6 +1419,7 @@ def Plotter(
     legend()
     figurePath = os.path.join(figureDirectory, "Pitch")
     pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+    close()
 
     fig = figure()
     plot_date(
@@ -1423,6 +1437,7 @@ def Plotter(
     legend()
     figurePath = os.path.join(figureDirectory, "Roll")
     pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+    close()
 
     ###################################
 
@@ -1440,6 +1455,7 @@ def Plotter(
     legend()
     figurePath = os.path.join(figureDirectory, "Lat")
     pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+    close()
 
     """
     for t in range(len(lat_MATS_STK_FIXED)):
@@ -1473,6 +1489,7 @@ def Plotter(
     legend()
     figurePath = os.path.join(figureDirectory, "Long")
     pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+    close()
 
     """
     fig = figure()
@@ -1497,6 +1514,7 @@ def Plotter(
     legend()
     figurePath = os.path.join(figureDirectory, "Alt")
     pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+    close()
 
     fig = figure()
     plot_date(
@@ -1525,6 +1543,7 @@ def Plotter(
     legend()
     figurePath = os.path.join(figureDirectory, "ECEFerror")
     pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+    close()
 
     ####################################
 
@@ -1647,7 +1666,8 @@ def Plotter(
                     "The transpose of a matrix where the columns are basis vectors is a change of basis matrix"
                     dcm_change_of_basis_RCI = transpose(UnitVectorBasis_RCI)
                     r_change_of_basis_ECI_to_SLOF = R.from_matrix(
-                        dcm_change_of_basis_RCI)
+                        dcm_change_of_basis_RCI
+                    )
 
                     r_MATS_error_OHB_RCI = r_change_of_basis_ECI_to_SLOF.apply(
                         (
@@ -1692,6 +1712,7 @@ def Plotter(
         legend()
         figurePath = os.path.join(figureDirectory, "PosError")
         pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+        close()
 
         fig = figure()
         plot_date(
@@ -1717,6 +1738,7 @@ def Plotter(
         legend()
         figurePath = os.path.join(figureDirectory, "PosErrorRCI")
         pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+        close()
 
         fig = figure()
         plot_date(
@@ -1733,6 +1755,7 @@ def Plotter(
         legend()
         figurePath = os.path.join(figureDirectory, "MagPosError")
         pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+        close()
 
     fig = figure()
     plot_date(
@@ -1748,6 +1771,7 @@ def Plotter(
     legend()
     figurePath = os.path.join(figureDirectory, "Lat_LP")
     pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+    close()
 
     """
     fig = figure()
@@ -1771,6 +1795,7 @@ def Plotter(
     legend()
     figurePath = os.path.join(figureDirectory, "Long_LP")
     pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+    close()
 
     """
     fig = figure()
@@ -1795,6 +1820,7 @@ def Plotter(
     legend()
     figurePath = os.path.join(figureDirectory, "Alt_LP")
     pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+    close()
 
     if OHB_H5_Path != "":
         fig = figure()
@@ -1805,6 +1831,7 @@ def Plotter(
 
         figurePath = os.path.join(figureDirectory, "AltError_LP")
         pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+        close()
 
         fig = figure()
         plot_date(Time_error_MPL[:], x_LP_error_OHB[:], markersize=1, label="x")
@@ -1816,6 +1843,7 @@ def Plotter(
         legend()
         figurePath = os.path.join(figureDirectory, "PosError_LP")
         pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+        close()
 
         fig = figure()
         plot_date(
@@ -1838,6 +1866,7 @@ def Plotter(
         legend()
         figurePath = os.path.join(figureDirectory, "PosErrorRCI_LP")
         pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+        close()
 
         fig = figure()
         plot_date(Time_error_MPL[:], total_r_LP_error_OHB[:], markersize=1, label="XYZ")
@@ -1850,6 +1879,7 @@ def Plotter(
         legend()
         figurePath = os.path.join(figureDirectory, "MagPosError_LP")
         pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+        close()
 
     fig = figure()
     plot_date(
@@ -1865,6 +1895,7 @@ def Plotter(
     legend()
     figurePath = os.path.join(figureDirectory, "RA_OpticalAxis")
     pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+    close()
 
     if OHB_H5_Path != "":
         fig = figure()
@@ -1880,6 +1911,7 @@ def Plotter(
         legend()
         figurePath = os.path.join(figureDirectory, "RA_OpticalAxisError")
         pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+        close()
 
     fig = figure()
     plot_date(
@@ -1896,6 +1928,7 @@ def Plotter(
     legend()
     figurePath = os.path.join(figureDirectory, "Dec_OpticalAxis")
     pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+    close()
 
     if OHB_H5_Path != "":
         fig = figure()
@@ -1911,6 +1944,7 @@ def Plotter(
         legend()
         figurePath = os.path.join(figureDirectory, "Dec_OpticalAxisError")
         pickle.dump(fig, open(figurePath + ".fig.pickle", "wb"))
+        close()
 
     "######## Save data to pickle files ##########"
     "################################################"
