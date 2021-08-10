@@ -20,6 +20,7 @@ from pylab import (
     sqrt,
     floor,
     figure,
+    close,
     plot_date,
     datestr2num,
     xlabel,
