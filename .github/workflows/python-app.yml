@@ -22,10 +22,7 @@ jobs:
         python-version: 3.9
     - name: Install dependencies
       run: |
-        pip install wheel
-        conda install h5py
         pip install pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         pip install .
     - name: Lint with flake8
       run: |
@@ -35,4 +32,4 @@ jobs:
         #flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        pytest
+        python -m pytest
