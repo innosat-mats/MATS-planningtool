@@ -138,18 +138,18 @@ def lat_2_R(lat):
 
 
 def lat_calculator(Satellite_skyfield, date):
-    """ Function that calculates the latitude of a skyfield.sgp4lib.EarthSatellite object at a certain date
+    """Function that calculates the latitude of a skyfield.sgp4lib.EarthSatellite object at a certain date
 
-    Mainly used to approximate the latitude of the LP as the LP is close to being in the same plane as the orbital plane. 
+    Mainly used to approximate the latitude of the LP as the LP is close to being in the same plane as the orbital plane.
     So if the orbital position angle between LP and MATS is known (and MATS orbit is circular), then the time difference is known, then this function can be used to calculate the lat of MATS at a previous location to estimate the LPs current latitude.
 
-    Used only in Timeline_gen and XML_gen to estimate LPs latitude without using computational difficult methods to save run time.  
+    Used only in Timeline_gen and XML_gen to estimate LPs latitude without using computational difficult methods to save run time.
 
     Arguments:
         Satellite_skyfield (:obj:`skyfield.sgp4lib.EarthSatellite`): A Skyfield object representing an EarthSatellite defined by a TLE.
         date (:obj:`datetime.datetime`): The date of the calculation.
 
-    Returns: 
+    Returns:
         (float): Latitude given in degrees.
     """
 
@@ -170,7 +170,7 @@ def lat_calculator(Satellite_skyfield, date):
 
 
 def scheduler(Occupied_Timeline, date, endDate):
-    """ Function that checks if the scheduled time is available.
+    """Function that checks if the scheduled time is available.
 
     Changes the date until available or until no time is determined to be available.
 
@@ -179,7 +179,7 @@ def scheduler(Occupied_Timeline, date, endDate):
         date (:obj:`ephem.Date`): The scheduled startdate of the current Mode.
         endDate (:obj:`ephem.Date`): The scheduled end-date of the current Mode.
 
-    Returns: 
+    Returns:
         (tuple): tuple containing:
 
             - **date** (*ephem.Date*): The scheduled startdate (potentially changed).
@@ -223,9 +223,9 @@ def scheduler(Occupied_Timeline, date, endDate):
 
 
 def dict_comparator(dict1, dict2, Logger=None):
-    """Function which compares the keys of two dictionaries and outputs a new dictionary. 
+    """Function which compares the keys of two dictionaries and outputs a new dictionary.
 
-    A dict_new will be created containing all the keys and values of dict2. Then for any keys that 
+    A dict_new will be created containing all the keys and values of dict2. Then for any keys that
     exist in both dict1 and dict_new, dict_new's keys will have their values replaced by the ones in dict1.
 
     Used to compare settings given in a Science Mode Timeline to the same kind of settings given in the Configuration File.
@@ -234,8 +234,8 @@ def dict_comparator(dict1, dict2, Logger=None):
 
     Arguments:
         dict1 (dict):
-        dict2 (dict): 
-        Logger (:obj:`logging.Logger`): Logger used to log the result. 
+        dict2 (dict):
+        Logger (:obj:`logging.Logger`): Logger used to log the result.
 
     Returns:
         (dict): dict_new
@@ -317,7 +317,7 @@ def SetupLogger(LoggerName):
 def calculate_time_per_row(NCOL, NCBIN, NCBINFPGA, NRSKIP, NROW, NRBIN, NFLUSH):
     """This function provides an estimated amount of time for a CCD readout.
 
-    Note that minor "transition" states may have been omitted resulting in 
+    Note that minor "transition" states may have been omitted resulting in
     somewhat shorter readout times (<0.1%).
 
     Default timing setting is:\n
@@ -338,7 +338,7 @@ def calculate_time_per_row(NCOL, NCBIN, NCBINFPGA, NRSKIP, NROW, NRBIN, NFLUSH):
         NFLUSH (int): Number of pre-exposure flushes
 
     Returns:
-        (float): Readout time in ms. 
+        (float): Readout time in ms.
 
     """
 
@@ -425,9 +425,9 @@ def SyncArgCalculator(CCD_settings, ExtraOffset, ExtraIntervalTime):
     The CCDs are offset in order of ExposureTime (TEXPMS) with the CCD with the shortest ExposureTime being the leading CCD. \n
     CCDs with ExposureTime equal to zero are skipped. \n
     The offset calculations depend on the Readout Time, which depends on the binning settings of the CCDs. \n
-    The ExposureInterval Time (TEXPIMS) depends on the longest combined Readout Time and ExposureTime for a CCD aswell as the 
+    The ExposureInterval Time (TEXPIMS) depends on the longest combined Readout Time and ExposureTime for a CCD aswell as the
     leading CCD's Exposure Time to prevent collision between
-    readout of the leading CCD and the final CCD. If the combined TransferTime is estimated to be longer than TEXPIMS; TEXPIMS is set to the estimated combined TransferTime to prevent CRB crash. 
+    readout of the leading CCD and the final CCD. If the combined TransferTime is estimated to be longer than TEXPIMS; TEXPIMS is set to the estimated combined TransferTime to prevent CRB crash.
 
     Arguments:
         CCD_settings (dict of dict of int): Dictionary containing settings for the CCDs.
@@ -820,8 +820,8 @@ def Satellite_Simulator(
 ):
     """Simulates a single point in time for a Satellite using Skyfield and also the pointing of the satellite.
 
-    Only estimates the actual pointing definition used by OHB as it is uncertain if the algorithm to calculate the LP here is the same as the one OHB uses. 
-    The LP is calculated with an algorithm derived by Nick Lloyd at University of Saskatchewan, 
+    Only estimates the actual pointing definition used by OHB as it is uncertain if the algorithm to calculate the LP here is the same as the one OHB uses.
+    The LP is calculated with an algorithm derived by Nick Lloyd at University of Saskatchewan,
     Canada (nick.lloyd@usask.ca), and is part of
     the operational code for both OSIRIS and SMR on-board- the Odin satellite. An offset is added to the pointing altitude to better mimic OHBs actual LP.
 
@@ -843,7 +843,7 @@ def Satellite_Simulator(
     celestial_eq = [0, 0, 1]
 
     "Offset the pointing altitude slightly which improves the estimation of OHBs actual pointing"
-    pointing_altitude = pointing_altitude + 0.3
+    pointing_altitude = pointing_altitude + 0.3  # OBS OBS FIXME: Check this!
 
     yaw_correction = Timeline_settings["yaw_correction"]
 
@@ -883,10 +883,17 @@ def Satellite_Simulator(
 
     time_between_LP_and_Satellite = orbital_period * OrbAngleBetweenSatelliteAndLP / 360
 
-    "Estimation of lat of LP using the position of Satellite at a previous time"
-    date_of_Satellitelat_is_equal_2_current_LPlat = ephem.Date(
-        SimulationTime - ephem.second * time_between_LP_and_Satellite
-    ).datetime()
+    "Estimation of lat of LP using the position of Satellite at a previous time"  # This only support forward looking
+    forward_looking = True
+    if forward_looking:
+        date_of_Satellitelat_is_equal_2_current_LPlat = ephem.Date(
+            SimulationTime + ephem.second * time_between_LP_and_Satellite
+        ).datetime()
+    else:
+        date_of_Satellitelat_is_equal_2_current_LPlat = ephem.Date(
+            SimulationTime - ephem.second * time_between_LP_and_Satellite
+        ).datetime()
+
     lat_LP = lat_calculator(
         Satellite_skyfield, date_of_Satellitelat_is_equal_2_current_LPlat
     )
@@ -1125,7 +1132,7 @@ def FreezeDuration_calculator(pointing_altitude1, pointing_altitude2, TLE2):
         TLE2 (str): Second row of a TLE.
 
     Returns:
-        (int): FreezeDuration, Time [s] it takes for the satellites orbital position angle to change 
+        (int): FreezeDuration, Time [s] it takes for the satellites orbital position angle to change
         by the same amount as the angle between the two tangential pointing altitudes as seen from the satellite.
     """
 
