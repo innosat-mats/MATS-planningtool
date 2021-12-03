@@ -307,7 +307,7 @@ def CheckConfigFile(configFile):
     for x in range(len(Mode120_settings["V_offset"])):
         if not (
             abs(Mode120_settings["V_offset"][x]) <= 10
-            and 0 < abs(Mode120_settings["H_offset"]) <= 10
+            and 0 <= abs(Mode120_settings["H_offset"]) <= 10
         ):
             Logger.error("Mode120_settings['V_offset'] or Mode120_settings['H_offset']")
             raise ValueError
@@ -536,7 +536,7 @@ def CheckConfigFile(configFile):
         raise TypeError
     if not (type(Mode124_settings["V_offset"]) == list):
         Logger.error("Mode124_settings['V_offset'] != list")
-    for x in range(len(Mode120_settings["V_offset"])):
+    for x in range(len(Mode124_settings["V_offset"])):
         if not (
             abs(Mode124_settings["V_offset"][x]) <= 1
             and 0 <= abs(Mode124_settings["H_offset"]) <= 10
