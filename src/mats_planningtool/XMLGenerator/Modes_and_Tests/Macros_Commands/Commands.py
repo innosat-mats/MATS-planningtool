@@ -1064,7 +1064,7 @@ def Payload_Power_Toggle(root, relativeTime, Timeline_settings, configFile, comm
         )
         raise ValueError
 
-    etree.SubElement(root[1], "procedure", mnemonic="FCP-MTS-0035_Payload_Power_Toggle")
+    etree.SubElement(root[1], "procedure", id="FCP-MTS-0035_Payload_Power_Toggle")
 
     etree.SubElement(root[1][len(root[1]) - 1], "relativeTime")
     root[1][len(root[1]) - 1][0].text = str(int(relativeTime))
