@@ -66,7 +66,7 @@ def XML_generator(configFile, SCIMOD_Path):
 
     ######## Try to Create a directory for storage of output files #######
     try:
-        os.mkdir('Output')
+        os.mkdir(configFile.output_dir)
     except:
         pass
 
@@ -162,7 +162,7 @@ def XML_generator(configFile, SCIMOD_Path):
     SCIMOD_Path = SCIMOD_Path.replace('.json', '')
 
     ### Write finished XML-tree with all commands to a file #######
-    XML_TIMELINE = os.path.join('Output', 'XML_TIMELINE__'+'FROM__'+SCIMOD_Path+'.xml')
+    XML_TIMELINE = os.path.join(configFile.output_dir, 'XML_TIMELINE__'+'FROM__'+SCIMOD_Path+'.xml')
     Logger.info('Write XML-tree to: '+XML_TIMELINE)
     f = open(XML_TIMELINE, 'w')
     f.write(etree.tostring(root, pretty_print=True, encoding='unicode'))

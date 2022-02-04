@@ -55,6 +55,14 @@ def CheckConfigFile(configFile):
         )
         raise ValueError
     try:
+        Logger.info("Outputting file to directory: " + configFile.output_dir)
+    except:
+        Logger.error(
+            "Output directory invalid."
+        )
+        raise ValueError
+    
+    try:
         Logger.info("Currently used starting date: " + Timeline_settings["start_date"])
     except:
         Logger.error(

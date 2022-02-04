@@ -33,7 +33,7 @@ def MinimalScienceXMLGenerator(configFile):
 
     "######## Try to Create a directory for storage of output files #######"
     try:
-        os.mkdir("Output")
+        os.mkdir(configFile.output_dir)
     except:
         pass
 
@@ -144,7 +144,7 @@ def MinimalScienceXMLGenerator(configFile):
     "####################### End of Minimum Science CMDs ################################"
 
     "### Write finished XML-tree with all commands to a file #######"
-    XML_TIMELINE = os.path.join("Output", "XML_TIMELINE__MinimalScience_.xml")
+    XML_TIMELINE = os.path.join(configFile.output_dir, "XML_TIMELINE__MinimalScience_.xml")
     Logger.info("Write XML-tree to: " + XML_TIMELINE)
     f = open(XML_TIMELINE, "w")
     f.write(etree.tostring(root, pretty_print=True, encoding="unicode"))

@@ -32,7 +32,7 @@ def Timeline_generator(configFile):
 
     "######## Try to Create a directory for storage of output files #######"
     try:
-        os.mkdir('Output')
+        os.mkdir(configFile.output_dir)
     except:
         pass
 
@@ -251,11 +251,11 @@ def Timeline_generator(configFile):
 
     "Write the Science Mode Timeline list to a .json file"
     try:
-        os.mkdir('Output')
+        os.mkdir(configFile.output_dir)
     except:
         pass
     SCIMOD_NAME = os.path.join(
-        'Output', 'Science_Mode_Timeline_'+os.path.split(configFile.config_file_name)[1])
+        configFile.output_dir, 'Science_Mode_Timeline_'+os.path.split(configFile.config_file_name)[1])
     Logger.info('Save mode timeline to file: '+SCIMOD_NAME)
     with open(SCIMOD_NAME, "w") as write_file:
         json.dump(SCIMOD_Timeline, write_file, indent=2)

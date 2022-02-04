@@ -17,6 +17,7 @@ class configFile:
     ):
 
         self.config_file_name = config_file_name
+        self.output_dir = 'Output'
         self.TLE1 = TLE1
         self.TLE2 = TLE2
         self.date = date
@@ -720,7 +721,7 @@ class configFile:
 
         if SCIMOD_Path == None:
             SCIMOD_Path = os.path.join(
-                "Output",
+                self.output_dir,
                 "Science_Mode_Timeline_" + os.path.split(self.config_file_name)[1],
             )
         XML_TIMELINE = XML_generator(self, SCIMOD_Path)
