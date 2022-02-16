@@ -50,7 +50,19 @@ assert DeepDiff(timeline_plotter_data[3],Time_OHB) == {}
 # Convert the Science Mode Timeline into payload and platform CMDs as a .xml file)
 
 configfile_test.XML_gen(SCIMOD_Path="test_data/output/Science_Mode_Timeline_config_file_test.json")
-assert filecmp.cmp('test_data_output/XML_TIMELINE__FROM__test_data_output_Science_Mode_Timeline_config_file_test.xml','test_data/output/XML_TIMELINE__FROM__test_data_output_Science_Mode_Timeline_config_file_test.xml')
+
+#since creation date is included in the XML a custom comparator is needed
+outputfile = 'test_data_output/XML_TIMELINE__FROM__test_data_output_Science_Mode_Timeline_config_file_test.xml'
+test_file = 'test_data/output/XML_TIMELINE__FROM__test_data_output_Science_Mode_Timeline_config_file_test.xml'
+with open(outputfile, 'r') as file1:
+    with open(test_file, 'r') as file2:
+       for l1,l2 in zip(file1,file2):
+            if l1 != l2:
+                if l2.strip() == '<changeLogItem version="1.0" date="2022-02-04" author="David Skanberg">The file was created using OPT</changeLogItem>':
+                    pass
+                else:
+                    assert False
+#assert filecmp.cmp('test_data_output/XML_TIMELINE__FROM__test_data_output_Science_Mode_Timeline_config_file_test.xml','test_data/output/XML_TIMELINE__FROM__test_data_output_Science_Mode_Timeline_config_file_test.xml')
 
 # Plot the example Science Mode Timeline together with the example h5 file and the example STK generated .csv file
 Data_MATS, Data_LP, Timescience_mode_timeline_path, Time_OHB = configfile_test.Timeline_Plotter(
@@ -103,7 +115,20 @@ assert DeepDiff(timeline_analyzer_output[1],Parameters) == {}
 
 # Create a Minimal Science XML which is defined directly in the Source Code under _XMLGenerator.MinimalScienceXML_gen.py
 configfile.MinimalScienceXML_gen()
-assert filecmp.cmp('test_data_output/XML_TIMELINE__MinimalScience_.xml','test_data/output/XML_TIMELINE__MinimalScience_.xml')
+
+#since creation date is included in the XML a custom comparator is needed
+outputfile = 'test_data_output/XML_TIMELINE__MinimalScience_.xml'
+test_file = 'test_data/output/XML_TIMELINE__MinimalScience_.xml'
+with open(outputfile, 'r') as file1:
+    with open(test_file, 'r') as file2:
+       for l1,l2 in zip(file1,file2):
+            if l1 != l2:
+                if l2.strip() == '<changeLogItem version="1.0" date="2022-02-04" author="David Skanberg">The file was created using OPT</changeLogItem>':
+                    pass
+                else:
+                    assert False
+
+#assert filecmp.cmp('test_data_output/XML_TIMELINE__MinimalScience_.xml','test_data/output/XML_TIMELINE__MinimalScience_.xml')
 
 # Generate pluto script
 configfile_test.PLUTOGenerator(
@@ -119,4 +144,17 @@ assert filecmp.cmp('test_data_output/minimal_science_pluto.plp','test_data/outpu
 configfile.XML_gen(
      "test_data/Example_Science_Mode_Timeline__Commisioning_Phase_Tests.json"
 )
-assert filecmp.cmp('test_data_output/XML_TIMELINE__FROM__test_data_Example_Science_Mode_Timeline__Commisioning_Phase_Tests.xml','test_data/output/XML_TIMELINE__FROM__test_data_Example_Science_Mode_Timeline__Commisioning_Phase_Tests.xml')
+
+#since creation date is included in the XML a custom comparator is needed
+outputfile = 'test_data_output/XML_TIMELINE__FROM__test_data_Example_Science_Mode_Timeline__Commisioning_Phase_Tests.xml'
+test_file = 'test_data/output/XML_TIMELINE__FROM__test_data_Example_Science_Mode_Timeline__Commisioning_Phase_Tests.xml'
+with open(outputfile, 'r') as file1:
+    with open(test_file, 'r') as file2:
+       for l1,l2 in zip(file1,file2):
+            if l1 != l2:
+                if l2.strip() == '<changeLogItem version="1.0" date="2022-02-04" author="David Skanberg">The file was created using OPT</changeLogItem>':
+                    pass
+                else:
+                    assert False
+
+#assert filecmp.cmp('test_data_output/XML_TIMELINE__FROM__test_data_Example_Science_Mode_Timeline__Commisioning_Phase_Tests.xml','test_data/output/XML_TIMELINE__FROM__test_data_Example_Science_Mode_Timeline__Commisioning_Phase_Tests.xml')
