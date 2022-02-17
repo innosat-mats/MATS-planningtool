@@ -509,7 +509,7 @@ def Mode120_date_select(Occupied_Timeline, SpottedStarList, configFile):
 
     comment = ('Star name:'+star_name[x]+', V-offset: '+str(round(star_V_offset[x], 2))+', H-offset: '+str(round(star_H_offset[x], 2))+', V-mag: '+str(star_mag[x])+', Number of times date changed: '+str(iterations)
                + ', MATS (long,lat) in degrees = ('+str(long_MATS[x])+', '+str(lat_MATS[x])+'), optical-axis Dec (J2000 ICRS): '+str(Dec_optical_axis[x])+'), optical-axis RA (J2000 ICRS): '+str(RA_optical_axis[x]) +
-               '), star Dec (J2000 ICRS): '+str(np.round(SpottedStarList[x]['Dec'],4))+', star RA (J2000 ICRS): '+str(np.round(SpottedStarList[x]['RA'],4)))
+               '), star Dec (J2000 ICRS): '+str(np.round(SpottedStarList[x]['Dec'],2))+', star RA (J2000 ICRS): '+str(np.round(SpottedStarList[x]['RA'],2)))
 
     Occupied_Timeline['Mode120'].append((StartDate, endDate))
 
