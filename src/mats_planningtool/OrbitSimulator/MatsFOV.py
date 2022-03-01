@@ -14,6 +14,7 @@ from skyfield.units import Distance
 from mats_planningtool.OrbitSimulator import Geoidlib
 from scipy.optimize import minimize_scalar
 from skyfield.framelib import itrs
+from skyfield.positionlib import ICRF 
 
 def rotate (unitvec, roll, pitch, yaw, deg=False):
     def Rx (v,th):
@@ -86,8 +87,8 @@ def funpitch(pitch,g,th,pos,yaw,rotmatrix):
 
 def funheight (s,g,pos,FOV):
     newp = pos + s * FOV
-    g.position=Distance(m=newp)
-    return wgs84.subpoint(g).elevation.m
+    newp = ICRF(Distance(m=newp).au,t=g.t,center=399)
+    return wgs84.subpoint(newp).elevation.m 
 
 
 def findtangent(g,pos,FOV):
