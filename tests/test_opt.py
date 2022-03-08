@@ -83,7 +83,6 @@ def test_xml_gen():
                             pass
                         else:
                             assert False
-    #assert filecmp.cmp('test_data_output/XML_TIMELINE__FROM__test_data_output_Science_Mode_Timeline_config_file_test.xml','test_data/output/XML_TIMELINE__FROM__test_data_output_Science_Mode_Timeline_config_file_test.xml')
 
 def test_timeline_plotter():
 
@@ -166,7 +165,6 @@ def test_minimal_timeline():
                         else:
                             assert False
 
-    #assert filecmp.cmp('test_data_output/XML_TIMELINE__MinimalScience_.xml','test_data/output/XML_TIMELINE__MinimalScience_.xml')
 
 def test_pluto_script():
 
@@ -205,4 +203,3 @@ def test_operational_mode():
                         else:
                             assert False
 
-    #assert filecmp.cmp('test_data_output/XML_TIMELINE__FROM__test_data_Example_Science_Mode_Timeline__Commisioning_Phase_Tests.xml','test_data/output/XML_TIMELINE__FROM__test_data_Example_Science_Mode_Timeline__Commisioning_Phase_Tests.xml')
