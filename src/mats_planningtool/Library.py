@@ -3,6 +3,7 @@
 """
 
 import ephem
+import datetime as DT
 import importlib
 import time
 import logging
@@ -847,7 +848,11 @@ def Satellite_Simulator(
 
     yaw_correction = Timeline_settings["yaw_correction"]
 
-    current_time_datetime = ephem.Date(SimulationTime).datetime()
+    if type(SimulationTime) is DT.datetime:
+        current_time_datetime = SimulationTime
+    else:
+        current_time_datetime = ephem.Date(SimulationTime).datetime()
+    
     year = current_time_datetime.year
     month = current_time_datetime.month
     day = current_time_datetime.day
@@ -884,9 +889,13 @@ def Satellite_Simulator(
     time_between_LP_and_Satellite = orbital_period * OrbAngleBetweenSatelliteAndLP / 360
 
     "Estimation of lat of LP using the position of Satellite at a previous time"
-    date_of_Satellitelat_is_equal_2_current_LPlat = ephem.Date(
-        SimulationTime - ephem.second * time_between_LP_and_Satellite
-    ).datetime()
+    if type(SimulationTime) is DT.datetime:
+        date_of_Satellitelat_is_equal_2_current_LPlat = SimulationTime - DT.timedelta(seconds = time_between_LP_and_Satellite)
+    else:
+        date_of_Satellitelat_is_equal_2_current_LPlat = ephem.Date(
+            SimulationTime - ephem.second * time_between_LP_and_Satellite
+        ).datetime()
+        
     lat_LP = lat_calculator(
         Satellite_skyfield, date_of_Satellitelat_is_equal_2_current_LPlat
     )
@@ -1085,8 +1094,11 @@ def SunAngle(PositionVector, SimulationTime):
         (float): The sun angle [degrees].
 
     """
-
-    current_time_datetime = ephem.Date(SimulationTime).datetime()
+    if type(SimulationTime) is DT.datetime:
+        current_time_datetime = SimulationTime
+    else:
+        current_time_datetime = ephem.Date(SimulationTime).datetime()
+    
     year = current_time_datetime.year
     month = current_time_datetime.month
     day = current_time_datetime.day

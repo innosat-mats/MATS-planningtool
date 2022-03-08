@@ -15,6 +15,7 @@ from pylab import array, ceil, cos, sin, cross, dot, zeros, norm, pi, arccos, fl
 from astroquery.vizier import Vizier
 from skyfield import api
 import numpy as np
+import datetime as DT
 
 from mats_planningtool.Library import deg2HMS, Satellite_Simulator
 from .Mode12X import UserProvidedDateScheduler
@@ -119,9 +120,8 @@ def Mode120_date_calculator(configFile):
     timesteps = int(ceil(duration / timestep)) + 2
     Logger.info('Maximum number of timesteps set to: '+str(timesteps))
 
-    timeline_start = ephem.Date(Timeline_settings['start_date'])
-    initial_time = ephem.Date(timeline_start + ephem.second *
-                              Mode120_settings['freeze_start'])
+    timeline_start = DT.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S')
+    initial_time = timeline_start + DT.timedelta(seconds= Mode120_settings['freeze_start'])
     current_time = initial_time
     Logger.info('Initial simulation date set to: '+str(initial_time))
 
@@ -140,7 +140,7 @@ def Mode120_date_calculator(configFile):
         s = s.format(star_cat[t]['HIP'], deg2HMS(ra=star_cat[t]['_RA.icrs']), deg2HMS(
             dec=star_cat[t]['_DE.icrs']), star_cat[t]['Vmag'])
         stars.append(ephem.readdb(s))
-        stars[t].compute(epoch='2000/01/01 11:58:55.816')
+        stars[t].compute(epoch='2000/01/01 11:58:55.816') #what is this epoch value, where is it from?? OMC 2022.03.08
         stars_dec[t] = stars[t].dec
         stars_ra[t] = stars[t].ra
 
@@ -207,7 +207,7 @@ def Mode120_date_calculator(configFile):
     Logger.info('Start of simulation of MATS for Mode120')
     ################## Start of Simulation ########################################
     "Loop and calculate the relevant angle of each star to each direction of MATS's FOV"
-    while(current_time-initial_time < ephem.second*duration):
+    while((current_time-initial_time) < DT.timedelta(seconds=duration)):
 
         #current_time = ephem.Date(date+ephem.second*timestep*t)
 
@@ -244,7 +244,7 @@ def Mode120_date_calculator(configFile):
                 "Check if a star has already been spotted during this orbit."
                 if(stars[x].name in spotted_star_name):
 
-                    time_until_far_outside_of_FOV = ephem.second*(180*MATS_P[t]/360)
+                    time_until_far_outside_of_FOV = DT.timedelta(seconds=(180*MATS_P[t].item()/360)) #What does this do? @Donal
 
                     "If enough time has passed (half an orbit), the star can be removed from the exception list"
                     if((current_time - spotted_star_timestamp[spotted_star_name.index(stars[x].name)]) >= time_until_far_outside_of_FOV):
@@ -335,10 +335,10 @@ def Mode120_date_calculator(configFile):
         "Increase Simulation Time with a timestep, or skip ahead if 1 orbit is completed"
         t += 1
         if(t*timestep > MATS_P[t-1]*(TimeSkips+1)):
-            current_time = ephem.Date(current_time+ephem.second*Timeskip)
+            current_time = current_time+DT.timedelta(seconds=Timeskip)
             TimeSkips += 1
         else:
-            current_time = ephem.Date(current_time+ephem.second*timestep)
+            current_time = current_time+DT.timedelta(seconds=timestep)
 
     ########################## END OF SIMULATION ############################
 
@@ -477,14 +477,13 @@ def Mode120_date_select(Occupied_Timeline, SpottedStarList, configFile):
 
         StartDate = star_date[x]
 
-        StartDate = ephem.Date(ephem.Date(StartDate)-ephem.second *
-                               (Mode120_settings['freeze_start']))
+        StartDate = DT.datetime.strptime(StartDate,'%Y-%m-%d %H:%M:%S')-DT.timedelta(seconds=Mode120_settings['freeze_start'])
 
-        endDate = ephem.Date(StartDate+ephem.second * (
-            Mode120_settings['freeze_start'] + Mode120_settings['freeze_duration'] + Timeline_settings['mode_separation']))
+        endDate = StartDate+DT.timedelta(seconds= (Mode120_settings['freeze_start'] + 
+                Mode120_settings['freeze_duration'] + Timeline_settings['mode_separation']))
 
         "Check that the scheduled date is not before the start of the timeline"
-        if(StartDate < ephem.Date(configFile.Timeline_settings()['start_date'])):
+        if(StartDate < DT.datetime.strptime(configFile.Timeline_settings()['start_date'],'%Y/%m/%d %H:%M:%S')):
             iterations = iterations + 1
             restart = True
             continue
@@ -499,6 +498,9 @@ def Mode120_date_select(Occupied_Timeline, SpottedStarList, configFile):
             else:
                 "Extract the start and end date of each instance of a scheduled mode"
                 for busy_date in busy_dates:
+                    if type(busy_date[0]) is ephem.Date:
+                        busy_date = (busy_date[0].datetime(),busy_date[1].datetime())
+
                     if(busy_date[0] <= StartDate <= busy_date[1] or
                             busy_date[0] <= endDate <= busy_date[1] or
                             (StartDate < busy_date[0] and endDate > busy_date[1])):
@@ -511,6 +513,6 @@ def Mode120_date_select(Occupied_Timeline, SpottedStarList, configFile):
                + ', MATS (long,lat) in degrees = ('+str(np.round(long_MATS[x],2))+', '+str(np.round(lat_MATS[x],2))+'), optical-axis Dec (J2000 ICRS): '+str(np.round(Dec_optical_axis[x],2))+'), optical-axis RA (J2000 ICRS): '+str(np.round(RA_optical_axis[x],2)) +
                '), star Dec (J2000 ICRS): '+str(np.round(SpottedStarList[x]['Dec'],1))+', star RA (J2000 ICRS): '+str(np.round(SpottedStarList[x]['RA'],1)))
 
-    Occupied_Timeline['Mode120'].append((StartDate, endDate))
+    Occupied_Timeline['Mode120'].append((ephem.Date(str(StartDate)), ephem.Date(str(endDate))))
 
     return Occupied_Timeline, comment
