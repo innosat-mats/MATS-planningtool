@@ -507,8 +507,8 @@ def Mode120_date_select(Occupied_Timeline, SpottedStarList, configFile):
                         restart = True
                         break
 
-    comment = ('Star name:'+star_name[x]+', V-offset: '+str(round(star_V_offset[x], 2))+', H-offset: '+str(round(star_H_offset[x], 2))+', V-mag: '+str(star_mag[x])+', Number of times date changed: '+str(iterations)
-               + ', MATS (long,lat) in degrees = ('+str(long_MATS[x])+', '+str(lat_MATS[x])+'), optical-axis Dec (J2000 ICRS): '+str(Dec_optical_axis[x])+'), optical-axis RA (J2000 ICRS): '+str(RA_optical_axis[x]) +
+    comment = ('Star name:'+star_name[x]+', V-offset: '+str(np.round(star_V_offset[x], 2))+', H-offset: '+str(np.round(star_H_offset[x], 2))+', V-mag: '+str(star_mag[x])+', Number of times date changed: '+str(iterations)
+               + ', MATS (long,lat) in degrees = ('+str(np.round(long_MATS[x],2))+', '+str(np.round(lat_MATS[x],2))+'), optical-axis Dec (J2000 ICRS): '+str(np.round(Dec_optical_axis[x],2))+'), optical-axis RA (J2000 ICRS): '+str(np.round(RA_optical_axis[x],2)) +
                '), star Dec (J2000 ICRS): '+str(np.round(SpottedStarList[x]['Dec'],1))+', star RA (J2000 ICRS): '+str(np.round(SpottedStarList[x]['RA'],1)))
 
     Occupied_Timeline['Mode120'].append((StartDate, endDate))
