@@ -171,7 +171,7 @@ def Timeline_generator(configFile):
     elif(Timeline_settings['Choose_Operational_Science_Mode'] == 0):
         ### Check if it is NLC season ###
         if(Timeline_start_date.month in [11, 12, 1, 2, 5, 6, 7, 8] or
-                (Timeline_start_date.month in [3, 9] and Timeline_start_date.tuple()[2] in range(11))):
+                (Timeline_start_date.month in [3, 9] and Timeline_start_date.day in range(11))):
 
             Logger.info('NLC season (Mode1)')
             OpSciMode = 'Mode1'
