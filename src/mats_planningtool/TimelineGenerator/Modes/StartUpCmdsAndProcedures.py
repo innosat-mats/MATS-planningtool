@@ -16,7 +16,7 @@ import logging
 import sys
 import importlib
 import ephem
-
+import datetime as DT
 from mats_planningtool.Library import scheduler
 
 Logger = logging.getLogger("OPT_logger")
@@ -107,10 +107,9 @@ def CMD_scheduler(Occupied_Timeline, configFile):
     """
 
     Logger.info('Timeline start_time used as initial date')
-    initial_date = ephem.Date(configFile.Timeline_settings()['start_date'])
+    initial_date = DT.datetime.strptime(configFile.Timeline_settings()['start_date'],'%Y/%m/%d %H:%M:%S')
     duration = configFile.Timeline_settings()['CMD_duration']
-    endDate = ephem.Date(initial_date + ephem.second *
-                         (configFile.Timeline_settings()['mode_separation'] + duration))
+    endDate = initial_date + DT.timedelta(seconds = (configFile.Timeline_settings()['mode_separation'] + duration))
 
     ############### Start of availability schedueler ##########################
 

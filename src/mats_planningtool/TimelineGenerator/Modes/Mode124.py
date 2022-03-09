@@ -419,6 +419,6 @@ def date_select(Occupied_Timeline, SpottedMoonList, configFile):
                str(round(SpottedMoonList[x]['Dec'], 2))+', Moon RA (J2000) [degrees]: '+str(round(SpottedMoonList[x]['RA'], 2))+', OpticalAxis Dec = '+str(round(SpottedMoonList[x]['Dec FOV'][0], 2)) +
                ', Optical Axis RA = '+str(round(SpottedMoonList[x]['RA FOV'][0], 2)))
 
-    Occupied_Timeline['Mode124'].append((date, endDate))
+    Occupied_Timeline['Mode124'].append((date.datetime(), endDate.datetime()))
 
     return Occupied_Timeline, comment

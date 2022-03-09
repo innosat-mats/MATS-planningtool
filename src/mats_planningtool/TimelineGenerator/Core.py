@@ -14,6 +14,7 @@ import time
 import os
 import ephem
 import importlib
+import datetime as DT
 
 
 from .Modes import Modes_Header
@@ -49,7 +50,7 @@ def Timeline_generator(configFile):
     "Get settings for the timeline"
     Timeline_settings = configFile.Timeline_settings()
 
-    Timeline_start_date = ephem.Date(Timeline_settings['start_date'])
+    Timeline_start_date = DT.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S')
     Logger.debug('Timeline_settings: '+str(Timeline_settings))
 
     "Check if yaw_correction setting is set correct"
@@ -129,9 +130,9 @@ def Timeline_generator(configFile):
                 configFile.Mode124Iteration += 1
 
             "Check if the scheduled date is within the time defined for the timeline"
-            if(Occupied_Timeline[scimod][scheduled_instances[scimod]-1][0] < Timeline_start_date or
-                    Occupied_Timeline[scimod][scheduled_instances[scimod]-1][0] > (Timeline_start_date+ephem.second*Timeline_settings['duration']['duration']) or
-                    Occupied_Timeline[scimod][scheduled_instances[scimod]-1][1] - Occupied_Timeline[scimod][scheduled_instances[scimod]-1][0] > Timeline_settings['duration']['duration']):
+            if((Occupied_Timeline[scimod][scheduled_instances[scimod]-1][0] < Timeline_start_date) or
+                    (Occupied_Timeline[scimod][scheduled_instances[scimod]-1][0] > (Timeline_start_date+DT.timedelta(seconds=Timeline_settings['duration']['duration']))) or
+                    ((Occupied_Timeline[scimod][scheduled_instances[scimod]-1][1] - Occupied_Timeline[scimod][scheduled_instances[scimod]-1][0]) > DT.timedelta(seconds=Timeline_settings['duration']['duration']))):
                 Logger.error(
                     scimod+' scheduled outside of timeline as defined in configFile')
 
@@ -169,8 +170,8 @@ def Timeline_generator(configFile):
         OpSciMode = 'Mode2'
     elif(Timeline_settings['Choose_Operational_Science_Mode'] == 0):
         ### Check if it is NLC season ###
-        if(Timeline_start_date.tuple()[1] in [11, 12, 1, 2, 5, 6, 7, 8] or
-                (Timeline_start_date.tuple()[1] in [3, 9] and Timeline_start_date.tuple()[2] in range(11))):
+        if(Timeline_start_date.month in [11, 12, 1, 2, 5, 6, 7, 8] or
+                (Timeline_start_date.month in [3, 9] and Timeline_start_date.tuple()[2] in range(11))):
 
             Logger.info('NLC season (Mode1)')
             OpSciMode = 'Mode1'

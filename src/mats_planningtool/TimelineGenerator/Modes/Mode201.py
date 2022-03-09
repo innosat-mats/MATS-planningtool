@@ -70,6 +70,6 @@ def date_select(Occupied_Timeline, initial_date, configFile):
     "Get the name of the parent function, which is always defined as the name of the mode"
     Mode_name = sys._getframe(1).f_code.co_name
 
-    Occupied_Timeline[Mode_name].append((date, endDate))
+    Occupied_Timeline[Mode_name].append((date.datetime(), endDate.datetime()))
 
     return Occupied_Timeline, comment

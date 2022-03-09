@@ -104,7 +104,7 @@ def Mode1_2_5(Occupied_Timeline, configFile):
                 date = Occupied_Timeline_values[x-1][1]
                 endDate = ephem.Date(
                     Occupied_Timeline_values[x][0] - ephem.second*Timeline_settings['mode_separation'])
-                dates.append((date, endDate))
+                dates.append((date.datetime(), endDate.date.datetime()))
                 iterations = iterations + 1
 
     if('Mode1' in Occupied_Timeline):

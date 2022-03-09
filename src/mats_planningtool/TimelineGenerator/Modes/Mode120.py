@@ -499,7 +499,7 @@ def Mode120_date_select(Occupied_Timeline, SpottedStarList, configFile):
                 "Extract the start and end date of each instance of a scheduled mode"
                 for busy_date in busy_dates:
                     if type(busy_date[0]) is ephem.Date:
-                        busy_date = (busy_date[0].datetime(),busy_date[1].datetime())
+                        raise TypeError('busy_date is ephem date and not datetime')
 
                     if(busy_date[0] <= StartDate <= busy_date[1] or
                             busy_date[0] <= endDate <= busy_date[1] or
@@ -513,6 +513,6 @@ def Mode120_date_select(Occupied_Timeline, SpottedStarList, configFile):
                + ', MATS (long,lat) in degrees = ('+str(np.round(long_MATS[x],2))+', '+str(np.round(lat_MATS[x],2))+'), optical-axis Dec (J2000 ICRS): '+str(np.round(Dec_optical_axis[x],2))+'), optical-axis RA (J2000 ICRS): '+str(np.round(RA_optical_axis[x],2)) +
                '), star Dec (J2000 ICRS): '+str(np.round(SpottedStarList[x]['Dec'],1))+', star RA (J2000 ICRS): '+str(np.round(SpottedStarList[x]['RA'],1)))
 
-    Occupied_Timeline['Mode120'].append((ephem.Date(str(StartDate)), ephem.Date(str(endDate))))
+    Occupied_Timeline['Mode120'].append((StartDate, endDate))
 
     return Occupied_Timeline, comment
