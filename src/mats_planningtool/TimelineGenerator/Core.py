@@ -243,7 +243,7 @@ def Timeline_generator(configFile):
 
         #SCIMOD_Timeline.append([ x[2],str(x[0]), str(x[1]),{},x[3] ])
 
-        SCIMOD_Timeline.append([x[2], str(x[0]), str(x[1]), Config_File, x[3]])
+        SCIMOD_Timeline.append([x[2], x[0].strftime("%Y/%-m/%d %H:%M:%S"), x[1].strftime("%Y/%-m/%d %H:%M:%S"), Config_File, x[3]])
         Logger.debug(str(t+2)+' entry in Science Mode list: '+str(SCIMOD_Timeline[t+1]))
         Logger.debug('')
         t = t+1
