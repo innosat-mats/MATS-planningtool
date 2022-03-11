@@ -6,7 +6,6 @@ Part of Timeline_generator, as part of OPT.
 """
 
 
-import ephem
 import sys
 import logging
 import importlib
@@ -292,7 +291,7 @@ def date_calculator(configFile):
 
                 Logger.debug('Jump ahead half an orbit in time')
                 "Skip ahead half an orbit"
-                current_time = ephem.Date(current_time+ephem.second*MATS_P[t]/2)
+                current_time = current_time+DT.timedelta(seconds=MATS_P[t].item()/2)
                 Logger.debug('Current time: '+str(current_time))
                 Logger.debug('')
 
@@ -381,16 +380,14 @@ def date_select(Occupied_Timeline, SpottedMoonList, configFile):
         then next smallest if 2nd iterations needed and so on"""
         x = Moon_H_offset_abs.index(Moon_H_offset_sorted[iterations])
 
-        date = Moon_date[x]
+        date = DT.datetime.strptime(Moon_date[x],'%Y-%m-%d %H:%M:%S.%f')
+        date = date-DT.timedelta(seconds=Mode124_settings['freeze_start'])
 
-        date = ephem.Date(ephem.Date(date)-ephem.second *
-                          (Mode124_settings['freeze_start']))
-
-        endDate = ephem.Date(date+ephem.second*(Mode124_settings['freeze_start'] +
-                                                Mode124_settings['freeze_duration'] + configFile.Timeline_settings()['mode_separation']))
+        endDate = date+DT.timedelta(seconds=Mode124_settings['freeze_start'] +
+                                                Mode124_settings['freeze_duration'] + configFile.Timeline_settings()['mode_separation'])
 
         "Check that the scheduled date is not before the start of the timeline"
-        if(date < ephem.Date(configFile.Timeline_settings()['start_date'])):
+        if(date < DT.datetime.strptime(configFile.Timeline_settings()['start_date'],'%Y/%m/%d %H:%M:%S')):
             iterations = iterations + 1
             restart = True
             continue
@@ -418,6 +415,6 @@ def date_select(Occupied_Timeline, SpottedMoonList, configFile):
                str(round(SpottedMoonList[x]['Dec'], 2))+', Moon RA (J2000) [degrees]: '+str(round(SpottedMoonList[x]['RA'], 2))+', OpticalAxis Dec = '+str(round(SpottedMoonList[x]['Dec FOV'][0], 2)) +
                ', Optical Axis RA = '+str(round(SpottedMoonList[x]['RA FOV'][0], 2)))
 
-    Occupied_Timeline['Mode124'].append((date.datetime(), endDate.datetime()))
+    Occupied_Timeline['Mode124'].append((date, endDate))
 
     return Occupied_Timeline, comment
