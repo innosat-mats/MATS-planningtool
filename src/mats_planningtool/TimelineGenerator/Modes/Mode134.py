@@ -10,6 +10,7 @@ import ephem
 import sys
 import logging
 import importlib
+import datetime as DT
 
 from mats_planningtool.Library import scheduler
 
@@ -31,20 +32,13 @@ def Mode134(Occupied_Timeline, configFile):
 
     "Get the initially planned date"
     if configFile.Mode134_settings()["start_date"] != "0":
-        initialDate = ephem.Date(configFile.Mode160_settings()["start_date"])
+        initialDate = DT.datetime.strptime(configFile.Mode160_settings()["start_date"],'%Y/%m/%d %H:%M:%S') #Why mode 160?? 2022.03.09 OMC
         Logger.info("Mode specific start_date used as initial date")
     else:
         Logger.info("Timeline start_date used as initial date")
-        initialDate = ephem.Date(configFile.Timeline_settings()["start_date"])
+        initialDate = DT.datetime.strptime(configFile.Timeline_settings()["start_date"],'%Y/%m/%d %H:%M:%S')
 
-    endDate = ephem.Date(
-        initialDate
-        + ephem.second
-        * (
-            configFile.Mode134_settings()["mode_duration"]
-            + configFile.Timeline_settings()["mode_separation"]
-        )
-    )
+    endDate = initialDate + DT.timedelta(seconds= configFile.Mode134_settings()["mode_duration"] + configFile.Timeline_settings()["mode_separation"] )
 
     ############### Start of availability schedueler ##########################
 

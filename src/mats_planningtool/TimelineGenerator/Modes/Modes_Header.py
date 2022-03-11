@@ -18,8 +18,6 @@ from .Mode131 import Mode131
 from .Mode132 import Mode132
 from .Mode133 import Mode133
 from .Mode124 import Mode124
-from .Mode201 import Mode201
-from .Mode203 import Mode203
 from .Mode110 import Mode110
 from .Mode134 import Mode134
 from .Mode1_2_5 import Mode1_2_5

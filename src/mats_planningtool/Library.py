@@ -177,14 +177,14 @@ def scheduler(Occupied_Timeline, date, endDate):
 
     Arguments:
         Occupied_Timeline (dict): A dictionary of currently planned Modes containing lists with their scheduled times ([startDate, endDate]) as ephem.Date class.
-        date (:obj:`ephem.Date`): The scheduled startdate of the current Mode.
-        endDate (:obj:`ephem.Date`): The scheduled end-date of the current Mode.
+        date (:obj:`datetime.datetime`): The scheduled startdate of the current Mode.
+        endDate (:obj:`datetime.datetime`): The scheduled end-date of the current Mode.
 
     Returns: 
         (tuple): tuple containing:
 
-            - **date** (*ephem.Date*): The scheduled startdate (potentially changed).
-            - **endDate** (*ephem.Date*): The scheduled end-date (potentially changed).
+            - **date** (*datetime.datetime*): The scheduled startdate (potentially changed).
+            - **endDate** (*datetime.datetime*): The scheduled end-date (potentially changed).
             - **iterations** (*int*): The number of times the scheduled date got changed.
 
     """
@@ -206,6 +206,11 @@ def scheduler(Occupied_Timeline, date, endDate):
                 "Extract the start and end date of each instance of a scheduled mode"
                 for busy_date in busy_dates:
 
+                    if type(busy_date[0]) is ephem.Date:
+                        raise TypeError('busy_date is ephem date and not datetime')
+                    if type(date) is ephem.Date:
+                        raise TypeError('date is ephem date and not datetime')
+
                     "If the planned date collides with any already scheduled ones -> post-pone and restart loop"
                     if (
                         busy_date[0] <= date < busy_date[1]
@@ -213,8 +218,8 @@ def scheduler(Occupied_Timeline, date, endDate):
                         or (date < busy_date[0] and endDate > busy_date[1])
                     ):
 
-                        endDate = ephem.Date(endDate + abs(date - busy_date[1]))
-                        date = ephem.Date(busy_date[1])
+                        endDate = endDate + abs(date - busy_date[1])
+                        date = busy_date[1]
 
                         iterations = iterations + 1
                         restart = True

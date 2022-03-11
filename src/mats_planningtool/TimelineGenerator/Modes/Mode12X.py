@@ -10,6 +10,7 @@ import ephem
 from pylab import array, ceil, cos, sin, dot, zeros, norm, pi, arccos, floor
 from astroquery.vizier import Vizier
 from skyfield import api
+import datetime as DT
 
 from mats_planningtool.Library import Satellite_Simulator, deg2HMS, scheduler
 from mats_planningtool import MATS_coordinates
@@ -364,10 +365,8 @@ def date_select(Occupied_Timeline, date_magnitude_array, Settings, configFile):
             #input('Enter anything to ackknowledge and continue')
             return Occupied_Timeline, comment
 
-        date = ephem.Date(ephem.Date(date_max_mag) -
-                          ephem.second*(Settings['freeze_start']))
-        endDate = ephem.Date(date+ephem.second * (
-            Settings['freeze_start'] + Settings['freeze_duration'] + Timeline_settings['mode_separation']))
+        date = ephem.Date(date_max_mag).datetime() -  DT.timedelta(seconds=Settings['freeze_start'])
+        endDate = date+DT.timedelta(seconds= Settings['freeze_start'] + Settings['freeze_duration'] + Timeline_settings['mode_separation'])
 
         "Extract the start and end date of each scheduled mode"
         for busy_dates in Occupied_Timeline.values():

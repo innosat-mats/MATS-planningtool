@@ -7,7 +7,7 @@ Part of *Timeline_gen*, as part of OPT. *Operational Science Modes* is always sc
 import ephem
 import logging
 import importlib
-
+import datetime as DT
 
 Logger = logging.getLogger("OPT_logger")
 
@@ -32,7 +32,7 @@ def Mode1_2_5(Occupied_Timeline, configFile):
     Timeline_settings = configFile.Timeline_settings()
 
     "Earliest possible date an Operational Science Mode is scheduled"
-    initial_date = ephem.Date(Timeline_settings['start_date'])
+    initial_date = DT.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S')
 
     Occupied_Timeline_values = []
 
@@ -54,7 +54,7 @@ def Mode1_2_5(Occupied_Timeline, configFile):
     dates = []
 
     "The least amount of time that needs to be available for mode1/2 to be scheduled"
-    minDuration = ephem.second*Timeline_settings['Mode1_2_5_minDuration']
+    minDuration = DT.timedelta(seconds=Timeline_settings['Mode1_2_5_minDuration'])
     iterations = 0
 
     """To fill in modes inbetween already schedueled modes. The amount of iterations is equal to 
@@ -64,11 +64,9 @@ def Mode1_2_5(Occupied_Timeline, configFile):
 
         # If Occupied_Timeline_values is empty then just schedule until the end of the timeline
         if(len(Occupied_Timeline_values) == 0):
-            timeline_end = ephem.Date(ephem.Date(
-                Timeline_settings['start_date'])+ephem.second*Timeline_settings['duration']['duration'])
+            timeline_end = DT.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S')+ DT.timedelta(seconds=Timeline_settings['duration']['duration'])
             date = initial_date
-            endDate = ephem.Date(timeline_end - ephem.second *
-                                 Timeline_settings['mode_separation'])
+            endDate = timeline_end - DT.timedelta(seconds=Timeline_settings['mode_separation'])
             dates.append((date, endDate))
 
             iterations = iterations + 1
@@ -79,20 +77,17 @@ def Mode1_2_5(Occupied_Timeline, configFile):
             if(time_between_modes > minDuration):
                 date = initial_date
 
-                endDate = ephem.Date(
-                    Occupied_Timeline_values[x][0] - ephem.second*Timeline_settings['mode_separation'])
+                endDate = Occupied_Timeline_values[x][0] - DT.timedelta(seconds=Timeline_settings['mode_separation'])
                 dates.append((date, endDate))
                 iterations = iterations + 1
 
         # For last iteration; Check if there is spacing in between end of the last mode and the end of the timeline
         elif(x == len(Occupied_Timeline_values)):
-            timeline_end = ephem.Date(ephem.Date(
-                Timeline_settings['start_date'])+ephem.second*Timeline_settings['duration']['duration'])
+            timeline_end = DT.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S')+DT.timedelta(seconds=Timeline_settings['duration']['duration'])
             time_between_modes = timeline_end - Occupied_Timeline_values[-1][1]
             if(time_between_modes > minDuration):
                 date = Occupied_Timeline_values[-1][1]
-                endDate = ephem.Date(timeline_end - ephem.second *
-                                     Timeline_settings['mode_separation'])
+                endDate = timeline_end - DT.timedelta(seconds=Timeline_settings['mode_separation'])
                 dates.append((date, endDate))
                 iterations = iterations + 1
 
@@ -102,8 +97,7 @@ def Mode1_2_5(Occupied_Timeline, configFile):
                 Occupied_Timeline_values[x-1][1]
             if(time_between_modes > minDuration):
                 date = Occupied_Timeline_values[x-1][1]
-                endDate = ephem.Date(
-                    Occupied_Timeline_values[x][0] - ephem.second*Timeline_settings['mode_separation'])
+                endDate = Occupied_Timeline_values[x][0] - DT.timedelta(seconds=Timeline_settings['mode_separation'])
                 dates.append((date, endDate))
                 iterations = iterations + 1
 

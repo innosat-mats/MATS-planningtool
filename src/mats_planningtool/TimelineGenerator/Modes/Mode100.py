@@ -10,6 +10,7 @@ import sys
 import logging
 import importlib
 import logging
+import datetime as DT
 
 
 from mats_planningtool.Library import scheduler
@@ -36,11 +37,12 @@ def Mode100(Occupied_Timeline, configFile):
 
     "Get the initially planned date"
     if Settings["start_date"] != "0":
-        initialDate = ephem.Date(Settings["start_date"])
+        initialDate = DT.datetime.strptime(Settings["start_date"],'%Y/%m/%d %H:%M:%S')
         Logger.info("Mode specific start_date used as initial date")
     else:
+        initialDate = initialDate = DT.datetime.strptime(Timeline_settings["start_date"],'%Y/%m/%d %H:%M:%S')
         Logger.info("Timeline start_date used as initial date")
-        initialDate = ephem.Date(Timeline_settings["start_date"])
+
 
     # number_of_CMDs = 6
     number_of_altitudes = int(
@@ -58,9 +60,8 @@ def Mode100(Occupied_Timeline, configFile):
         + Timeline_settings["CMD_separation"] * NumberOfCMDsPerAltitude
     ) * number_of_altitudes
 
-    endDate = ephem.Date(
-        initialDate + ephem.second * (duration + Timeline_settings["mode_separation"])
-    )  # no mode seperation to ensure consistency at each altitude
+    endDate = initialDate + DT.timedelta(seconds = duration + Timeline_settings["mode_separation"])
+      # no mode seperation to ensure consistency at each altitude
 
     ############### Start of availability schedueler ##########################
 
