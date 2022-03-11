@@ -12,6 +12,7 @@ import logging
 import importlib
 from pylab import cross, ceil, dot, zeros, sqrt, norm, pi, arccos, arctan
 from skyfield import api
+import datetime as DT
 
 from mats_planningtool.Library import Satellite_Simulator, scheduler
 
@@ -119,9 +120,8 @@ def date_calculator(configFile):
 
     timesteps = int(ceil(duration / timestep)) + 2
 
-    timeline_start = ephem.Date(Timeline_settings['start_date'])
-    initial_time = ephem.Date(timeline_start + ephem.second *
-                              Mode124_settings['freeze_start'])
+    timeline_start = DT.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S')
+    initial_time = timeline_start + DT.timedelta(seconds = Mode124_settings['freeze_start'])
 
     Logger.info('Initial simulation date set to: '+str(initial_time))
 
@@ -165,7 +165,7 @@ def date_calculator(configFile):
     Logger.info('Start of simulation for Mode124')
 
     ######### SIMULATION ################
-    while(current_time < initial_time+ephem.second*duration):
+    while(current_time < initial_time+DT.timedelta(seconds = duration)):
 
         if(t*timestep % log_timestep == 0):
             LogFlag = True
@@ -194,7 +194,7 @@ def date_calculator(configFile):
 
         ############# End of Calculations of orbital and pointing vectors #####
 
-        current_time_datetime = ephem.Date(current_time).datetime()
+        current_time_datetime = current_time
         year = current_time_datetime.year
         month = current_time_datetime.month
         day = current_time_datetime.day
@@ -300,8 +300,7 @@ def date_calculator(configFile):
         if((angle_between_orbital_plane_and_moon[t] > H_offset and yaw_correction == False) or
                 angle_between_orbital_plane_and_moon[t] > H_offset+abs(Timeline_settings['yaw_amplitude']) and yaw_correction == True):
 
-            current_time = ephem.Date(
-                current_time+ephem.second * H_offset/4 / 360 * Moon_orbital_period)
+            current_time = current_time+DT.timedelta(seconds= H_offset/4 / 360 * Moon_orbital_period)
             # if( t*timestep % floor(log_timestep/400) == 0 ):
             Logger.debug('')
             Logger.debug(
@@ -312,7 +311,7 @@ def date_calculator(configFile):
             t = t + 1
         else:
             t = t + 1
-            current_time = ephem.Date(current_time+ephem.second*timestep)
+            current_time = current_time+DT.timedelta(seconds=timestep)
 
     Logger.info('End of simulation for Mode124')
     Logger.debug('SpottedMoonList: '+str(SpottedMoonList))
