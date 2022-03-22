@@ -88,6 +88,34 @@ def TurnONCCDs(
         comment="TurnONCCDs, " + str(date),
     )
 
+def TurnOFFCCDs(
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
+):
+
+    relativeTime = Commands.TC_pafCCDMain(
+        root,
+        relativeTime,
+        CCDSEL=127,
+        PWR=0,
+        TEXPIMS=6000,
+        TEXPMS=0,
+        NRSKIP=0,
+        NRBIN=1,
+        NROW=1,
+        NCBIN=1,
+        NCOL=1,
+        WDW=7,
+        JPEGQ=100,
+        SYNC=0,
+        NCBINFPGA=0,
+        SIGMODE=1,
+        GAIN=0,
+        NFLUSH=1023,
+        NCSKIP=0,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
+        comment="TurnONCCDs, " + str(date),
+    )
 
 def MODE(
     root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}

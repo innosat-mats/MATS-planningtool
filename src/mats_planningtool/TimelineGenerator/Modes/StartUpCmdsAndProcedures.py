@@ -79,6 +79,11 @@ def TurnONCCDs(Occupied_Timeline, configFile):
 
     return Occupied_Timeline, comment
 
+def TurnOFFCCDs(Occupied_Timeline, configFile):
+
+    Occupied_Timeline, comment = CMD_scheduler(Occupied_Timeline, configFile)
+
+    return Occupied_Timeline, comment
 ########################################################
 
 #################### PROCEDURES ########################

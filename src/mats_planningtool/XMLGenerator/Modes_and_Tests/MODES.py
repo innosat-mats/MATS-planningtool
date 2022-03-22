@@ -84,6 +84,75 @@ def Mode5(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
 
 ############################################################################################
 
+def Mode6(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
+    """Mode6
+
+    **Macro:** Operational_Limb_Pointing_macro \n
+    **CCD_Macro:** Chosen in the settings of the Mode. \n
+
+    """
+
+    pointing_altitude = Timeline_settings["StandardPointingAltitude"]
+
+    Mode_settings_ConfigFile = configFile.Operational_Science_Mode_settings()
+
+    Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
+
+    CCD_settings = configFile.CCD_macro_settings("HighResUV")
+    PM_settings = configFile.PM_settings()
+
+    Mode_name = sys._getframe(0).f_code.co_name.replace("", "")
+    comment = Mode_name + " starting date: " + str(date) + ", " + str(Mode_settings)
+
+    # pointing_altitude = Mode_settings['pointing_altitude']
+
+    # Macros.Custom_Binning_Macro(root,relativeTime, pointing_altitude=pointing_altitude, Timeline_settings = Timeline_settings, comment = comment)
+    Macros.Operational_Limb_Pointing_macro(
+        root,
+        relativeTime,
+        CCD_settings,
+        PM_settings=PM_settings,
+        pointing_altitude=pointing_altitude,
+        Timeline_settings=Timeline_settings, configFile=configFile,
+        comment=comment,
+    )
+
+###################################################################################################
+
+def Mode7(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
+    """Mode7
+
+    **Macro:** Operational_Limb_Pointing_macro \n
+    **CCD_Macro:** Chosen in the settings of the Mode. \n
+
+    """
+
+    pointing_altitude = Timeline_settings["StandardPointingAltitude"]
+
+    Mode_settings_ConfigFile = configFile.Operational_Science_Mode_settings()
+
+    Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
+
+    CCD_settings = configFile.CCD_macro_settings("HighResIR")
+    PM_settings = configFile.PM_settings()
+
+    Mode_name = sys._getframe(0).f_code.co_name.replace("", "")
+    comment = Mode_name + " starting date: " + str(date) + ", " + str(Mode_settings)
+
+    # pointing_altitude = Mode_settings['pointing_altitude']
+
+    # Macros.Custom_Binning_Macro(root,relativeTime, pointing_altitude=pointing_altitude, Timeline_settings = Timeline_settings, comment = comment)
+    Macros.Operational_Limb_Pointing_macro(
+        root,
+        relativeTime,
+        CCD_settings,
+        PM_settings=PM_settings,
+        pointing_altitude=pointing_altitude,
+        Timeline_settings=Timeline_settings, configFile=configFile,
+        comment=comment,
+    )
+
+###################################################################################################
 
 def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
     """Mode1

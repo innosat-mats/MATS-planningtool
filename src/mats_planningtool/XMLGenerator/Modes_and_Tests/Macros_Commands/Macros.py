@@ -778,6 +778,48 @@ def SetCCDs_macro(
 
     return relativeTime
 
+'''
+def OffCCDs_macro(
+    root, relativeTime, CCD_settings, Timeline_settings, configFile, comment=""
+):
+    """Macro that turns off all CCDs
+
+    Calls SetCCDs_macro with PWR=0
+
+    Arguments:
+        root (lxml.etree._Element):  XML tree structure. Main container object for the ElementTree API.
+        relativeTime (float): The relative starting time of the macro with regard to the start of the timeline [s]
+        CCD_settings (:obj:`dict` of int): A dict containing Settings for the CCDs. Defined in the *Configuration File*.
+        Timeline_settings (dict): Dictionary containing the settings of the Timeline given in either the *Science_Mode_Timeline* or the *Configuration File*.
+        comment (str): A comment for the macro. Will be printed in the genereated XML-file.
+
+    Returns:
+        relativeTime (float): Time in seconds equal to the input "relativeTime" with added delay from the scheduling of commands.
+
+    """
+
+
+    comment = comment + ", OffCCDs_macro"
+
+    CCDSEL, NCCD, TEXPIOFS, TEXPIMS = Library.SyncArgCalculator(
+        CCD_settings,
+        Timeline_settings["CCDSYNC_ExtraOffset"],
+        Timeline_settings["CCDSYNC_ExtraIntervalTime"],
+    )
+
+    CCD_settings_off = CCD_settings
+    CCD_settings_off[16]["PWR"] = 0
+    CCD_settings_off[32]["PWR"] = 0
+    CCD_settings_off[1]["PWR"] = 0
+    CCD_settings_off[8]["PWR"] = 0
+    CCD_settings_off[2]["PWR"] = 0
+    CCD_settings_off[4]["PWR"] = 0
+    CCD_settings_off[64]["PWR"] = 0
+
+    relativeTime = SetCCDs_macro(root, relativeTime, CCD_settings, TEXPIMS,Timeline_settings, configFile, comment="")
+
+    return relativeTime 
+'''
 
 """
 def Mode_User_Specified_macro(root, relativeTime, Timeline_settings, configFile=configFile, comment = ''):
@@ -787,3 +829,4 @@ def Mode_User_Specified_macro(root, relativeTime, Timeline_settings, configFile=
     return relativeTime
     
 """
+

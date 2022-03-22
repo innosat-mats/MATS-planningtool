@@ -107,6 +107,10 @@ def Mode1_2_5(Occupied_Timeline, configFile):
         Occupied_Timeline['Mode2'] = dates
     elif('Mode5' in Occupied_Timeline):
         Occupied_Timeline['Mode5'] = dates
+    elif('Mode6' in Occupied_Timeline):
+        Occupied_Timeline['Mode6'] = dates
+    elif('Mode7' in Occupied_Timeline):
+        Occupied_Timeline['Mode7'] = dates
 
     Logger.debug('Scheduled Operational Science Mode (date, endDate): '+str(dates))
     comment = 'Number of Modes inserted: ' + str(iterations)

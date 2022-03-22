@@ -162,6 +162,14 @@ def Timeline_generator(configFile):
         Logger.info('Schedule Mode5 as an operational science mode')
 
         OpSciMode = 'Mode5'
+    if(Timeline_settings['Choose_Operational_Science_Mode'] == 6):
+        Logger.info('Schedule Mode5 as an operational science mode')
+
+        OpSciMode = 'Mode6'
+    if(Timeline_settings['Choose_Operational_Science_Mode'] == 7):
+        Logger.info('Schedule Mode5 as an operational science mode')
+
+        OpSciMode = 'Mode7'
     elif(Timeline_settings['Choose_Operational_Science_Mode'] == 1):
         Logger.info('Schedule Mode1 as an operational science mode')
         OpSciMode = 'Mode1'
