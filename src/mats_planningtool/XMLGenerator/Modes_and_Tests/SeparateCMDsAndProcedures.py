@@ -53,6 +53,27 @@ def Payload_Power_Toggle(
         comment="Payload_Power_Toggle, " + str(date),
     )
 
+def Point_at_Sun(
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
+):
+    Commands.Point_at_Sun(
+        root,
+        round(relativeTime, 2),
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
+        comment="Point_at_Sun, " + str(date),
+    )
+
+def Point_at_Orbit(
+    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
+):
+    Commands.Point_at_Orbit(
+        root,
+        round(relativeTime, 2),
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
+        comment="Point_at_Orbit, " + str(date),
+    )
 
 "################# PAYLOAD COMMANDS ############################"
 

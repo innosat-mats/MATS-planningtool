@@ -243,7 +243,7 @@ def Timeline_generator(configFile):
                 Config_File = {'HTRSEL': '?', 'SET': '?',
                                'PVALUE': '?', 'IVALUE': '?', 'DVALUE': '?'}
 
-            elif(x[2] == 'Payload_Power_Toggle' or x[2] == 'TurnONCCDs'):
+            elif(x[2] == 'Payload_Power_Toggle' or x[2] == 'TurnONCCDs' or x[2] == 'TurnOFFCCDs' or x[2] == 'Point_at_Sun' or x[2] == 'Point_at_Orbit'):
                 Config_File = {}
             else:
                 Logger.warning('No Config function for '+x[2])
