@@ -10,6 +10,7 @@ from scipy.optimize import minimize_scalar
 from skyfield.positionlib import ICRF
 from skyfield.units import Distance
 from skyfield.framelib import itrs
+from Library import rot_arbit
 
 def rotate (unitvec, yaw, pitch, roll, deg=False):
     def Rx (v,th):
@@ -87,6 +88,7 @@ def funheight (s,g,pos,FOV):
 
 
 def findtangent(g,pos,FOV):
+    #dokument!
     res=minimize_scalar(funheight,args=(g,pos,FOV),bracket=(1e5,3e5))
     return res
 
@@ -94,6 +96,154 @@ def findpitch (th,g,pos,yaw,rotmatrix):
     res=minimize_scalar(funpitch,args=(g,th,pos,yaw,rotmatrix),method="Bounded",bounds=(np.deg2rad(-30),np.deg2rad(-10)))
     return res.x
 
+
+def Satellite_Simulator(
+    Satellite_skyfield,
+    SimulationTime,
+    Timeline_settings,
+    pointing_altitude,
+    LogFlag=False,
+    Logger=None,
+):
+    """Simulates a single point in time for a Satellite using Skyfield and also the pointing of the satellite.
+
+    Only estimates the actual pointing definition used by OHB as it is uncertain if the algorithm to calculate the LP here is the same as the one OHB uses. 
+    The LP is calculated with an algorithm derived by Nick Lloyd at University of Saskatchewan, 
+    Canada (nick.lloyd@usask.ca), and is part of
+    the operational code for both OSIRIS and SMR on-board- the Odin satellite. An offset is added to the pointing altitude to better mimic OHBs actual LP.
+
+    Arguments:
+        Satellite_skyfield (:obj:`skyfield.sgp4lib.EarthSatellite`): A Skyfield object representing an EarthSatellite defined by a TLE.
+        SimulationTime (:obj:`ephem.Date`): The time of the simulation.
+        Timeline_settings (dict): A dictionary containing relevant settings to the simulation.
+        pointing_altitude (float): Contains the pointing altitude of the simulation [km].
+        LogFlag (bool): If data from the simulation shall be logged.
+        Logger (:obj:`logging.Logger`): Logger used to log the result from the simulation if LogFlag == True.
+
+    Returns:
+        (dict): Dictionary containing simulated data.
+
+    """
+
+    ##Yaw offset??
+
+    if type(SimulationTime) is DT.datetime:
+        current_time_datetime = SimulationTime
+    else:
+        current_time_datetime = ephem.Date(SimulationTime).datetime()
+    
+    year = current_time_datetime.year
+    month = current_time_datetime.month
+    day = current_time_datetime.day
+    hour = current_time_datetime.hour
+    minute = current_time_datetime.minute
+    second = current_time_datetime.second + current_time_datetime.microsecond / 1000000
+
+    current_time_skyfield = sfapi.timescale_skyfield.utc(
+        year, month, day, hour, minute, second
+    )
+
+    Satellite_geo = Satellite_skyfield.at(current_time_skyfield)
+    orbital_period= 2*np.pi/Satellite_skyfield.model.nm
+    ECI_pos=Satellite_geo.position.m
+    ECI_vel=Satellite_geo.velocity.m_per_s
+
+    "############# Calculations of orbital and pointing vectors ############"
+    "Vector normal to the orbital plane of Satellite"
+
+    "Calculate intersection between the orbital plane and the equator"
+    celestial_pole = [0, 0, 1]
+    vunit=np.array(ECI_vel)/norm(ECI_vel)
+    mrunit=-np.array(ECI_pos)/norm(ECI_pos)
+    normal_orbit=np.cross(mrunit,vunit)
+    ascending_node = cross(celestial_pole, normal_orbit)
+
+    "Argument of latitude" #FIXME: check sign
+    arg_of_lat = (
+        arccos(
+            dot(ascending_node, -mrunit) / norm(mrunit) / norm(ascending_node)
+        )
+        / pi
+        * 180
+    )
+
+    rotmatrix=np.array([vunit,normal_orbit,mrunit]).T 
+    sublat_c,sublon_c = wgs84.latlon_of(Satellite_geo)
+    sublat_c = sublat_c.degrees
+    sublon_c = sublon_c.degrees
+    alt_Satellite = wgs84.height_of(Satellite_geo).m
+    yawoffset = 0 #FIXME: yaw offset should within the field of view should be implemented
+    tanheigh = 92000 #FIXME: read in dynamically
+    
+    #correct for yaw?
+    yaw = 0
+    pitch=findpitch(tanheigh,Satellite_geo, ECI_pos, np.deg2rad(yaw)+yawoffset, rotmatrix)
+    #calculate yaw offset angle
+    yaw_correction = Timeline_settings["yaw_correction"]
+    if yaw_correction == True:
+        #check consistency here
+        tt
+        yaw=-3.3*np.cos(np.deg2rad(tt*timestep.seconds/period/60*360-np.rad2deg(pitch)-0))
+        
+        yaw_offset_angle = Timeline_settings["yaw_amplitude"] * cos(
+            arg_of_lat / 180 * pi
+            - (Pitch - 90) / 180 * pi
+            - Timeline_settings["yaw_phase"] / 180 * pi
+        )
+    elif yaw_correction == False:
+        yaw_offset_angle = 0
+    
+    pitch=findpitch(tanheigh,Satellite_geo, ECI_pos, np.deg2rad(yaw)+yawoffset, rotmatrix)
+
+    #Get the center of the field of view
+    FOV_satellite=rotate(np.array([1,0,0]),np.deg2rad(yaw)+yawoffset,pitch,0,deg=False)
+    FOV_sky=np.matmul(rotmatrix,FOV_satellite)
+    [FOV_ra,FOV_dec]=xyz2radec(FOV_sky,deg=True,positivera=True)
+    
+    #Get tangent point
+    res = findtangent(Satellite_geo,ECI_pos,FOV_sky) #find distance to the nearest point to the geoid
+    s=res.x # distance to tanget point (point nearest to the geoid)
+    newp = ECI_pos + s * FOV_sky #position in ECI units of the tangent point
+    newp=ICRF(Distance(m=newp).au,t=current_time_skyfield,center=399)
+    platslat = (wgs84.subpoint(newp).latitude.degrees)
+    platslon = (wgs84.subpoint(newp).longitude.degrees)
+      
+    "Rotate 'vector to Satellite', to represent vector normal to satellite H-offset "
+    rot_mat = rot_arbit((Pitch - 90) / 180 * pi, normal_orbit)
+    r_H_offset_normal = rot_mat @ ECI_pos
+    r_H_offset_normal = r_H_offset_normal / norm(r_H_offset_normal)
+
+    "If pointing direction has a Yaw defined, Rotate yaw of normal to pointing direction H-offset plane, meaning to rotate around the vector to Satellite"
+    rot_mat = rot_arbit(yaw_offset_angle / 180 * pi, mrunit)
+    r_H_offset_normal = rot_mat @ r_H_offset_normal
+    r_H_offset_normal = r_H_offset_normal / norm(r_H_offset_normal)
+
+    "Rotate negative orbital plane normal to make it into a normal to the V-offset plane"
+    r_V_offset_normal = rot_mat @ -normal_orbit
+    r_V_offset_normal = r_V_offset_normal / norm(r_V_offset_normal)
+
+
+    Satellite_dict = {
+        "Position [km]": ECI_pos,
+        "Velocity [km/s]": ECI_vel,
+        "OrbitNormal": -normal_orbit,
+        "OrbitalPeriod [s]": orbital_period,
+        "Latitude [degrees]": sublat_c,
+        "Longitude [degrees]": sublon_c,
+        "Altitude [km]": alt_Satellite,
+        "AscendingNode": ascending_node,
+        "ArgOfLat [degrees]": arg_of_lat,
+        "Yaw [degrees]": yaw_offset_angle,
+        "Pitch [degrees]": pitch,
+        "OpticalAxis": FOV_sky,
+        "Dec_OpticalAxis [degrees]": FOV_dec,
+        "RA_OpticalAxis [degrees]": FOV_ra,
+        "Normal2H_offset": r_H_offset_normal,
+        "Normal2V_offset": r_V_offset_normal,
+        "EstimatedLatitude_LP [degrees]": lat_LP,
+    }
+
+    return Satellite_dict
 
 startdate=DT.datetime(2022,1,10,10)
 date=startdate
