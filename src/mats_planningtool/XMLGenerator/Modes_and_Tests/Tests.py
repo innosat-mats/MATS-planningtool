@@ -32,7 +32,7 @@ import importlib
 import skyfield.api
 from pylab import dot, arccos, zeros, pi, sin, cos, arctan, cross, norm, sqrt
 
-from mats_planningtool import Library, MATS_coordinates
+from mats_planningtool import Library
 
 #from mats_planningtool_Config_File import Logger_name, Timeline_settings, getTLE
 

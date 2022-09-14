@@ -202,4 +202,3 @@ def test_operational_mode():
                             pass
                         else:
                             assert False
-

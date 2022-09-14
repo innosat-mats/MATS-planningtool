@@ -10,7 +10,7 @@ from scipy.optimize import minimize_scalar
 from skyfield.positionlib import ICRF
 from skyfield.units import Distance
 from skyfield.framelib import itrs
-from Library import rot_arbit
+from mats_planningtool.Library import rot_arbit
 
 def rotate (unitvec, yaw, pitch, roll, deg=False):
     def Rx (v,th):
@@ -74,27 +74,27 @@ def loadysb(d):
                 ysb.append(st)
     return ysb
     
-def funpitch(pitch,g,th,pos,yaw,rotmatrix):
+def funpitch(pitch,current_time,tangent_height,pos,yaw,rotmatrix):
     #print(pitch*180/np.pi)
     FOV=rotate(np.array([1,0,0]),yaw,pitch,0,deg=False)
     FOV=np.matmul(rotmatrix,FOV)
-    tp=findtangent(g,pos,FOV)
-    return((tp.fun-th)**2)
+    tangent_point=findtangent(current_time,pos,FOV)
+    return ((tangent_point.fun-tangent_height)**2)
 
-def funheight (s,g,pos,FOV):
-    newp = pos + s * FOV
-    g.position=Distance(m=newp)
-    return wgs84.subpoint(g).elevation.m
+def funheight(scaling_factor,current_time,pos,FOV):
+    newp = pos + scaling_factor * FOV
+    newp=ICRF(Distance(m=newp).au,t=current_time,center=399)
+    return wgs84.subpoint(newp).elevation.m 
 
 
-def findtangent(g,pos,FOV):
+def findtangent(current_time,pos,FOV):
     #dokument!
-    res=minimize_scalar(funheight,args=(g,pos,FOV),bracket=(1e5,3e5))
-    return res
+    scaling_factor=minimize_scalar(funheight,args=(current_time,pos,FOV),bracket=(1e5,3e5))
+    return scaling_factor.x
 
-def findpitch (th,g,pos,yaw,rotmatrix):
-    res=minimize_scalar(funpitch,args=(g,th,pos,yaw,rotmatrix),method="Bounded",bounds=(np.deg2rad(-30),np.deg2rad(-10)))
-    return res.x
+def findpitch (tangent_height,current_time,pos,yaw,rotmatrix):
+    pitch=minimize_scalar(funpitch,args=(current_time,tangent_height,pos,yaw,rotmatrix),method="Bounded",bounds=(np.deg2rad(-30),np.deg2rad(-10)))
+    return pitch.x
 
 
 def Satellite_Simulator(
@@ -144,7 +144,7 @@ def Satellite_Simulator(
     )
 
     Satellite_geo = Satellite_skyfield.at(current_time_skyfield)
-    orbital_period= 2*np.pi/Satellite_skyfield.model.nm
+    orbital_period= 2*np.pi/Satellite_skyfield.model.nm 
     ECI_pos=Satellite_geo.position.m
     ECI_vel=Satellite_geo.velocity.m_per_s
 
@@ -156,65 +156,62 @@ def Satellite_Simulator(
     vunit=np.array(ECI_vel)/norm(ECI_vel)
     mrunit=-np.array(ECI_pos)/norm(ECI_pos)
     normal_orbit=np.cross(mrunit,vunit)
-    ascending_node = cross(celestial_pole, normal_orbit)
+    ascending_node = np.cross(celestial_pole, normal_orbit)
 
     "Argument of latitude" #FIXME: check sign
     arg_of_lat = (
-        arccos(
-            dot(ascending_node, -mrunit) / norm(mrunit) / norm(ascending_node)
+        np.arccos(
+            np.dot(ascending_node, -mrunit) / norm(mrunit) / norm(ascending_node)
         )
-        / pi
+        / np.pi
         * 180
-    )
+    ) #argument of latitude in degrees
 
     rotmatrix=np.array([vunit,normal_orbit,mrunit]).T 
     sublat_c,sublon_c = wgs84.latlon_of(Satellite_geo)
     sublat_c = sublat_c.degrees
     sublon_c = sublon_c.degrees
     alt_Satellite = wgs84.height_of(Satellite_geo).m
-    yawoffset = 0 #FIXME: yaw offset should within the field of view should be implemented
-    tanheigh = 92000 #FIXME: read in dynamically
     
     #correct for yaw?
     yaw = 0
-    pitch=findpitch(tanheigh,Satellite_geo, ECI_pos, np.deg2rad(yaw)+yawoffset, rotmatrix)
+    pitch=findpitch(pointing_altitude,current_time_skyfield, ECI_pos, np.deg2rad(yaw), rotmatrix)
     #calculate yaw offset angle
     yaw_correction = Timeline_settings["yaw_correction"]
     if yaw_correction == True:
         #check consistency here
-        tt
-        yaw=-3.3*np.cos(np.deg2rad(tt*timestep.seconds/period/60*360-np.rad2deg(pitch)-0))
-        
-        yaw_offset_angle = Timeline_settings["yaw_amplitude"] * cos(
-            arg_of_lat / 180 * pi
-            - (Pitch - 90) / 180 * pi
-            - Timeline_settings["yaw_phase"] / 180 * pi
-        )
+        yaw_offset_angle=-Timeline_settings["yaw_amplitude"]*np.cos(np.deg2rad(arg_of_lat)-np.rad2deg(pitch)-np.deg2rad(Timeline_settings["yaw_phase"])) #check if this is optimal
+
+        # yaw_offset_angle = Timeline_settings["yaw_amplitude"] * np.cos(
+        #     arg_of_lat / 180 * np.pi
+        #     - (pitch - 90) / 180 * np.pi
+        #     - Timeline_settings["yaw_phase"] / 180 * np.pi
+        # )
     elif yaw_correction == False:
         yaw_offset_angle = 0
     
-    pitch=findpitch(tanheigh,Satellite_geo, ECI_pos, np.deg2rad(yaw)+yawoffset, rotmatrix)
+    pitch=findpitch(pointing_altitude,current_time_skyfield, ECI_pos, np.deg2rad(yaw), rotmatrix)
 
     #Get the center of the field of view
-    FOV_satellite=rotate(np.array([1,0,0]),np.deg2rad(yaw)+yawoffset,pitch,0,deg=False)
+    instrument_look_vector = np.array([1,0,0]) # instrument looks in +x axis (velocity vector)
+    FOV_satellite=rotate(instrument_look_vector,np.deg2rad(yaw),pitch,0,deg=False)
     FOV_sky=np.matmul(rotmatrix,FOV_satellite)
     [FOV_ra,FOV_dec]=xyz2radec(FOV_sky,deg=True,positivera=True)
     
     #Get tangent point
-    res = findtangent(Satellite_geo,ECI_pos,FOV_sky) #find distance to the nearest point to the geoid
-    s=res.x # distance to tanget point (point nearest to the geoid)
-    newp = ECI_pos + s * FOV_sky #position in ECI units of the tangent point
-    newp=ICRF(Distance(m=newp).au,t=current_time_skyfield,center=399)
-    platslat = (wgs84.subpoint(newp).latitude.degrees)
-    platslon = (wgs84.subpoint(newp).longitude.degrees)
+    scaling_factor = findtangent(Satellite_geo,ECI_pos,FOV_sky) #find distance to the nearest point to the geoid (m)
+    tangent_point = ECI_pos + scaling_factor * FOV_sky #position in ECI units of the tangent point
+    tangent_point=ICRF(Distance(m=tangent_point).au,t=current_time_skyfield,center=399)
+    tangent_point_lat = (wgs84.subpoint(tangent_point).latitude.degrees)
+    tangent_point_lon = (wgs84.subpoint(tangent_point).longitude.degrees)
       
     "Rotate 'vector to Satellite', to represent vector normal to satellite H-offset "
-    rot_mat = rot_arbit((Pitch - 90) / 180 * pi, normal_orbit)
+    rot_mat = rot_arbit(pitch, normal_orbit)
     r_H_offset_normal = rot_mat @ ECI_pos
     r_H_offset_normal = r_H_offset_normal / norm(r_H_offset_normal)
 
     "If pointing direction has a Yaw defined, Rotate yaw of normal to pointing direction H-offset plane, meaning to rotate around the vector to Satellite"
-    rot_mat = rot_arbit(yaw_offset_angle / 180 * pi, mrunit)
+    rot_mat = rot_arbit(np.deg2rad(yaw_offset_angle), mrunit)
     r_H_offset_normal = rot_mat @ r_H_offset_normal
     r_H_offset_normal = r_H_offset_normal / norm(r_H_offset_normal)
 
@@ -222,6 +219,30 @@ def Satellite_Simulator(
     r_V_offset_normal = rot_mat @ -normal_orbit
     r_V_offset_normal = r_V_offset_normal / norm(r_V_offset_normal)
 
+    if LogFlag == True and Logger != None:
+        Logger.debug("")
+
+        Logger.debug("SimulationTime time: " + str(SimulationTime))
+        Logger.debug("Orbital Period in s: " + str(orbital_period))
+        Logger.debug("Vector to Satellite [km]: " + str(ECI_pos))
+        Logger.debug("Latitude in degrees: " + str(sublat_c))
+        Logger.debug("Longitude in degrees: " + str(sublon_c))
+        Logger.debug("Altitude in km: " + str(alt_Satellite))
+
+        Logger.debug("Pitch [degrees]: " + str(np.rad2deg(pitch)))
+        Logger.debug("Yaw [degrees]: " + str(yaw_offset_angle))
+        Logger.debug("ArgOfLat [degrees]: " + str(arg_of_lat))
+        Logger.debug("Latitude of LP: " + str(tangent_point_lat))
+        Logger.debug("Longitude of LP: " + str(tangent_point_lon))
+
+        Logger.debug("Optical Axis: " + str(FOV_sky))
+        Logger.debug(
+            "Orthogonal direction to H-offset plane: " + str(r_H_offset_normal)
+        )
+        Logger.debug(
+            "Orthogonal direction to V-offset plane: " + str(r_V_offset_normal)
+        )
+        Logger.debug("Orthogonal direction to the orbital plane: " + str(normal_orbit))
 
     Satellite_dict = {
         "Position [km]": ECI_pos,
@@ -240,7 +261,8 @@ def Satellite_Simulator(
         "RA_OpticalAxis [degrees]": FOV_ra,
         "Normal2H_offset": r_H_offset_normal,
         "Normal2V_offset": r_V_offset_normal,
-        "EstimatedLatitude_LP [degrees]": lat_LP,
+        "EstimatedLatitude_LP [degrees]": tangent_point_lat,
+        "EstimatedLongitude_LP [degrees]": tangent_point_lon,
     }
 
     return Satellite_dict

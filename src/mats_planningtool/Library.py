@@ -26,8 +26,6 @@ from pylab import (
 )
 from skyfield import api
 
-from mats_planningtool import MATS_coordinates
-
 
 timescale_skyfield = api.load.timescale(builtin=True)
 database_skyfield = api.load("de421.bsp")
@@ -281,6 +279,23 @@ def utc_to_onboardTime(utc_date):
 
     return onboardGPSTime
 
+def utc_to_onboardTime_2(utc_date):
+    """Function which converts a date in utc into onboard time (GPS) in seconds and rounds to nearest 10th of a second.
+
+    Arguments:
+        utc_date (:obj:`ephem.Date`): The date as a ephem.Date object.
+
+    Returns:
+        (float): Onboard GPS time in seconds.
+
+    """
+
+    dt_object = utc_date.datetime()
+    dt_object = dt_object.replace(tzinfo=api.utc)
+    dateEpochGPS = DT.datetime(1980,1,6,0,0,0,0,tzinfo=api.utc) + DT.timedelta(seconds=-18)
+    onboardGPSTime = around((dt_object-dateEpochGPS).total_seconds(),1)
+
+    return onboardGPSTime
 
 def SetupLogger(LoggerName):
     """Removes previous handlers and sets up a logger with both a file handler and a stream handler.
