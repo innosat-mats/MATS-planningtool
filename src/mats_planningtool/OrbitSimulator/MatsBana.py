@@ -5,14 +5,30 @@ import numpy as  np
 import skyfield.api as sfapi
 from skyfield.api import wgs84
 import skyfield.sgp4lib as sgp4lib
-from mats_planningtool.OrbitSimulator import Geoidlib
+#from mats_planningtool.OrbitSimulator import Geoidlib
 from scipy.optimize import minimize_scalar
 from skyfield.positionlib import ICRF
 from skyfield.units import Distance
 from skyfield.framelib import itrs
 from mats_planningtool.Library import rot_arbit
+import ephem
+
+
+ts = sfapi.load.timescale()
 
 def rotate (unitvec, yaw, pitch, roll, deg=False):
+    """Rotates a unitvector applying yaw, pitch and roll (in that order)
+
+    Arguments:
+        unitvec (:obj:np.array): the 3 element unit vector to be rotated
+        yaw (float): yaw angle to appply
+        pitch (float): pitch angle to appply
+        roll (float): roll angle to appply
+        deg (Boolean): true if yaw,pitch and roll is given in degrees (default False)
+
+    Returns:
+        (:obj:np.array): Rotated unit vector
+    """
     def Rx (v,th):
         s=np.sin(th)
         c=np.cos(th)
@@ -41,45 +57,45 @@ def xyz2radec(vector, deg=False, positivera=False):
         dec*=180./np.pi
     return [ra,dec]
 
-def radec2xyz(ra,dec, deg=True):
-    if deg:
-        ra*=np.pi/180.
-        dec*=np.pi/180.
-    z=np.sin(dec)
-    x=np.cos(ra)*np.cos(dec)
-    y=np.sin(ra)*np.cos(dec)
-    return [x,y,z]
+# def radec2xyz(ra,dec, deg=True):
+#     if deg:
+#         ra*=np.pi/180.
+#         dec*=np.pi/180.
+#     z=np.sin(dec)
+#     x=np.cos(ra)*np.cos(dec)
+#     y=np.sin(ra)*np.cos(dec)
+#     return [x,y,z]
 
         
-def get_tle_dateDB (d):
-    db=sqlite.connect('/Users/donal/mydocs/ODIN/Tle/odintletext.db')
-    cur=db.cursor()
-    sperday=24.*60*60
-    doy=d-DT.datetime(d.year,1,1)
-    datekey =((d.year-int(d.year/100)*100)*1000 + doy.days+doy.seconds/sperday)*100
-    query="select tle1,tle2 from odintle where datekey between {} and {}"
-    r=cur.execute(query.format(datekey,datekey+400)) #four day margin
-    tle=r.fetchone()
-    cur.close()
-    db.close()
-    return tle
+# def get_tle_dateDB (d):
+#     db=sqlite.connect('/Users/donal/mydocs/ODIN/Tle/odintletext.db')
+#     cur=db.cursor()
+#     sperday=24.*60*60
+#     doy=d-DT.datetime(d.year,1,1)
+#     datekey =((d.year-int(d.year/100)*100)*1000 + doy.days+doy.seconds/sperday)*100
+#     query="select tle1,tle2 from odintle where datekey between {} and {}"
+#     r=cur.execute(query.format(datekey,datekey+400)) #four day margin
+#     tle=r.fetchone()
+#     cur.close()
+#     db.close()
+#     return tle
 
-def loadysb(d):
-    ysb=[]
-    with open('YBS.edb','r') as fb:
-        for line in fb:
-            if line[0] !='#' and len(line) >1 : 
-                st=ephem.readdb(line)
-                st.compute()
-                ysb.append(st)
-    return ysb
+# def loadysb(d):
+#     ysb=[]
+#     with open('YBS.edb','r') as fb:
+#         for line in fb:
+#             if line[0] !='#' and len(line) >1 : 
+#                 st=ephem.readdb(line)
+#                 st.compute()
+#                 ysb.append(st)
+#     return ysb
     
 def funpitch(pitch,current_time,tangent_height,pos,yaw,rotmatrix):
     #print(pitch*180/np.pi)
-    FOV=rotate(np.array([1,0,0]),yaw,pitch,0,deg=False)
+    FOV=rotate(np.array([-1,0,0]),yaw,pitch,0,deg=False)
     FOV=np.matmul(rotmatrix,FOV)
-    tangent_point=findtangent(current_time,pos,FOV)
-    return ((tangent_point.fun-tangent_height)**2)
+    tangent_point_solution=findtangent(current_time,pos,FOV)
+    return ((tangent_point_solution.fun-tangent_height)**2)
 
 def funheight(scaling_factor,current_time,pos,FOV):
     newp = pos + scaling_factor * FOV
@@ -90,10 +106,10 @@ def funheight(scaling_factor,current_time,pos,FOV):
 def findtangent(current_time,pos,FOV):
     #dokument!
     scaling_factor=minimize_scalar(funheight,args=(current_time,pos,FOV),bracket=(1e5,3e5))
-    return scaling_factor.x
+    return scaling_factor
 
 def findpitch (tangent_height,current_time,pos,yaw,rotmatrix):
-    pitch=minimize_scalar(funpitch,args=(current_time,tangent_height,pos,yaw,rotmatrix),method="Bounded",bounds=(np.deg2rad(-30),np.deg2rad(-10)))
+    pitch=minimize_scalar(funpitch,args=(current_time,tangent_height,pos,yaw,rotmatrix),method="Bounded",bounds=(np.deg2rad(-30),np.deg2rad(30)))
     return pitch.x
 
 
@@ -107,10 +123,7 @@ def Satellite_Simulator(
 ):
     """Simulates a single point in time for a Satellite using Skyfield and also the pointing of the satellite.
 
-    Only estimates the actual pointing definition used by OHB as it is uncertain if the algorithm to calculate the LP here is the same as the one OHB uses. 
-    The LP is calculated with an algorithm derived by Nick Lloyd at University of Saskatchewan, 
-    Canada (nick.lloyd@usask.ca), and is part of
-    the operational code for both OSIRIS and SMR on-board- the Odin satellite. An offset is added to the pointing altitude to better mimic OHBs actual LP.
+    This is Donals implementation
 
     Arguments:
         Satellite_skyfield (:obj:`skyfield.sgp4lib.EarthSatellite`): A Skyfield object representing an EarthSatellite defined by a TLE.
@@ -125,8 +138,6 @@ def Satellite_Simulator(
 
     """
 
-    ##Yaw offset??
-
     if type(SimulationTime) is DT.datetime:
         current_time_datetime = SimulationTime
     else:
@@ -139,10 +150,11 @@ def Satellite_Simulator(
     minute = current_time_datetime.minute
     second = current_time_datetime.second + current_time_datetime.microsecond / 1000000
 
-    current_time_skyfield = sfapi.timescale_skyfield.utc(
+    current_time_skyfield = ts.utc(
         year, month, day, hour, minute, second
     )
 
+    #Get satellite position and orbital period
     Satellite_geo = Satellite_skyfield.at(current_time_skyfield)
     orbital_period= 2*np.pi/Satellite_skyfield.model.nm 
     ECI_pos=Satellite_geo.position.m
@@ -156,7 +168,7 @@ def Satellite_Simulator(
     vunit=np.array(ECI_vel)/norm(ECI_vel)
     mrunit=-np.array(ECI_pos)/norm(ECI_pos)
     normal_orbit=np.cross(mrunit,vunit)
-    ascending_node = np.cross(celestial_pole, normal_orbit)
+    ascending_node = np.cross(celestial_pole, -normal_orbit)
 
     "Argument of latitude" #FIXME: check sign
     arg_of_lat = (
@@ -175,37 +187,33 @@ def Satellite_Simulator(
     
     #correct for yaw?
     yaw = 0
-    pitch=findpitch(pointing_altitude,current_time_skyfield, ECI_pos, np.deg2rad(yaw), rotmatrix)
+    pitch=findpitch(pointing_altitude*1e3,current_time_skyfield, ECI_pos, np.deg2rad(yaw), rotmatrix)
     #calculate yaw offset angle
     yaw_correction = Timeline_settings["yaw_correction"]
     if yaw_correction == True:
         #check consistency here
-        yaw_offset_angle=-Timeline_settings["yaw_amplitude"]*np.cos(np.deg2rad(arg_of_lat)-np.rad2deg(pitch)-np.deg2rad(Timeline_settings["yaw_phase"])) #check if this is optimal
+        yaw_offset_angle=Timeline_settings["yaw_amplitude"]*np.cos(np.deg2rad(arg_of_lat)-pitch-np.deg2rad(Timeline_settings["yaw_phase"])) #check if this is optimal
 
-        # yaw_offset_angle = Timeline_settings["yaw_amplitude"] * np.cos(
-        #     arg_of_lat / 180 * np.pi
-        #     - (pitch - 90) / 180 * np.pi
-        #     - Timeline_settings["yaw_phase"] / 180 * np.pi
-        # )
     elif yaw_correction == False:
         yaw_offset_angle = 0
     
-    pitch=findpitch(pointing_altitude,current_time_skyfield, ECI_pos, np.deg2rad(yaw), rotmatrix)
+    pitch=findpitch(pointing_altitude*1e3,current_time_skyfield, ECI_pos, np.deg2rad(yaw_offset_angle), rotmatrix)
 
     #Get the center of the field of view
-    instrument_look_vector = np.array([1,0,0]) # instrument looks in +x axis (velocity vector)
+    instrument_look_vector = np.array([-1,0,0]) # instrument looks in +x axis (velocity vector)
     FOV_satellite=rotate(instrument_look_vector,np.deg2rad(yaw),pitch,0,deg=False)
     FOV_sky=np.matmul(rotmatrix,FOV_satellite)
     [FOV_ra,FOV_dec]=xyz2radec(FOV_sky,deg=True,positivera=True)
     
     #Get tangent point
-    scaling_factor = findtangent(Satellite_geo,ECI_pos,FOV_sky) #find distance to the nearest point to the geoid (m)
+    scaling_factor = findtangent(current_time_skyfield,ECI_pos,FOV_sky).x #find distance to the nearest point to the geoid (m)
     tangent_point = ECI_pos + scaling_factor * FOV_sky #position in ECI units of the tangent point
     tangent_point=ICRF(Distance(m=tangent_point).au,t=current_time_skyfield,center=399)
     tangent_point_lat = (wgs84.subpoint(tangent_point).latitude.degrees)
     tangent_point_lon = (wgs84.subpoint(tangent_point).longitude.degrees)
       
     "Rotate 'vector to Satellite', to represent vector normal to satellite H-offset "
+    #FIXME: Normal orbit sign
     rot_mat = rot_arbit(pitch, normal_orbit)
     r_H_offset_normal = rot_mat @ ECI_pos
     r_H_offset_normal = r_H_offset_normal / norm(r_H_offset_normal)
@@ -223,11 +231,11 @@ def Satellite_Simulator(
         Logger.debug("")
 
         Logger.debug("SimulationTime time: " + str(SimulationTime))
-        Logger.debug("Orbital Period in s: " + str(orbital_period))
-        Logger.debug("Vector to Satellite [km]: " + str(ECI_pos))
+        Logger.debug("Orbital Period in s: " + str(orbital_period*60))
+        Logger.debug("Vector to Satellite [km]: " + str(ECI_pos*1e3))
         Logger.debug("Latitude in degrees: " + str(sublat_c))
         Logger.debug("Longitude in degrees: " + str(sublon_c))
-        Logger.debug("Altitude in km: " + str(alt_Satellite))
+        Logger.debug("Altitude in km: " + str(alt_Satellite*1e3))
 
         Logger.debug("Pitch [degrees]: " + str(np.rad2deg(pitch)))
         Logger.debug("Yaw [degrees]: " + str(yaw_offset_angle))
@@ -245,17 +253,17 @@ def Satellite_Simulator(
         Logger.debug("Orthogonal direction to the orbital plane: " + str(normal_orbit))
 
     Satellite_dict = {
-        "Position [km]": ECI_pos,
-        "Velocity [km/s]": ECI_vel,
+        "Position [km]": ECI_pos*1e-3,
+        "Velocity [km/s]": ECI_vel*1e-3,
         "OrbitNormal": -normal_orbit,
-        "OrbitalPeriod [s]": orbital_period,
+        "OrbitalPeriod [s]": orbital_period*60,
         "Latitude [degrees]": sublat_c,
         "Longitude [degrees]": sublon_c,
-        "Altitude [km]": alt_Satellite,
+        "Altitude [km]": alt_Satellite*1e-3,
         "AscendingNode": ascending_node,
         "ArgOfLat [degrees]": arg_of_lat,
         "Yaw [degrees]": yaw_offset_angle,
-        "Pitch [degrees]": pitch,
+        "Pitch [degrees]": np.rad2deg(pitch),
         "OpticalAxis": FOV_sky,
         "Dec_OpticalAxis [degrees]": FOV_dec,
         "RA_OpticalAxis [degrees]": FOV_ra,
@@ -267,61 +275,61 @@ def Satellite_Simulator(
 
     return Satellite_dict
 
-startdate=DT.datetime(2022,1,10,10)
-date=startdate
-timestep=DT.timedelta(days=1*0.5)
-ts=sfapi.load.timescale()
-tle=['1 99991U 21321B   22010.41666667  .00000000  00000-0  49154-3 0    13',
-          '2 99991  97.3120  64.9140 0002205 122.9132 235.5287 15.01280112    07']  
-sfodin = sgp4lib.EarthSatellite(tle[0],tle[1])
+# startdate=DT.datetime(2022,1,10,10)
+# date=startdate
+# timestep=DT.timedelta(days=1*0.5)
+# ts=sfapi.load.timescale()
+# tle=['1 99991U 21321B   22010.41666667  .00000000  00000-0  49154-3 0    13',
+#           '2 99991  97.3120  64.9140 0002205 122.9132 235.5287 15.01280112    07']  
+# sfodin = sgp4lib.EarthSatellite(tle[0],tle[1])
 
-d=date#+offsetfromdate*timestep
-timestep=DT.timedelta(seconds=60)
-yaw=0
-yawoffset=0
-#plt.figure()
+# d=date#+offsetfromdate*timestep
+# timestep=DT.timedelta(seconds=60)
+# yaw=0
+# yawoffset=0
+# #plt.figure()
 
-dateslist=[]
-sublats=[]
-sublons=[]
-platslat=[]
-platslon=[]
-LTsat=[]
-LTtp=[]
-for tt in range(1500):
-    d+=timestep
-    dateslist.append(d.isoformat())
-    t=ts.utc(d.year,d.month,d.day,d.hour,d.minute,d.second)
-    g=sfodin.at(t)
-    period= 2*np.pi/sfodin.model.nm
-    ECI_pos=g.position.m
-    ECI_vel=g.velocity.m_per_s
-    vunit=np.array(ECI_vel)/norm(ECI_vel)
-    mrunit=-np.array(ECI_pos)/norm(ECI_pos)
-    yunit=np.cross(mrunit,vunit)
-    rotmatrix=np.array([vunit,yunit,mrunit]).T 
-    sublat_c=g.subpoint().latitude.degrees
-    sublon_c=g.subpoint().longitude.degrees
-    sublats.append(sublat_c)
-    sublons.append(sublon_c)
-    LTsat.append((d+DT.timedelta(seconds=sublon_c/15*60*60)).strftime('%H:%M:%S'))
-    pitch=findpitch(92000,g, ECI_pos, np.deg2rad(yaw)+yawoffset, rotmatrix)
-    yaw=-3.3*np.cos(np.deg2rad(tt*timestep.seconds/period/60*360-np.rad2deg(pitch)-0))
-    #yaw =0
-    #print(np.rad2deg(pitchdown))
-    FOV=rotate(np.array([1,0,0]),np.deg2rad(yaw)+yawoffset,pitch,0,deg=False)
-    FOV=np.matmul(rotmatrix,FOV)
-    res = findtangent(g,ECI_pos,FOV)
-    s=res.x
-    newp = ECI_pos + s * FOV
-#    pos_s=np.matmul(itrs.rotation_at(t),newp)
-    newp=ICRF(Distance(m=newp).au,t=t,center=399)
-    platslat.append(wgs84.subpoint(newp).latitude.degrees)
-    platslon.append(wgs84.subpoint(newp).longitude.degrees)
-    LTtp.append((d+DT.timedelta(seconds=platslon[-1]/15*60*60)).strftime('%H:%M:%S'))
+# dateslist=[]
+# sublats=[]
+# sublons=[]
+# platslat=[]
+# platslon=[]
+# LTsat=[]
+# LTtp=[]
+# for tt in range(1500):
+#     d+=timestep
+#     dateslist.append(d.isoformat())
+#     t=ts.utc(d.year,d.month,d.day,d.hour,d.minute,d.second)
+#     g=sfodin.at(t)
+#     period= 2*np.pi/sfodin.model.nm
+#     ECI_pos=g.position.m
+#     ECI_vel=g.velocity.m_per_s
+#     vunit=np.array(ECI_vel)/norm(ECI_vel)
+#     mrunit=-np.array(ECI_pos)/norm(ECI_pos)
+#     yunit=np.cross(mrunit,vunit)
+#     rotmatrix=np.array([vunit,yunit,mrunit]).T 
+#     sublat_c=g.subpoint().latitude.degrees
+#     sublon_c=g.subpoint().longitude.degrees
+#     sublats.append(sublat_c)
+#     sublons.append(sublon_c)
+#     LTsat.append((d+DT.timedelta(seconds=sublon_c/15*60*60)).strftime('%H:%M:%S'))
+#     pitch=findpitch(92000,g, ECI_pos, np.deg2rad(yaw)+yawoffset, rotmatrix)
+#     yaw=-3.3*np.cos(np.deg2rad(tt*timestep.seconds/period/60*360-np.rad2deg(pitch)-0))
+#     #yaw =0
+#     #print(np.rad2deg(pitchdown))
+#     FOV=rotate(np.array([1,0,0]),np.deg2rad(yaw)+yawoffset,pitch,0,deg=False)
+#     FOV=np.matmul(rotmatrix,FOV)
+#     res = findtangent(g,ECI_pos,FOV)
+#     s=res.x
+#     newp = ECI_pos + s * FOV
+# #    pos_s=np.matmul(itrs.rotation_at(t),newp)
+#     newp=ICRF(Distance(m=newp).au,t=t,center=399)
+#     platslat.append(wgs84.subpoint(newp).latitude.degrees)
+#     platslon.append(wgs84.subpoint(newp).longitude.degrees)
+#     LTtp.append((d+DT.timedelta(seconds=platslon[-1]/15*60*60)).strftime('%H:%M:%S'))
 
-with (open('testfile.txt','w')) as f:
-    for i in range(len(dateslist)):
-        #print (i) 
-        f.write ('{:s} {:f} {:f} {:s} {:f} {:f} {:s}\n'.format(dateslist[i],sublats[i],sublons[i],LTsat[i],platslat[i],platslon[i],LTtp[i]))
-f.close()
+# with (open('testfile.txt','w')) as f:
+#     for i in range(len(dateslist)):
+#         #print (i) 
+#         f.write ('{:s} {:f} {:f} {:s} {:f} {:f} {:s}\n'.format(dateslist[i],sublats[i],sublons[i],LTsat[i],platslat[i],platslon[i],LTtp[i]))
+# f.close()
