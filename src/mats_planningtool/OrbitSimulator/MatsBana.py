@@ -90,9 +90,10 @@ def xyz2radec(vector, deg=False, positivera=False):
 #                 ysb.append(st)
 #     return ysb
     
-def funpitch(pitch,current_time,tangent_height,pos,yaw,rotmatrix):
-    #print(pitch*180/np.pi)
-    FOV=rotate(np.array([-1,0,0]),yaw,pitch,0,deg=False)
+def funpitch(pitch,current_time,tangent_height,pos,yaw,rotmatrix,look_vector=None):
+    if look_vector is None:
+        look_vector = np.array([1,0,0])
+    FOV=rotate(look_vector,yaw,pitch,0,deg=False)
     FOV=np.matmul(rotmatrix,FOV)
     tangent_point_solution=findtangent(current_time,pos,FOV)
     return ((tangent_point_solution.fun-tangent_height)**2)
@@ -108,8 +109,10 @@ def findtangent(current_time,pos,FOV):
     scaling_factor=minimize_scalar(funheight,args=(current_time,pos,FOV),bracket=(1e5,3e5))
     return scaling_factor
 
-def findpitch (tangent_height,current_time,pos,yaw,rotmatrix):
-    pitch=minimize_scalar(funpitch,args=(current_time,tangent_height,pos,yaw,rotmatrix),method="Bounded",bounds=(np.deg2rad(-30),np.deg2rad(30)))
+def findpitch (tangent_height,current_time,pos,yaw,rotmatrix,look_vector=None):
+    if look_vector is None:
+        look_vector = np.array([1,0,0])
+    pitch=minimize_scalar(funpitch,args=(current_time,tangent_height,pos,yaw,rotmatrix,look_vector),method="Bounded",bounds=(np.deg2rad(-30),np.deg2rad(30)))
     return pitch.x
 
 
@@ -185,9 +188,9 @@ def Satellite_Simulator(
     sublon_c = sublon_c.degrees
     alt_Satellite = wgs84.height_of(Satellite_geo).m
     
-    #correct for yaw?
-    yaw = 0
-    pitch=findpitch(pointing_altitude*1e3,current_time_skyfield, ECI_pos, np.deg2rad(yaw), rotmatrix)
+    instrument_look_vector = np.array([Timeline_settings["intrument_look_vector"]['x'],Timeline_settings["intrument_look_vector"]['y'],Timeline_settings["intrument_look_vector"]['z']])
+
+    pitch=findpitch(pointing_altitude*1e3,current_time_skyfield, ECI_pos, 0, rotmatrix, instrument_look_vector)
     #calculate yaw offset angle
     yaw_correction = Timeline_settings["yaw_correction"]
     if yaw_correction == True:
@@ -197,11 +200,10 @@ def Satellite_Simulator(
     elif yaw_correction == False:
         yaw_offset_angle = 0
     
-    pitch=findpitch(pointing_altitude*1e3,current_time_skyfield, ECI_pos, np.deg2rad(yaw_offset_angle), rotmatrix)
+    pitch=findpitch(pointing_altitude*1e3,current_time_skyfield, ECI_pos, np.deg2rad(yaw_offset_angle), rotmatrix, instrument_look_vector)
 
     #Get the center of the field of view
-    instrument_look_vector = np.array([-1,0,0]) # instrument looks in +x axis (velocity vector)
-    FOV_satellite=rotate(instrument_look_vector,np.deg2rad(yaw),pitch,0,deg=False)
+    FOV_satellite=rotate(instrument_look_vector,np.deg2rad(yaw_offset_angle),pitch,0,deg=False)
     FOV_sky=np.matmul(rotmatrix,FOV_satellite)
     [FOV_ra,FOV_dec]=xyz2radec(FOV_sky,deg=True,positivera=True)
     

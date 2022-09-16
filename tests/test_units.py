@@ -6,8 +6,8 @@ Unit tests for single functions
 @author: Ole Martin Christensen
 """
 
-from mats_planningtool.Library import utc_to_onboardTime,Satellite_Simulator
-from mats_planningtool.OrbitSimulator.MatsBana import Satellite_Simulator as Satellite_Simulator_Donal
+from mats_planningtool.Library import utc_to_onboardTime
+from mats_planningtool.OrbitSimulator.MatsBana import Satellite_Simulator
 from mats_planningtool.OrbitSimulator.MatsBana import findpitch
 
 import ephem
@@ -59,6 +59,11 @@ def test_findpitch():
     assert (pitch-0.38048642231615376)<1e-9
 
 def test_Satellite_Simulator():
+    '''
+    This test runs an old MATS orbit (looking backwards) to keep consistency with
+    Davids simulator. Only difference with new simulator is the definition of Pitch
+    and that the optical coordinate is returned differently.. 
+    '''
     
     configFile = get_test_configfile()
     Settings = configFile.Mode120_settings()
@@ -72,7 +77,7 @@ def test_Satellite_Simulator():
         timeline_start + ephem.second*Settings['freeze_start'])
 
     Timeline_settings["yaw_correction"] = True
-    Timeline_settings["yaw_phase"] = 0
+    Timeline_settings["intrument_look_vector"]['x'] = -1
 
     pointing_altitude = 92.5
     Satellite_dict = Satellite_Simulator(
@@ -81,21 +86,17 @@ def test_Satellite_Simulator():
     assert np.linalg.norm(Satellite_dict['Position [km]'] - np.array([-2749.37428943,   531.49744563,  6359.4555113 ]))<1e-3
     assert np.linalg.norm(Satellite_dict['Velocity [km/s]'] - np.array([6.90179808, 1.23085971, 2.87630014]))<1e-3
     assert np.linalg.norm(Satellite_dict['OrbitNormal'] - np.array([-0.11962339,  0.98374384, -0.13393392]))<1e-3
-    assert (Satellite_dict['OrbitalPeriod [s]'] -  5764.543426286832)<1e-6
-    assert (Satellite_dict['Latitude [degrees]'] == 66.2518721740933)<1e-6
-    assert (Satellite_dict['Longitude [degrees]'] == 167.98938387874895)<1e-6
-    assert (Satellite_dict['Altitude [km]'] == 588.4421145683573)<1e-6
+    assert np.abs((Satellite_dict['OrbitalPeriod [s]'] -  5781.405442710422))<1e-3
+    assert np.abs((Satellite_dict['Latitude [degrees]'] - 66.2518721740933))<1e-3
+    assert np.abs((Satellite_dict['Longitude [degrees]'] - 167.98515928719192))<1e-3
+    assert np.abs((Satellite_dict['Altitude [km]'] - 588.4421145683573))<1e-3
     assert np.linalg.norm(Satellite_dict['AscendingNode'] - np.array([-0.98374384, -0.11962339,  0.        ]))<1e-3
-    assert (Satellite_dict['ArgOfLat [degrees]'] == 67.44674503995131)<1e-6
-    assert (Satellite_dict['Yaw [degrees]'] == -3.4202478726957044)<1e-6
-    assert (Satellite_dict['Pitch [degrees]'] == 111.61338774886056)<1e-6
-    #assert np.linalg.norm(Satellite_dict['OpticalAxis'] - np.array([-0.69266389, -0.23351756, -0.6824121 ]))<1e-3
-    #assert (Satellite_dict['Dec_OpticalAxis [degrees]'] == -43.032421988221735)<1e-6
-    #assert (Satellite_dict['RA_OpticalAxis [degrees]'] == 198.6304891481579)<1e-6
-    #assert np.linalg.norm(Satellite_dict['Normal2H_offset' ]- np.array([-0.70002371, -0.01024573,  0.7140461 ]))<1e-3
-
-    Satellite_dict_Donal = Satellite_Simulator_Donal(MATS_skyfield, current_time, Timeline_settings, pointing_altitude)
-    Satellite_dict_Donal
+    assert np.abs((Satellite_dict['ArgOfLat [degrees]'] - 67.44587321842594))<1e-3
+    assert np.abs((Satellite_dict['Yaw [degrees]'] - -3.421236658595461))<1e-3
+    assert np.abs((Satellite_dict['Pitch [degrees]'] - 21.648870551653236))<1e-6
+    assert np.abs((Satellite_dict['Dec_OpticalAxis [degrees]'] - -43.04102760757912))<1e-3
+    assert np.abs((Satellite_dict['RA_OpticalAxis [degrees]'] - 198.6252475912853))<1e-3
+    assert np.abs((Satellite_dict['EstimatedLatitude_LP [degrees]'] - 45.45170931631043))<1e-3
 
 if __name__ == "__main__":
 

@@ -175,6 +175,7 @@ class configFile:
             'yaw_correction': Determines if yaw correction shall be used for the duration of the timeline. Mainly impacts simulations of MATS's pointing. But also determines the argument of the ArgEnableYawComp CMD. (bool) \n
             'yaw_amplitude': Amplitude of the yaw function, A*cos(argument_of_latitude - B - phase), where B is angle between optical axis and negative velocity vector in the orbital plane. (float) \n
             'yaw_phase': Phase of the yaw function, A*cos(argument_of_latitude - B - phase), where B is angle between optical axis and negative velocity vector in the orbital plane. (float) \n
+            "intrument_look_vector": Look vector of instrument compared to payload coordinate system (nominal x=1,y=0,z=0).
             'Choose_Operational_Science_Mode': Set to 1, 2, or 5 to choose either Mode1, Mode2, or Mode5 as the *Operational Science Mode*. Set to 0 to schedule either Mode1 or Mode2 depending of the time of the year.
             'StandardPointingAltitude': Sets pointing altitude in meters for the timeline. Used to set the pointing altitude of *Operational Science Modes* and to calculate the duration of attitude freezes (because attitude freezes last until the pointing altitude is reorientated to this value).  (int) \n
 
@@ -182,6 +183,7 @@ class configFile:
             'pointing_stabilization': The maximum time it takes for an attitude change to stabilize [s]. Used before scheduling certain CMDs in *XML_gen* to make sure that the attitude has been stabilized after running *TC_acfLimbPointingAltitudeOffset*. Impacts the estimated duration of Science Modes in *Timeline_gen*. (int) \n
             'CCDSYNC_ExtraOffset': Extra offset time [ms] that is added to an estimated ReadoutTime when calculating TEXPIOFS for the CCD Synchronize CMD. (int) \n
             'CCDSYNC_ExtraIntervalTime': Extra time [ms] that is added to the calculated Exposure Interval Time (for example when calculating arguments for the CCD Synchronize CMD or nadir TEXPIMS). (int) \n
+            'CCDSYNC_Waittime': Time [ms] to wait after running CCDSYNC  \n
 
         Returns:
             (:obj:`dict`): Timeline_settings

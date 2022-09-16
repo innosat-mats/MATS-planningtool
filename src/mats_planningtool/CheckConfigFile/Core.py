@@ -12,6 +12,7 @@ import sys
 import ephem
 from pylab import sign
 from math import ceil as ceil
+import numpy as np
 
 from mats_planningtool import Library
 
@@ -155,6 +156,21 @@ def CheckConfigFile(configFile):
         )
     ):
         Logger.error("Timeline_settings['yaw_phase']")
+        raise ValueError
+
+    try:
+        Logger.info("Currently used instrument look vector: " + Timeline_settings["intrument_look_vector"])
+    except:
+        Logger.error(
+            "Instrument look vector invalid or missing."
+        )
+        raise ValueError
+    
+    look_vector = np.array([Timeline_settings["intrument_look_vector"]['x'],Timeline_settings["intrument_look_vector"]['y'],Timeline_settings["intrument_look_vector"]['z']])
+    if np.linalg.norm(look_vector) != 1:
+        Logger.error(
+            "Norm of instrument look vector is not 1."
+        )
         raise ValueError
 
     for key in Operational_Science_Mode_settings.keys():
