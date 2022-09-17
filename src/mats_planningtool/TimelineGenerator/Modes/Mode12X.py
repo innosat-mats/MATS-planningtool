@@ -12,8 +12,8 @@ from astroquery.vizier import Vizier
 from skyfield import api
 import datetime as DT
 
-from mats_planningtool.Library import Satellite_Simulator, deg2HMS, scheduler
-
+from mats_planningtool.Library import deg2HMS, scheduler
+from mats_planningtool.OrbitSimulator.MatsBana import Satellite_Simulator
 Logger = logging.getLogger("OPT_logger")
 
 

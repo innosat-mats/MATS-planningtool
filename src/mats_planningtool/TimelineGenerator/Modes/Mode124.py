@@ -13,7 +13,8 @@ from pylab import cross, ceil, dot, zeros, sqrt, norm, pi, arccos, arctan
 from skyfield import api
 import datetime as DT
 
-from mats_planningtool.Library import Satellite_Simulator, scheduler
+from mats_planningtool.Library import scheduler
+from mats_planningtool.OrbitSimulator.MatsBana import Satellite_Simulator
 
 from .Mode12X import UserProvidedDateScheduler
 

@@ -24,12 +24,12 @@ When creating new Mode functions it is crucial that the function name is
 
 from .Macros_Commands import Macros, Commands
 from mats_planningtool.Library import (
-    Satellite_Simulator,
     dict_comparator,
     utc_to_onboardTime,
     SunAngle,
     CCDSELExtracter,
 )
+from mats_planningtool.OrbitSimulator.MatsBana import Satellite_Simulator
 import ephem
 import logging
 import sys

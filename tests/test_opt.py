@@ -43,26 +43,26 @@ def test_timeline_get():
 
 
     configfile_test = get_test_configfile()
-
+    configfile_test.OPT_Config_File['Timeline_settings']['intrument_look_vector']['x'] = -1
     # Create a Science Mode Timeline (.json file) depending on the settings in the Configuration File
     configfile_test.Timeline_gen()
     assert filecmp.cmp('test_data_output/Science_Mode_Timeline_config_file_test.json','test_data/output/Science_Mode_Timeline_config_file_test.json')
 
-def test_timeline_plotter():
+# def test_timeline_plotter():
 
-    configfile_test = get_test_configfile()
+#     configfile_test = get_test_configfile()
 
-    # Predict state and attitude dataconfig from the Science Mode Timeline and plot the results
-    Data_MATS, Data_LP, Time, Time_OHB = configfile_test.Timeline_Plotter(
-        "test_data/output/Science_Mode_Timeline_config_file_test.json", Timestep=20
-    )
+#     # Predict state and attitude dataconfig from the Science Mode Timeline and plot the results
+#     Data_MATS, Data_LP, Time, Time_OHB = configfile_test.Timeline_Plotter(
+#         "test_data/output/Science_Mode_Timeline_config_file_test.json", Timestep=20
+#     )
 
-    with open('test_data/output/timeline_plotter_output.pkl', 'rb') as f:
-        timeline_plotter_data = pickle.load(f)
-    assert DeepDiff(timeline_plotter_data[0],Data_MATS) == {}
-    assert DeepDiff(timeline_plotter_data[1],Data_LP) == {}
-    assert DeepDiff(timeline_plotter_data[2],Time) == {}
-    assert DeepDiff(timeline_plotter_data[3],Time_OHB) == {}
+#     with open('test_data/output/timeline_plotter_output.pkl', 'rb') as f:
+#         timeline_plotter_data = pickle.load(f)
+#     assert DeepDiff(timeline_plotter_data[0],Data_MATS) == {}
+#     assert DeepDiff(timeline_plotter_data[1],Data_LP) == {}
+#     assert DeepDiff(timeline_plotter_data[2],Time) == {}
+#     assert DeepDiff(timeline_plotter_data[3],Time_OHB) == {}
 
 def test_xml_gen():
 
@@ -84,30 +84,30 @@ def test_xml_gen():
                         else:
                             assert False
 
-def test_timeline_plotter():
+# def test_timeline_plotter():
 
-    configfile_test = get_test_configfile()
+#     configfile_test = get_test_configfile()
 
-    # Plot the example Science Mode Timeline together with the example h5 file and the example STK generated .csv file
-    Data_MATS, Data_LP, Timescience_mode_timeline_path, Time_OHB = configfile_test.Timeline_Plotter(
-        "test_data/Example_Science_Mode_Timeline__OPT_Config_File.json",
-        STK_CSV_PATH="test_data/ExampleCSVfile.csv",
-        OHB_H5_Path="test_data/ExampleH5file_LEVEL_1A_PLATF_20200120-094217_20200120-102136.hdf5",
-        Timestep=20,
-        FractionOfDataUsed=0.1,
-    )
+#     # Plot the example Science Mode Timeline together with the example h5 file and the example STK generated .csv file
+#     Data_MATS, Data_LP, Timescience_mode_timeline_path, Time_OHB = configfile_test.Timeline_Plotter(
+#         "test_data/Example_Science_Mode_Timeline__OPT_Config_File.json",
+#         STK_CSV_PATH="test_data/ExampleCSVfile.csv",
+#         OHB_H5_Path="test_data/ExampleH5file_LEVEL_1A_PLATF_20200120-094217_20200120-102136.hdf5",
+#         Timestep=20,
+#         FractionOfDataUsed=0.1,
+#     )
 
-    with open('test_data/output/timeline_plotter_OHB_output.pkl', 'rb') as f:
-        timeline_plotter_data = pickle.load(f)
-    assert DeepDiff(timeline_plotter_data[0],Data_MATS) == {}
-    assert DeepDiff(timeline_plotter_data[1],Data_LP) == {}
-    assert DeepDiff(timeline_plotter_data[2],Timescience_mode_timeline_path) == {}
-    assert DeepDiff(timeline_plotter_data[3],Time_OHB) == {}
+#     with open('test_data/output/timeline_plotter_OHB_output.pkl', 'rb') as f:
+#         timeline_plotter_data = pickle.load(f)
+#     assert DeepDiff(timeline_plotter_data[0],Data_MATS) == {}
+#     assert DeepDiff(timeline_plotter_data[1],Data_LP) == {}
+#     assert DeepDiff(timeline_plotter_data[2],Timescience_mode_timeline_path) == {}
+#     assert DeepDiff(timeline_plotter_data[3],Time_OHB) == {}
 
-    # Open plots previously created with Timeline_Plotter
-    configfile_test.Plot_Timeline_Plotter_Plots(
-        "Output/Science_Mode_Timeline__OPT_Config_File/Timeline_Plotter_PlotsAndData"
-    )
+#     # Open plots previously created with Timeline_Plotter
+#     configfile_test.Plot_Timeline_Plotter_Plots(
+#         "Output/Science_Mode_Timeline__OPT_Config_File/Timeline_Plotter_PlotsAndData"
+#     )
 
 def test_timeline_pluto_script():
 
@@ -202,3 +202,7 @@ def test_operational_mode():
                             pass
                         else:
                             assert False
+
+if __name__ == "__main__":
+
+    test_operational_mode()

@@ -17,7 +17,8 @@ from skyfield import api
 import numpy as np
 import datetime as DT
 
-from mats_planningtool.Library import deg2HMS, Satellite_Simulator
+from mats_planningtool.Library import deg2HMS
+from mats_planningtool.OrbitSimulator.MatsBana import Satellite_Simulator
 from .Mode12X import UserProvidedDateScheduler
 
 Logger = logging.getLogger("OPT_logger")

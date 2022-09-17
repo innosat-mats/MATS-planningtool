@@ -33,7 +33,7 @@ import skyfield.api
 from pylab import dot, arccos, zeros, pi, sin, cos, arctan, cross, norm, sqrt
 
 from mats_planningtool import Library
-
+from mats_planningtool.OrbitSimulator.MatsBana import Satellite_Simulator
 #from mats_planningtool_Config_File import Logger_name, Timeline_settings, getTLE
 
 
@@ -162,7 +162,7 @@ def Limb_functional_test(root, date, duration, relativeTime, Timeline_settings, 
                         else:
                             LogFlag = False
 
-                        Satellite_dict = Library.Satellite_Simulator(
+                        Satellite_dict = Satellite_Simulator(
                             MATS_skyfield, current_time, Timeline_settings, altitude/1000, LogFlag, Logger)
 
                         r_MATS = Satellite_dict['Position [km]']
@@ -375,7 +375,7 @@ def Nadir_functional_test(root, date, duration, relativeTime, Timeline_settings,
                     else:
                         LogFlag = False
 
-                    Satellite_dict = Library.Satellite_Simulator(
+                    Satellite_dict = Satellite_Simulator(
                         MATS_skyfield, current_time, Timeline_settings, altitude/1000, LogFlag, Logger)
 
                     r_MATS = Satellite_dict['Position [km]']

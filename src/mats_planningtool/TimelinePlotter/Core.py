@@ -44,7 +44,7 @@ import sys
 import ntpath
 
 from mats_planningtool import Library, MATS_coordinates
-
+from mats_planningtool.OrbitSimulator.MatsBana import Satellite_Simulator
 
 Logger = logging.getLogger("OPT_logger")
 rcParams["figure.max_open_warning"] = 30
@@ -575,7 +575,7 @@ def Simulator(
             LogFlag = False
 
         "Run the satellite simulation for the current time"
-        Satellite_dict = Library.Satellite_Simulator(
+        Satellite_dict = Satellite_Simulator(
             MATS_skyfield,
             current_time,
             Timeline_settings,
@@ -686,7 +686,7 @@ def Simulator(
                 )
 
                 "Run the satellite simulation for the freeze time"
-                Satellite_dict = Library.Satellite_Simulator(
+                Satellite_dict = Satellite_Simulator(
                     MATS_skyfield,
                     current_time_freeze,
                     Timeline_settings,

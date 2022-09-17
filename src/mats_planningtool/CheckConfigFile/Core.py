@@ -159,7 +159,7 @@ def CheckConfigFile(configFile):
         raise ValueError
 
     try:
-        Logger.info("Currently used instrument look vector: " + Timeline_settings["intrument_look_vector"])
+        Logger.info("Currently used instrument look vector: " + str(Timeline_settings["intrument_look_vector"]))
     except:
         Logger.error(
             "Instrument look vector invalid or missing."
