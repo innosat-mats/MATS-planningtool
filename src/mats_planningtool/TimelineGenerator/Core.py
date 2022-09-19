@@ -12,7 +12,6 @@ import logging
 import sys
 import time
 import os
-import ephem
 import importlib
 import datetime as DT
 

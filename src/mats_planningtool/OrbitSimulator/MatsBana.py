@@ -270,7 +270,7 @@ def Satellite_Simulator(
         "Dec_OpticalAxis [degrees]": FOV_dec,
         "RA_OpticalAxis [degrees]": FOV_ra,
         "Normal2H_offset": r_H_offset_normal,
-        "Normal2V_offset": r_V_offset_normal,
+        "Normal2V_offset": -r_V_offset_normal,
         "EstimatedLatitude_LP [degrees]": tangent_point_lat,
         "EstimatedLongitude_LP [degrees]": tangent_point_lon,
     }

@@ -9,6 +9,7 @@ Unit tests for single functions
 from mats_planningtool.Library import utc_to_onboardTime
 from mats_planningtool.OrbitSimulator.MatsBana import Satellite_Simulator
 from mats_planningtool.OrbitSimulator.MatsBana import findpitch
+from mats_planningtool.Library import Satellite_Simulator as Satellite_Simulator_old
 
 import ephem
 from skyfield import api
@@ -97,6 +98,12 @@ def test_Satellite_Simulator():
     assert np.abs((Satellite_dict['Dec_OpticalAxis [degrees]'] - -43.04102760757912))<1e-3
     assert np.abs((Satellite_dict['RA_OpticalAxis [degrees]'] - 198.6252475912853))<1e-3
     assert np.abs((Satellite_dict['EstimatedLatitude_LP [degrees]'] - 45.45170931631043))<1e-3
+    assert np.linalg.norm(Satellite_dict['Normal2H_offset'] - np.array([-0.70003147, -0.01020216,  0.71403911]))
+    assert np.linalg.norm(Satellite_dict['Normal2V_offset'] - np.array([ 0.17362442, -0.97232546,  0.15632581]))
+
+    # Satellite_dict_old = Satellite_Simulator_old(
+    #     MATS_skyfield, current_time, Timeline_settings, pointing_altitude)
+    # Satellite_dict_old   
 
 if __name__ == "__main__":
 
