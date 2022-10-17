@@ -205,4 +205,4 @@ def test_operational_mode():
 
 if __name__ == "__main__":
 
-    test_operational_mode()
+    test_timeline_get()
