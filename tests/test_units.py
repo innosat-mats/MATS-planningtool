@@ -61,25 +61,23 @@ def test_findpitch():
 
 def test_Satellite_Simulator():
 
-    Satellite_dict,Satellite_dict_old = run_Satellite_Simulator(60*20)
+    Satellite_dict,_ = run_Satellite_Simulator(60*20)
 
-    assert np.linalg.norm(Satellite_dict['Position [km]'] - np.array([-2749.37428943,   531.49744563,  6359.4555113 ]))<1e-3
-    assert np.linalg.norm(Satellite_dict['Velocity [km/s]'] - np.array([6.90179808, 1.23085971, 2.87630014]))<1e-3
-    assert np.linalg.norm(Satellite_dict['OrbitNormal'] - np.array([-0.11962339,  0.98374384, -0.13393392]))<1e-3
-    assert np.abs((Satellite_dict['OrbitalPeriod [s]'] -  5781.405442710422))<1e-3
-    assert np.abs((Satellite_dict['Latitude [degrees]'] - 66.2518721740933))<1e-3
-    assert np.abs((Satellite_dict['Longitude [degrees]'] - 167.98515928719192))<1e-3
-    assert np.abs((Satellite_dict['Altitude [km]'] - 588.4421145683573))<1e-3
-    assert np.linalg.norm(Satellite_dict['AscendingNode'] - np.array([-0.98374384, -0.11962339,  0.        ]))<1e-3
-    assert np.abs((Satellite_dict['ArgOfLat [degrees]'] - 67.44587321842594))<1e-3
-    assert np.abs((Satellite_dict['Yaw [degrees]'] - -3.421236658595461))<1e-3
-    assert np.abs((Satellite_dict['Pitch [degrees]'] - 21.648870551653236))<1e-6
-    assert np.abs((Satellite_dict['Dec_OpticalAxis [degrees]'] - -43.04102760757912))<1e-3
-    assert np.abs((Satellite_dict['RA_OpticalAxis [degrees]'] - 198.6252475912853))<1e-3
-    assert np.abs((Satellite_dict['EstimatedLatitude_LP [degrees]'] - 45.45170931631043))<1e-3
-    assert np.linalg.norm(Satellite_dict['Normal2H_offset'] - np.array([-0.70003147, -0.01020216,  0.71403911]))
-    assert np.linalg.norm(Satellite_dict['Normal2V_offset'] - np.array([ 0.17362442, -0.97232546,  0.15632581]))
-    assert np.linalg.norm(Satellite_dict['OpticalAxis'] - np.array([-0.69268355, -0.23340761, -0.68242977]))<1e-6
+    assert np.linalg.norm(Satellite_dict['Position [km]'] - np.array([5402.42016169, 1231.53689184, 4213.39979245]))<1e-3
+    assert np.linalg.norm(Satellite_dict['Velocity [km/s]'] - np.array([4.702034753185209, -0.23305121301179657, -5.926880234636016]))<1e-3
+    assert np.linalg.norm(Satellite_dict['OrbitNormal'] - np.array([-0.11989762414733787, 0.9837248329260864, -0.13380075684911716]))<1e-3
+    assert np.abs((Satellite_dict['OrbitalPeriod [s]'] -  5781.405357604852))<1e-3
+    assert np.abs((Satellite_dict['Latitude [degrees]'] - 37.53148679514688))<1e-3
+    assert np.abs((Satellite_dict['Longitude [degrees]'] - 6.724316837111286))<1e-3
+    assert np.abs((Satellite_dict['Altitude [km]'] - 590.7634247518984))<1e-3
+    assert np.linalg.norm(Satellite_dict['AscendingNode'] - np.array([-0.98372483, -0.11989762,  0.        ]))<1e-3
+    assert np.abs((Satellite_dict['ArgOfLat [degrees]'] - 142.35419960240145))<1e-3
+    assert np.abs((Satellite_dict['Yaw [degrees]'] - 0.6929335795171141))<1e-3
+    assert np.abs((Satellite_dict['Pitch [degrees]'] - 21.84697932755591))<1e-6
+    assert np.abs((Satellite_dict['Dec_OpticalAxis [degrees]'] - 29.96898374166494))<1e-3
+    assert np.abs((Satellite_dict['RA_OpticalAxis [degrees]'] - 181.73266881417956))<1e-3
+    assert np.abs((Satellite_dict['EstimatedLatitude_LP [degrees]'] - 58.810239085649776))<1e-3
+    assert np.linalg.norm(Satellite_dict['OpticalAxis'] - np.array([-0.86671138, -0.02621802,  0.49999928]))<1e-6
 
 def run_Satellite_Simulator(extratime = 0):
     '''

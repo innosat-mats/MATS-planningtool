@@ -847,7 +847,7 @@ def Satellite_Simulator(
     celestial_eq = [0, 0, 1]
 
     "Offset the pointing altitude slightly which improves the estimation of OHBs actual pointing"
-    pointing_altitude = pointing_altitude + 0.3
+    pointing_altitude = pointing_altitude
 
     yaw_correction = Timeline_settings["yaw_correction"]
 

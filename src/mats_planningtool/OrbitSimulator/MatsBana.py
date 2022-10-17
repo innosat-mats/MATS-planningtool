@@ -112,7 +112,10 @@ def findtangent(current_time,pos,FOV):
 def findpitch (tangent_height,current_time,pos,yaw,rotmatrix,look_vector=None):
     if look_vector is None:
         look_vector = np.array([1,0,0])
-    pitch=minimize_scalar(funpitch,args=(current_time,tangent_height,pos,yaw,rotmatrix,look_vector),method="Bounded",bounds=(np.deg2rad(-30),np.deg2rad(30)))
+    if look_vector[0]<0:
+        pitch=minimize_scalar(funpitch,args=(current_time,tangent_height,pos,yaw,rotmatrix,look_vector),method="Bounded",bounds=(np.deg2rad(-10),np.deg2rad(30)))
+    else:
+        pitch=minimize_scalar(funpitch,args=(current_time,tangent_height,pos,yaw,rotmatrix,look_vector),method="Bounded",bounds=(np.deg2rad(-30),np.deg2rad(10)))
     return pitch.x
 
 
@@ -203,8 +206,8 @@ def Satellite_Simulator(
     pitch=findpitch(pointing_altitude*1e3,current_time_skyfield, ECI_pos, np.deg2rad(yaw_offset_angle), rotmatrix, instrument_look_vector)
 
     #Get the center of the field of view
-    FOV_satellite=rotate(instrument_look_vector,np.deg2rad(yaw_offset_angle),pitch,0,deg=False)
-    FOV_sky=np.matmul(rotmatrix,FOV_satellite)
+    FOV_satellite=rotate(instrument_look_vector,np.deg2rad(yaw_offset_angle),pitch,0,deg=False) #FoV in satellite coordinates
+    FOV_sky=np.matmul(rotmatrix,FOV_satellite) #FoV in sky (ECI) coordinates
     [FOV_ra,FOV_dec]=xyz2radec(FOV_sky,deg=True,positivera=True)
     
     #Get tangent point
@@ -214,20 +217,20 @@ def Satellite_Simulator(
     tangent_point_lat = (wgs84.subpoint(tangent_point).latitude.degrees)
     tangent_point_lon = (wgs84.subpoint(tangent_point).longitude.degrees)
       
-    "Rotate 'vector to Satellite', to represent vector normal to satellite H-offset "
-    #FIXME: Normal orbit sign
-    rot_mat = rot_arbit(pitch, normal_orbit)
-    r_H_offset_normal = rot_mat @ ECI_pos
-    r_H_offset_normal = r_H_offset_normal / norm(r_H_offset_normal)
+    # "Rotate 'vector to Satellite', to represent vector normal to satellite H-offset "
+    # #FIXME: Normal orbit sign
+    # rot_mat = rot_arbit(pitch, normal_orbit)
+    # r_H_offset_normal = rot_mat @ ECI_pos
+    # r_H_offset_normal = r_H_offset_normal / norm(r_H_offset_normal)
 
-    "If pointing direction has a Yaw defined, Rotate yaw of normal to pointing direction H-offset plane, meaning to rotate around the vector to Satellite"
-    rot_mat = rot_arbit(np.deg2rad(yaw_offset_angle), mrunit)
-    r_H_offset_normal = rot_mat @ r_H_offset_normal
-    r_H_offset_normal = r_H_offset_normal / norm(r_H_offset_normal)
+    # "If pointing direction has a Yaw defined, Rotate yaw of normal to pointing direction H-offset plane, meaning to rotate around the vector to Satellite"
+    # rot_mat = rot_arbit(np.deg2rad(yaw_offset_angle), mrunit)
+    # r_H_offset_normal = rot_mat @ r_H_offset_normal
+    # r_H_offset_normal = r_H_offset_normal / norm(r_H_offset_normal)
 
-    "Rotate negative orbital plane normal to make it into a normal to the V-offset plane"
-    r_V_offset_normal = rot_mat @ -normal_orbit
-    r_V_offset_normal = r_V_offset_normal / norm(r_V_offset_normal)
+    # "Rotate negative orbital plane normal to make it into a normal to the V-offset plane"
+    # r_V_offset_normal = rot_mat @ -normal_orbit
+    # r_V_offset_normal = r_V_offset_normal / norm(r_V_offset_normal)
 
     if LogFlag == True and Logger != None:
         Logger.debug("")
@@ -246,12 +249,6 @@ def Satellite_Simulator(
         Logger.debug("Longitude of LP: " + str(tangent_point_lon))
 
         Logger.debug("Optical Axis: " + str(FOV_sky))
-        Logger.debug(
-            "Orthogonal direction to H-offset plane: " + str(r_H_offset_normal)
-        )
-        Logger.debug(
-            "Orthogonal direction to V-offset plane: " + str(r_V_offset_normal)
-        )
         Logger.debug("Orthogonal direction to the orbital plane: " + str(normal_orbit))
 
     Satellite_dict = {
@@ -269,8 +266,6 @@ def Satellite_Simulator(
         "OpticalAxis": FOV_sky,
         "Dec_OpticalAxis [degrees]": FOV_dec,
         "RA_OpticalAxis [degrees]": FOV_ra,
-        "Normal2H_offset": r_H_offset_normal,
-        "Normal2V_offset": -r_V_offset_normal,
         "EstimatedLatitude_LP [degrees]": tangent_point_lat,
         "EstimatedLongitude_LP [degrees]": tangent_point_lon,
     }
