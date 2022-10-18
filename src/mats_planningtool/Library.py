@@ -1032,57 +1032,6 @@ def Satellite_Simulator(
     return Satellite_dict
 
 
-'''
-def IntrinsicEulerAnglesSLOF( VelocityVector, NegativeOrbitalNormal, NegativePosVector,):
-    """Calculates intrinsic Euler angles (ZYZ or Yaw, Pitch, Roll) defined from SLOF (Spacecraft Local Orbit Frame)
-    
-    Arguments:
-        VelocityVector (array): Velocity vector in GCRS. X basis vector in SLOF.
-        NegativeOrbitalNormal (array): Negative orbital normal vector in GCRS. Y basis vector in SLOF.
-        NegativePosVector (array): Negative positional vector in GCRS. Z basis vector in SLOF.
-        
-    Returns:
-        (tuple): tuple containing:
-            
-            - **Yaw** (*float*): Yaw angle in degrees.
-            - **Pitch** (*float*): Pitch angle in degrees.
-            - **Roll** (*float*): Roll angle in degrees.
-        
-        
-    
-    """
-    
-    "Define SLOF basis"
-    z_SLOF = NegativePosVector
-    z_SLOF = z_SLOF / norm(z_SLOF)
-    y_SLOF = NegativeOrbitalNormal
-    y_SLOF = y_SLOF / norm(y_SLOF)
-    x_SLOF = VelocityVector
-    x_SLOF = x_SLOF / norm(x_SLOF)
-    
-    "Convert ECI coordinates to SLOF"
-    dcm_SLOF_coordinate_system = array( ([x_SLOF[0], y_SLOF[0], z_SLOF[0]], [x_SLOF[1], y_SLOF[1], z_SLOF[1]], [x_SLOF[2], y_SLOF[2], z_SLOF[2]]) )
-    dcm_change_of_basis_ECI_to_SLOF = transpose(dcm_SLOF_coordinate_system)
-    r_change_of_basis_ECI_to_SLOF = R.from_dcm(dcm_change_of_basis_ECI_to_SLOF)
-    
-    optical_axis_SLOF = r_change_of_basis_ECI_to_SLOF.apply( optical_axis[t,:])
-    r_V_offset_normal_SLOF = r_change_of_basis_ECI_to_SLOF.apply( r_V_offset_normal )
-    r_H_offset_normal_SLOF = r_change_of_basis_ECI_to_SLOF.apply( r_H_offset_normal )
-    
-    
-    
-    "Find rotation and Euler angles from definition of optical axis in SLOF"
-    basis_SLOF = array( ( (optical_axis_SLOF), (r_V_offset_normal_SLOF), (r_H_offset_normal_SLOF) ) )
-    basis_ECI = array( ( (0,0,-1), (0,1,0), (1,0,0) ) )
-    rotation, sensitivity_matrix = R.match_vectors(basis_SLOF, basis_ECI)
-    
-    Euler_angles[t,:] = rotation.as_euler('ZYZ', degrees=True)
-    yaw_offset_angle[t] = Euler_angles[t,0]
-    pitch_MATS[t] = Euler_angles[t,1]
-    roll_MATS[t] = Euler_angles[t,2]
-'''
-
-
 def SunAngle(PositionVector, SimulationTime):
     """Calculates angle between a position vector and the position vector of the Sun.
 

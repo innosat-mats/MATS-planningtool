@@ -216,21 +216,13 @@ def Satellite_Simulator(
     tangent_point=ICRF(Distance(m=tangent_point).au,t=current_time_skyfield,center=399)
     tangent_point_lat = (wgs84.subpoint(tangent_point).latitude.degrees)
     tangent_point_lon = (wgs84.subpoint(tangent_point).longitude.degrees)
-      
-    # "Rotate 'vector to Satellite', to represent vector normal to satellite H-offset "
-    # #FIXME: Normal orbit sign
-    # rot_mat = rot_arbit(pitch, normal_orbit)
-    # r_H_offset_normal = rot_mat @ ECI_pos
-    # r_H_offset_normal = r_H_offset_normal / norm(r_H_offset_normal)
+    
 
-    # "If pointing direction has a Yaw defined, Rotate yaw of normal to pointing direction H-offset plane, meaning to rotate around the vector to Satellite"
-    # rot_mat = rot_arbit(np.deg2rad(yaw_offset_angle), mrunit)
-    # r_H_offset_normal = rot_mat @ r_H_offset_normal
-    # r_H_offset_normal = r_H_offset_normal / norm(r_H_offset_normal)
+    r_dash=np.cross(FOV_sky,normal_orbit)
 
-    # "Rotate negative orbital plane normal to make it into a normal to the V-offset plane"
-    # r_V_offset_normal = rot_mat @ -normal_orbit
-    # r_V_offset_normal = r_V_offset_normal / norm(r_V_offset_normal)
+    #get transform from ECI to CCD coordinates
+    invrotmatrix=np.linalg.inv(np.array([FOV_sky,normal_orbit,r_dash]).T) 
+
 
     if LogFlag == True and Logger != None:
         Logger.debug("")
@@ -268,6 +260,7 @@ def Satellite_Simulator(
         "RA_OpticalAxis [degrees]": FOV_ra,
         "EstimatedLatitude_LP [degrees]": tangent_point_lat,
         "EstimatedLongitude_LP [degrees]": tangent_point_lon,
+        "InvRotMatrix": invrotmatrix #Rotation matrix from ECI to CCD coordinates
     }
 
     return Satellite_dict

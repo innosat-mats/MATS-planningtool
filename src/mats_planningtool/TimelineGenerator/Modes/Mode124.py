@@ -12,9 +12,10 @@ import importlib
 from pylab import cross, ceil, dot, zeros, sqrt, norm, pi, arccos, arctan
 from skyfield import api
 import datetime as DT
+import numpy as np
 
 from mats_planningtool.Library import scheduler
-from mats_planningtool.OrbitSimulator.MatsBana import Satellite_Simulator
+from mats_planningtool.OrbitSimulator.MatsBana import Satellite_Simulator,xyz2radec
 
 from .Mode12X import UserProvidedDateScheduler
 
@@ -143,12 +144,16 @@ def date_calculator(configFile):
     Moon_r_orbital_plane = zeros((timesteps, 3))
     Moon_vert_offset = zeros((timesteps, 1))
     Moon_hori_offset = zeros((timesteps, 1))
+    Moon_tot_offset = zeros((timesteps, 1))
     angle_between_orbital_plane_and_moon = zeros((timesteps, 1))
     SpottedMoonList = []
     r_Moon_unit_vector = zeros((timesteps, 3))
 
     Dec_optical_axis = zeros((timesteps, 1))
     RA_optical_axis = zeros((timesteps, 1))
+
+    datetimes = []
+    timestamps = []
 
     ts = api.load.timescale(builtin=True)
     MATS_skyfield = api.EarthSatellite(TLE[0], TLE[1])
@@ -189,8 +194,6 @@ def date_calculator(configFile):
         arg_of_lat = Satellite_dict['ArgOfLat [degrees]']
 
         negative_normal_orbit[t] = -Satellite_dict['OrbitNormal']
-        r_H_offset_normal[t] = Satellite_dict['Normal2H_offset']
-        r_V_offset_normal[t] = Satellite_dict['Normal2V_offset']
 
         ############# End of Calculations of orbital and pointing vectors #####
 
@@ -204,117 +207,111 @@ def date_calculator(configFile):
 
         current_time_skyfield = ts.utc(year, month, day, hour, minute, second)
 
-        Moon_apparent_from_Earth = Earth.at(
-            current_time_skyfield).observe(Moon).apparent()
-        r_Moon[t, 0:3] = Moon_apparent_from_Earth.position.km
+        #### Caluclate moon position on CCD #########
 
-        r_Moon_unit_vector[t, 0:3] = r_Moon[t, 0:3]/norm(r_Moon[t, 0:3])
+        moonpos=Earth.at(current_time_skyfield).observe(Moon)
+        moonpos_km = moonpos.position.km
+        moonpos_ra_dec = moonpos.radec()
+        inst_xyz=np.matmul(Satellite_dict['InvRotMatrix'],moonpos_km)
+        [xang,yang]=xyz2radec(inst_xyz,positivera=False,deg=True) #degrees
+        Moon_hori_offset[t] = xang #degrees
+        Moon_vert_offset[t] = yang #degrees
+        Moon_tot_offset[t]=np.rad2deg(np.arccos(np.dot(optical_axis[t],moonpos_km/norm(moonpos_km))))
+        
+        datetimes.append(current_time_datetime)
+        timestamps.append(current_time_datetime.timestamp())
 
-        r_MATS_2_Moon[t] = r_Moon[t]-r_MATS[t]
-        r_MATS_2_Moon_norm[t] = r_MATS_2_Moon[t]/norm(r_MATS_2_Moon[t])
+        current_time = current_time+DT.timedelta(seconds=timestep)
+        t = t + 1
+        print(t)
+        
+    angle_filter_on=3 #degree
+    vert_filter=np.rad2deg(0.05) #degree
+    possibles=np.array([(itime) for itime in range(len(Moon_hori_offset))  
+                    if ((Moon_tot_offset[itime])< angle_filter_on and Moon_vert_offset[itime]< vert_filter)])
 
-        "Calculate Dec and RA of moon"
-        Dec_Moon = arctan(r_Moon[t, 2] / sqrt(r_Moon[t, 0]
-                                              ** 2 + r_Moon[t, 1]**2)) / pi * 180
-        RA_Moon = arccos(dot([1, 0, 0], [r_Moon[t, 0], r_Moon[t, 1], 0]) /
-                         norm([r_Moon[t, 0], r_Moon[t, 1], 0])) / pi * 180
+    _,moon_found = np.where([np.diff(possibles)>2]) #check if there is a gap in the indeces larger than 2
 
-        if(r_Moon[t, 1] < 0):
-            RA_Moon = 360-RA_Moon
+    xvalue = np.zeros((len(moon_found),1))
 
-        "Project 'r_MATS_2_Moon' ontop of orbital plane"
-        Moon_r_orbital_plane[t] = r_MATS_2_Moon_norm[t] - \
-            dot(r_MATS_2_Moon_norm[t], negative_normal_orbit[t]
-                ) * negative_normal_orbit[t]
+    timerange=slice(possibles[0],possibles[moon_found[0]])
+    crosstime=DT.datetime.fromtimestamp(np.interp(V_offset,Moon_vert_offset[timerange][-1::-1],timestamps[timerange][-1::-1]))
+    xvalue[0]=np.interp(crosstime.timestamp(),timestamps[timerange],Moon_hori_offset[timerange])
+    for i in range(len(moon_found)):
+        timerange=slice(possibles[moon_found[i]+1],possibles[moon_found[i+1]+1])
+        #print (timerange)
+        crosstime=DT.datetime.fromtimestamp(np.interp(V_offset,Moon_vert_offset[timerange][-1::-1],timestamps[timerange][-1::-1]))
+        xvalue[i]=np.interp(crosstime.timestamp(),timestamps[timerange],Moon_hori_offset[timerange])
+   
+    [_,I] = np.min(np.abs(xvalue)-H_offset)
 
-        "Project 'r_MATS_2_Moon' ontop pointing H-offset and V-offset plane"
-        Moon_r_V_offset_plane[t] = r_MATS_2_Moon_norm[t] - \
-            dot(r_MATS_2_Moon_norm[t], r_V_offset_normal[t]) * r_V_offset_normal[t]
-        Moon_r_H_offset_plane[t] = r_MATS_2_Moon_norm[t] - \
-            dot(r_MATS_2_Moon_norm[t], r_H_offset_normal[t]) * r_H_offset_normal[t]
+    SpottedMoonList.append({'Date': str(crosstime), 'V-offset': Moon_vert_offset[t], 'H-offset': Moon_hori_offset[t],
+                                        'long_MATS': float(long_MATS[t]), 'lat_MATS': float(lat_MATS[t]), 'Dec': moonpos_ra_dec[1].degrees, 'RA': moonpos_ra_dec[0].degrees,
+                                        'Dec FOV': Dec_optical_axis[t], 'RA FOV': RA_optical_axis[t]})        
 
-        "Dot product to get the Vertical and Horizontal angle offset of the Moon"
-        Moon_vert_offset[t] = arccos(dot(optical_axis[t], Moon_r_V_offset_plane[t]) / (
-            norm(optical_axis[t])*norm(Moon_r_V_offset_plane[t]))) / pi*180
-        Moon_hori_offset[t] = arccos(dot(optical_axis[t], Moon_r_H_offset_plane[t]) / (
-            norm(optical_axis[t])*norm(Moon_r_H_offset_plane[t]))) / pi*180
+    
 
-        "Get the offset angle sign correct"
-        if(dot(cross(optical_axis[t], Moon_r_V_offset_plane[t]), negative_normal_orbit[t, 0:3]) > 0):
-            Moon_vert_offset[t] = -Moon_vert_offset[t]
-        if(dot(cross(optical_axis[t], Moon_r_H_offset_plane[t]), r_H_offset_normal[t]) > 0):
-            Moon_hori_offset[t] = -Moon_hori_offset[t]
 
-        "Angle between orbital plane and moon"
-        angle_between_orbital_plane_and_moon[t] = arccos(dot(
-            r_MATS_2_Moon_norm[t], Moon_r_orbital_plane[t]) / norm(Moon_r_orbital_plane[t])) / pi*180
 
-        if(t*timestep % log_timestep == 0 or t == 1):
-            Logger.debug(
-                'angle_between_orbital_plane_and_moon [degrees]: '+str(angle_between_orbital_plane_and_moon[t]))
-            Logger.debug('Moon_vert_offset [degrees]: '+str(Moon_vert_offset[t]))
-            Logger.debug('Moon_hori_offset [degrees]: '+str(Moon_hori_offset[t]))
+    #     #print('angle_between_orbital_plane_and_moon = ' + str(angle_between_orbital_plane_and_moon[t]))
 
-        #print('angle_between_orbital_plane_and_moon = ' + str(angle_between_orbital_plane_and_moon[t]))
+    #     if(t != 0):
+    #         "Check that the Moon is entering at V-offset degrees and within the H-offset angle"
 
-        if(t != 0):
-            "Check that the Moon is entering at V-offset degrees and within the H-offset angle"
-            if(Moon_vert_offset[t] <= V_offset and Moon_vert_offset[t-1] > V_offset and abs(Moon_hori_offset[t]) < H_offset):
+    #             Logger.debug('')
+    #             Logger.debug('!!!!!!!!Moon available!!!!!!!!!!')
+    #             Logger.debug('t (loop iteration number): '+str(t))
+    #             Logger.debug('Current time: '+str(current_time))
+    #             Logger.debug('Orbital Period in s: '+str(MATS_P[t]))
+    #             Logger.debug('Vector to MATS [km]: '+str(r_MATS[t, 0:3]))
+    #             Logger.debug('Latitude in radians: '+str(lat_MATS[t]))
+    #             Logger.debug('Longitude in radians: '+str(long_MATS[t]))
 
-                Logger.debug('')
-                Logger.debug('!!!!!!!!Moon available!!!!!!!!!!')
-                Logger.debug('t (loop iteration number): '+str(t))
-                Logger.debug('Current time: '+str(current_time))
-                Logger.debug('Orbital Period in s: '+str(MATS_P[t]))
-                Logger.debug('Vector to MATS [km]: '+str(r_MATS[t, 0:3]))
-                Logger.debug('Latitude in radians: '+str(lat_MATS[t]))
-                Logger.debug('Longitude in radians: '+str(long_MATS[t]))
+    #             if(yaw_correction == True):
+    #                 Logger.debug('ascending_node: '+str(ascending_node))
+    #                 Logger.debug('arg_of_lat [degrees]: '+str(arg_of_lat))
+    #                 Logger.debug('yaw_offset_angle [degrees]: '+str(yaw_offset_angle))
 
-                if(yaw_correction == True):
-                    Logger.debug('ascending_node: '+str(ascending_node))
-                    Logger.debug('arg_of_lat [degrees]: '+str(arg_of_lat))
-                    Logger.debug('yaw_offset_angle [degrees]: '+str(yaw_offset_angle))
+    #             Logger.debug(
+    #                 'angle_between_orbital_plane_and_moon [degrees]: '+str(angle_between_orbital_plane_and_moon[t]))
+    #             Logger.debug('Moon_vert_offset [degrees]: '+str(Moon_vert_offset[t]))
+    #             Logger.debug('Moon_hori_offset [degrees]: '+str(Moon_hori_offset[t]))
+    #             Logger.debug('normal_orbit: '+str(-negative_normal_orbit[t, 0:3]))
+    #             Logger.debug('r_V_offset_normal: '+str(r_V_offset_normal[t, 0:3]))
+    #             Logger.debug('r_H_offset_normal: '+str(r_H_offset_normal[t, 0:3]))
+    #             Logger.debug('optical_axis: '+str(optical_axis[t, 0:3]))
 
-                Logger.debug(
-                    'angle_between_orbital_plane_and_moon [degrees]: '+str(angle_between_orbital_plane_and_moon[t]))
-                Logger.debug('Moon_vert_offset [degrees]: '+str(Moon_vert_offset[t]))
-                Logger.debug('Moon_hori_offset [degrees]: '+str(Moon_hori_offset[t]))
-                Logger.debug('normal_orbit: '+str(-negative_normal_orbit[t, 0:3]))
-                Logger.debug('r_V_offset_normal: '+str(r_V_offset_normal[t, 0:3]))
-                Logger.debug('r_H_offset_normal: '+str(r_H_offset_normal[t, 0:3]))
-                Logger.debug('optical_axis: '+str(optical_axis[t, 0:3]))
+    #             Logger.debug('')
 
-                Logger.debug('')
+    #             SpottedMoonList.append({'Date': str(current_time), 'V-offset': Moon_vert_offset[t], 'H-offset': Moon_hori_offset[t],
+    #                                     'long_MATS': float(long_MATS[t]), 'lat_MATS': float(lat_MATS[t]), 'Dec': Dec_Moon, 'RA': RA_Moon,
+    #                                     'Dec FOV': Dec_optical_axis[t], 'RA FOV': RA_optical_axis[t]})
 
-                SpottedMoonList.append({'Date': str(current_time), 'V-offset': Moon_vert_offset[t], 'H-offset': Moon_hori_offset[t],
-                                        'long_MATS': float(long_MATS[t]), 'lat_MATS': float(lat_MATS[t]), 'Dec': Dec_Moon, 'RA': RA_Moon,
-                                        'Dec FOV': Dec_optical_axis[t], 'RA FOV': RA_optical_axis[t]})
+    #             Logger.debug('Jump ahead half an orbit in time')
+    #             "Skip ahead half an orbit"
+    #             current_time = current_time+DT.timedelta(seconds=MATS_P[t].item()/2)
+    #             Logger.debug('Current time: '+str(current_time))
+    #             Logger.debug('')
 
-                Logger.debug('Jump ahead half an orbit in time')
-                "Skip ahead half an orbit"
-                current_time = current_time+DT.timedelta(seconds=MATS_P[t].item()/2)
-                Logger.debug('Current time: '+str(current_time))
-                Logger.debug('')
+    #     "To be able to make time skips when the moon is far outside the orbital plane of MATS"
+    #     if((angle_between_orbital_plane_and_moon[t] > H_offset and yaw_correction == False) or
+    #             angle_between_orbital_plane_and_moon[t] > H_offset+abs(Timeline_settings['yaw_amplitude']) and yaw_correction == True):
 
-        "To be able to make time skips when the moon is far outside the orbital plane of MATS"
-        if((angle_between_orbital_plane_and_moon[t] > H_offset and yaw_correction == False) or
-                angle_between_orbital_plane_and_moon[t] > H_offset+abs(Timeline_settings['yaw_amplitude']) and yaw_correction == True):
+    #         current_time = current_time+DT.timedelta(seconds= H_offset/4 / 360 * Moon_orbital_period)
+    #         # if( t*timestep % floor(log_timestep/400) == 0 ):
+    #         Logger.debug('')
+    #         Logger.debug(
+    #             'angle_between_orbital_plane_and_moon [degrees]: '+str(angle_between_orbital_plane_and_moon[t]))
+    #         Logger.debug('Moon currently not visible -> jump ahead')
+    #         Logger.debug('current_time after jump is is: '+str(current_time))
 
-            current_time = current_time+DT.timedelta(seconds= H_offset/4 / 360 * Moon_orbital_period)
-            # if( t*timestep % floor(log_timestep/400) == 0 ):
-            Logger.debug('')
-            Logger.debug(
-                'angle_between_orbital_plane_and_moon [degrees]: '+str(angle_between_orbital_plane_and_moon[t]))
-            Logger.debug('Moon currently not visible -> jump ahead')
-            Logger.debug('current_time after jump is is: '+str(current_time))
+    #         t = t + 1
+    #     else:
+    #         t = t + 1
+    #         current_time = current_time+DT.timedelta(seconds=timestep)
 
-            t = t + 1
-        else:
-            t = t + 1
-            current_time = current_time+DT.timedelta(seconds=timestep)
-
-    Logger.info('End of simulation for Mode124')
-    Logger.debug('SpottedMoonList: '+str(SpottedMoonList))
+    # Logger.info('End of simulation for Mode124')
+    # Logger.debug('SpottedMoonList: '+str(SpottedMoonList))
 
     return SpottedMoonList
 
