@@ -45,7 +45,7 @@ def test_timeline_get():
     configfile_test = get_test_configfile()
     configfile_test.OPT_Config_File['Timeline_settings']['intrument_look_vector']['x'] = -1
     configfile_test.OPT_Config_File['Mode124_settings']['pointing_altitude'] = 92000
-    configfile_test.OPT_Config_File['Mode124_settings']['timestep'] = 60
+    configfile_test.OPT_Config_File['Mode124_settings']['timestep'] = 120
 
     # Create a Science Mode Timeline (.json file) depending on the settings in the Configuration File
     configfile_test.Timeline_gen()
