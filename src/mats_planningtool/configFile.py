@@ -43,15 +43,15 @@ class configFile:
         #     + self.OPT_Config_File["Mode120_settings"]["TimeSkip"]["seconds"]
         # )
 
-        self.OPT_Config_File["Mode121_122_123_settings"]["TimeToConsider"][
-            "TimeToConsider"
-        ] = (
-            self.OPT_Config_File["Mode121_122_123_settings"]["TimeToConsider"]["hours"]
-            * 3600
-            + self.OPT_Config_File["Mode121_122_123_settings"]["TimeToConsider"][
-                "seconds"
-            ]
-        )
+        # self.OPT_Config_File["Mode121_122_123_settings"]["TimeToConsider"][
+        #     "TimeToConsider"
+        # ] = (
+        #     self.OPT_Config_File["Mode121_122_123_settings"]["TimeToConsider"]["hours"]
+        #     * 3600
+        #     + self.OPT_Config_File["Mode121_122_123_settings"]["TimeToConsider"][
+        #         "seconds"
+        #     ]
+        # )
 
         # self.OPT_Config_File["Mode121_122_123_settings"]["TimeSkip"]["TimeSkip"] = (
         #     self.OPT_Config_File["Mode121_122_123_settings"]["TimeSkip"]["hours"] * 3600

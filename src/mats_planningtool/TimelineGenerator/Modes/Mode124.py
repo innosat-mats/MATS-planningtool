@@ -66,7 +66,7 @@ def date_calculator(configFile):
     Saves the date and parameters regarding the spotting of the Moon to the variable SpottedMoonList.
 
     Arguments:
-        configFile: 
+        configFile (obj): input config file
 
     Returns:
         SpottedMoonList ((:obj:`list` of :obj:`dict`)) or (str): A list containing dictionaries containing parameters for each time the Moon is spotted. Or just a date depending on 'automatic' in *Mode124_settings*.

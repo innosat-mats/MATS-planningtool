@@ -37,10 +37,10 @@ def CheckConfigFile(configFile):
     Mode100_settings = configFile.Mode100_settings()
     Mode110_settings = configFile.Mode110_settings()
     Mode120_settings = configFile.Mode120_settings()
-    Mode121_settings = configFile.Mode121_settings()
-    Mode122_settings = configFile.Mode122_settings()
-    Mode123_settings = configFile.Mode123_settings()
-    Mode121_122_123_settings = configFile.Mode121_122_123_settings()
+    #Mode121_settings = configFile.Mode121_settings()
+    #Mode122_settings = configFile.Mode122_settings()
+    #Mode123_settings = configFile.Mode123_settings()
+    #Mode121_122_123_settings = configFile.Mode121_122_123_settings()
     Mode124_settings = configFile.Mode124_settings()
     Mode130_settings = configFile.Mode130_settings()
     Mode131_settings = configFile.Mode131_settings()
@@ -394,149 +394,149 @@ def CheckConfigFile(configFile):
             Logger.error("Mode120_settings['CCDSELs'] element != [1,2,4,8,16,32]")
             raise ValueError
 
-    if not (
-        -60000 <= Mode121_122_123_settings["pointing_altitude"] <= 230000
-        and type(Mode121_122_123_settings["pointing_altitude"]) == int
-    ):
-        Logger.error("Mode121_122_123_settings['pointing_altitude']")
-        raise ValueError
-    if not (
-        0 < Mode121_122_123_settings["timestep"] <= 10
-        and type(Mode121_122_123_settings["timestep"]) == int
-    ):
-        Logger.error("Mode121_122_123_settings['timestep']")
-        raise ValueError
-    if not (
-        Mode121_122_123_settings["freeze_start"]
-        >= Timeline_settings["pointing_stabilization"]
-        + 12 * Timeline_settings["CMD_separation"]
-        and type(Mode121_122_123_settings["freeze_start"]) == int
-    ):
-        Logger.error("Mode121_122_123_settings")
-        raise TypeError
-    if not (
-        0 < abs(Mode121_122_123_settings["V_FOV"]) <= 5
-        and 0 < abs(Mode121_122_123_settings["H_FOV"]) <= 10
-    ):
-        Logger.error(
-            "Mode121_122_123_settings['V_FOV'] or Mode121_122_123_settings['H_FOV']"
-        )
-        raise ValueError
-    if not (type(Mode121_122_123_settings["Vmag"]) == str):
-        Logger.error("Mode121_122_123_settings['Vmag']")
-        raise TypeError
-    if not (
-        0
-        < Mode121_122_123_settings["SnapshotTime"]
-        < Mode121_122_123_settings["freeze_duration"] - 10
-        and type(Mode121_122_123_settings["SnapshotTime"]) == int
-    ):
-        Logger.error("Mode121_122_123_settings['SnapshotTime']")
-        raise ValueError
-    if not (
-        Timeline_settings["StandardPointingAltitude"]
-        < Mode121_122_123_settings["pointing_altitude"]
-        and type(Mode121_122_123_settings["pointing_altitude"]) == int
-    ):
-        Logger.error("Mode121_122_123_settings['pointing_altitude']")
-        raise ValueError
-    if not (
-        0 < Mode121_122_123_settings["TimeSkip"]["TimeSkip"] <= 2 * 3600 * 24
-        and (
-            type(Mode121_122_123_settings["TimeSkip"]["TimeSkip"]) == int
-            or type(Mode121_122_123_settings["TimeSkip"]["TimeSkip"]) == float
-        )
-    ):
-        Logger.error("Mode121_122_123_settings['TimeSkip']['TimeSkip']")
-        raise ValueError
-    if not (
-        0 <= Mode121_122_123_settings["SnapshotSpacing"]
-        and type(Mode121_122_123_settings["SnapshotSpacing"]) == int
-    ):
-        Logger.error("Mode121_122_123_settings['SnapshotSpacing']")
-        raise ValueError
-    if not (
-        Mode121_122_123_settings["SnapshotSpacing"] * 6
-        + Mode121_122_123_settings["SnapshotTime"]
-        < Mode121_122_123_settings["freeze_duration"]
-        <= 3600
-    ):
-        Logger.error(
-            "Mode121_122_123_settings['SnapshotSpacing'] * 5 + Mode121_122_123_settings['SnapshotTime'] > Mode121_122_123_settings['freeze_duration'] or Mode121_122_123_settings['freeze_duration'] > 3600"
-        )
-        raise ValueError
-    if not (
-        Mode121_122_123_settings["TimeToConsider"]["TimeToConsider"] <= Timeline_settings["duration"]["duration"]
-    ):
-        Logger.error(
-            "Mode121_122_123_settings['TimeToConsider']['TimeToConsider'] > Timeline_settings['duration']['duration']"
-        )
-        raise ValueError
+    # if not (
+    #     -60000 <= Mode121_122_123_settings["pointing_altitude"] <= 230000
+    #     and type(Mode121_122_123_settings["pointing_altitude"]) == int
+    # ):
+    #     Logger.error("Mode121_122_123_settings['pointing_altitude']")
+    #     raise ValueError
+    # if not (
+    #     0 < Mode121_122_123_settings["timestep"] <= 10
+    #     and type(Mode121_122_123_settings["timestep"]) == int
+    # ):
+    #     Logger.error("Mode121_122_123_settings['timestep']")
+    #     raise ValueError
+    # if not (
+    #     Mode121_122_123_settings["freeze_start"]
+    #     >= Timeline_settings["pointing_stabilization"]
+    #     + 12 * Timeline_settings["CMD_separation"]
+    #     and type(Mode121_122_123_settings["freeze_start"]) == int
+    # ):
+    #     Logger.error("Mode121_122_123_settings")
+    #     raise TypeError
+    # if not (
+    #     0 < abs(Mode121_122_123_settings["V_FOV"]) <= 5
+    #     and 0 < abs(Mode121_122_123_settings["H_FOV"]) <= 10
+    # ):
+    #     Logger.error(
+    #         "Mode121_122_123_settings['V_FOV'] or Mode121_122_123_settings['H_FOV']"
+    #     )
+    #     raise ValueError
+    # if not (type(Mode121_122_123_settings["Vmag"]) == str):
+    #     Logger.error("Mode121_122_123_settings['Vmag']")
+    #     raise TypeError
+    # if not (
+    #     0
+    #     < Mode121_122_123_settings["SnapshotTime"]
+    #     < Mode121_122_123_settings["freeze_duration"] - 10
+    #     and type(Mode121_122_123_settings["SnapshotTime"]) == int
+    # ):
+    #     Logger.error("Mode121_122_123_settings['SnapshotTime']")
+    #     raise ValueError
+    # if not (
+    #     Timeline_settings["StandardPointingAltitude"]
+    #     < Mode121_122_123_settings["pointing_altitude"]
+    #     and type(Mode121_122_123_settings["pointing_altitude"]) == int
+    # ):
+    #     Logger.error("Mode121_122_123_settings['pointing_altitude']")
+    #     raise ValueError
+    # if not (
+    #     0 < Mode121_122_123_settings["TimeSkip"]["TimeSkip"] <= 2 * 3600 * 24
+    #     and (
+    #         type(Mode121_122_123_settings["TimeSkip"]["TimeSkip"]) == int
+    #         or type(Mode121_122_123_settings["TimeSkip"]["TimeSkip"]) == float
+    #     )
+    # ):
+    #     Logger.error("Mode121_122_123_settings['TimeSkip']['TimeSkip']")
+    #     raise ValueError
+    # if not (
+    #     0 <= Mode121_122_123_settings["SnapshotSpacing"]
+    #     and type(Mode121_122_123_settings["SnapshotSpacing"]) == int
+    # ):
+    #     Logger.error("Mode121_122_123_settings['SnapshotSpacing']")
+    #     raise ValueError
+    # if not (
+    #     Mode121_122_123_settings["SnapshotSpacing"] * 6
+    #     + Mode121_122_123_settings["SnapshotTime"]
+    #     < Mode121_122_123_settings["freeze_duration"]
+    #     <= 3600
+    # ):
+    #     Logger.error(
+    #         "Mode121_122_123_settings['SnapshotSpacing'] * 5 + Mode121_122_123_settings['SnapshotTime'] > Mode121_122_123_settings['freeze_duration'] or Mode121_122_123_settings['freeze_duration'] > 3600"
+    #     )
+    #     raise ValueError
+    # if not (
+    #     Mode121_122_123_settings["TimeToConsider"]["TimeToConsider"] <= Timeline_settings["duration"]["duration"]
+    # ):
+    #     Logger.error(
+    #         "Mode121_122_123_settings['TimeToConsider']['TimeToConsider'] > Timeline_settings['duration']['duration']"
+    #     )
+    #     raise ValueError
 
-    if not (
-        Mode121_122_123_settings["SnapshotSpacing"]
-        * (len(Mode121_settings["CCDSELs"]) - 1)
-        + Mode121_122_123_settings["SnapshotTime"]
-        < Mode121_122_123_settings["freeze_duration"]
-        <= 3600
-    ):
-        Logger.error(
-            "Mode121_122_123_settings['SnapshotSpacing'] * (len(Mode121_settings['CCDSELs'])-1) + Mode124_settings['SnapshotTime'] > Mode121_122_123_settings['freeze_duration'] or Mode121_122_123_settings['freeze_duration'] > 3600"
-        )
-        raise ValueError
+    # if not (
+    #     Mode121_122_123_settings["SnapshotSpacing"]
+    #     * (len(Mode121_settings["CCDSELs"]) - 1)
+    #     + Mode121_122_123_settings["SnapshotTime"]
+    #     < Mode121_122_123_settings["freeze_duration"]
+    #     <= 3600
+    # ):
+    #     Logger.error(
+    #         "Mode121_122_123_settings['SnapshotSpacing'] * (len(Mode121_settings['CCDSELs'])-1) + Mode124_settings['SnapshotTime'] > Mode121_122_123_settings['freeze_duration'] or Mode121_122_123_settings['freeze_duration'] > 3600"
+    #     )
+    #     raise ValueError
 
-    if not (type(Mode121_settings["CCDSELs"]) == list):
-        Logger.error("Mode121_settings['CCDSELs'] != list")
-        raise TypeError
-    for CCDSEL in Mode121_settings["CCDSELs"]:
-        if not (CCDSEL in [1, 2, 4, 8, 16, 32]):
-            Logger.error("Mode121_settings['CCDSELs'] element != [1,2,4,8,16,32]")
-            raise ValueError
+    # if not (type(Mode121_settings["CCDSELs"]) == list):
+    #     Logger.error("Mode121_settings['CCDSELs'] != list")
+    #     raise TypeError
+    # for CCDSEL in Mode121_settings["CCDSELs"]:
+    #     if not (CCDSEL in [1, 2, 4, 8, 16, 32]):
+    #         Logger.error("Mode121_settings['CCDSELs'] element != [1,2,4,8,16,32]")
+    #         raise ValueError
 
-    if not (type(Mode121_settings["start_date"]) == str):
-        Logger.error("Mode121_settings['start_date']")
-        raise TypeError
-    if not (type(Mode122_settings["start_date"]) == str):
-        Logger.error("Mode122_settings['start_date']")
-        raise TypeError
-    if not (type(Mode123_settings["start_date"]) == str):
-        Logger.error("Mode123_settings['start_date']")
-        raise TypeError
+    # if not (type(Mode121_settings["start_date"]) == str):
+    #     Logger.error("Mode121_settings['start_date']")
+    #     raise TypeError
+    # if not (type(Mode122_settings["start_date"]) == str):
+    #     Logger.error("Mode122_settings['start_date']")
+    #     raise TypeError
+    # if not (type(Mode123_settings["start_date"]) == str):
+    #     Logger.error("Mode123_settings['start_date']")
+    #     raise TypeError
 
-    if not (
-        0 <= Mode122_settings["Exp_Time_IR"]
-        and type(Mode122_settings["Exp_Time_IR"]) == int
-    ):
-        Logger.error("Mode122_settings['Exp_Time_IR']")
-        raise ValueError
-    if not (
-        0 <= Mode122_settings["Exp_Time_UV"]
-        and type(Mode122_settings["Exp_Time_UV"]) == int
-    ):
-        Logger.error("Mode122_settings['Exp_Time_UV']")
-        raise ValueError
-    if not (
-        0 <= Mode123_settings["Exp_Time_IR"]
-        and type(Mode123_settings["Exp_Time_IR"]) == int
-    ):
-        Logger.error("Mode123_settings['Exp_Time_IR']")
-        raise ValueError
-    if not (
-        0 <= Mode123_settings["Exp_Time_UV"]
-        and type(Mode123_settings["Exp_Time_UV"]) == int
-    ):
-        Logger.error("Mode123_settings['Exp_Time_UV']")
-        raise ValueError
+    # if not (
+    #     0 <= Mode122_settings["Exp_Time_IR"]
+    #     and type(Mode122_settings["Exp_Time_IR"]) == int
+    # ):
+    #     Logger.error("Mode122_settings['Exp_Time_IR']")
+    #     raise ValueError
+    # if not (
+    #     0 <= Mode122_settings["Exp_Time_UV"]
+    #     and type(Mode122_settings["Exp_Time_UV"]) == int
+    # ):
+    #     Logger.error("Mode122_settings['Exp_Time_UV']")
+    #     raise ValueError
+    # if not (
+    #     0 <= Mode123_settings["Exp_Time_IR"]
+    #     and type(Mode123_settings["Exp_Time_IR"]) == int
+    # ):
+    #     Logger.error("Mode123_settings['Exp_Time_IR']")
+    #     raise ValueError
+    # if not (
+    #     0 <= Mode123_settings["Exp_Time_UV"]
+    #     and type(Mode123_settings["Exp_Time_UV"]) == int
+    # ):
+    #     Logger.error("Mode123_settings['Exp_Time_UV']")
+    #     raise ValueError
 
-    if not (type(Mode121_settings["automatic"]) == bool):
-        Logger.error("Mode121_settings['automatic']")
-        raise TypeError
-    if not (type(Mode122_settings["automatic"]) == bool):
-        Logger.error("Mode122_settings['automatic']")
-        raise TypeError
-    if not (type(Mode123_settings["automatic"]) == bool):
-        Logger.error("Mode123_settings['automatic']")
-        raise TypeError
+    # if not (type(Mode121_settings["automatic"]) == bool):
+    #     Logger.error("Mode121_settings['automatic']")
+    #     raise TypeError
+    # if not (type(Mode122_settings["automatic"]) == bool):
+    #     Logger.error("Mode122_settings['automatic']")
+    #     raise TypeError
+    # if not (type(Mode123_settings["automatic"]) == bool):
+    #     Logger.error("Mode123_settings['automatic']")
+    #     raise TypeError
 
     if not (
         -60000 <= Mode124_settings["pointing_altitude"] <= 230000
