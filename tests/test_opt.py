@@ -45,7 +45,7 @@ def test_timeline_get():
     configfile_test = get_test_configfile()
     configfile_test.OPT_Config_File['Timeline_settings']['intrument_look_vector']['x'] = -1
     configfile_test.OPT_Config_File['Mode124_settings']['pointing_altitude'] = 92000
-    configfile_test.OPT_Config_File['Mode124_settings']['timestep'] = 120
+    configfile_test.OPT_Config_File['Mode124_settings']['timestep'] = 10
 
     # Create a Science Mode Timeline (.json file) depending on the settings in the Configuration File
     configfile_test.Timeline_gen()
@@ -53,7 +53,7 @@ def test_timeline_get():
 
 # def test_timeline_plotter():
 
-#     configfile_test = get_test_configfile()
+#     configfile_test = get_test_configfile(5)
 
 #     # Predict state and attitude dataconfig from the Science Mode Timeline and plot the results
 #     Data_MATS, Data_LP, Time, Time_OHB = configfile_test.Timeline_Plotter(

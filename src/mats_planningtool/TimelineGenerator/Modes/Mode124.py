@@ -200,21 +200,17 @@ def date_calculator(configFile):
                     if (((abs(Moon_hori_offset[itime]))< horisontal_filter) and (abs(Moon_vert_offset[itime])< vert_filter))])
 
     moon_found = np.where(np.diff(possibles)>2)[0] #check if there is a gap in the indeces larger than 2
+    moon_found = np.insert(moon_found,0,0)
+    moon_found = np.append(moon_found,len(possibles))
 
-    xvalue = np.zeros((len(moon_found)+1,1)) #array to hold horizontal offset in degreess
+
+    xvalue = np.zeros((len(moon_found),1)) #array to hold horizontal offset in degreess
 
     crosstime = []
-    timerange=possibles[0:moon_found[0]+1]
-    crosstime.append(DT.datetime.fromtimestamp(np.interp(V_offset,Moon_vert_offset[timerange,0][::-1],timestamps[timerange,0][::-1])))
-    xvalue[0]=np.interp(crosstime[0].timestamp(),timestamps[timerange,0],Moon_hori_offset[timerange,0])
     for i in range(len(moon_found)-1):
-        timerange=possibles[moon_found[i]+1:moon_found[i+1]+1]
+        timerange=possibles[moon_found[i]:moon_found[i+1]]
         crosstime.append(DT.datetime.fromtimestamp(np.interp(V_offset,Moon_vert_offset[timerange,0][::-1],timestamps[timerange,0][::-1])))
-        xvalue[i+1]=np.interp(crosstime[i+1].timestamp(),timestamps[timerange,0],Moon_hori_offset[timerange,0])
-    timerange=possibles[moon_found[-1]+1:]
-    crosstime.append(DT.datetime.fromtimestamp(np.interp(V_offset,Moon_vert_offset[timerange,0][::-1],timestamps[timerange,0][::-1])))
-    xvalue[-1]=np.interp(crosstime[-1].timestamp(),timestamps[timerange,0],Moon_hori_offset[timerange,0])
-
+        xvalue[i]=np.interp(crosstime[i].timestamp(),timestamps[timerange,0],Moon_hori_offset[timerange,0])
 
     for i in range(len(crosstime)):
         Satellite_dict_at_freezepoint = Satellite_Simulator(

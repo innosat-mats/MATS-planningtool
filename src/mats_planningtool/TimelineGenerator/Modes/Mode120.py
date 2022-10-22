@@ -62,10 +62,10 @@ def Mode120(Occupied_Timeline, configFile):
 
 
 def Mode120_date_calculator(configFile):
-    """Subfunction, Simulates MATS FOV and stars.
+    """Subfunction, Simulates MATS FOV and the stars.
 
-    Determines when stars are entering the FOV at an vertical offset-angle equal to *#V-offset*, and also being 
-    located at a horizontal off-set angle equal to less than *#H-offset*, when pointing at the LP located at an altitude equal to *#pointing_altitude*. \n
+    Determines when stars are in the FOV at an vertical offset-angle equal to *#V-offset* and
+    when pointing at an LP altitude equal to *#pointing_altitude*. \n
 
     (# as defined in the *Configuration File*). \n
 
@@ -73,10 +73,11 @@ def Mode120_date_calculator(configFile):
     Also saves relevant data to an .csv file located in Output/.
 
     Arguments:
+        configFile (obj): input config file
 
     Returns:
         SpottedStarList ((:obj:`list` of :obj:`dict`)) or (str): A list containing dictionaries containing parameters for each time a star is spotted.
-
+        
     """
 
     Timeline_settings = configFile.Timeline_settings()
@@ -91,6 +92,7 @@ def Mode120_date_calculator(configFile):
     "Constants"
     V_offset = Mode120_settings['V_offset'][Offset_Index]
     H_offset = Mode120_settings['H_offset'][Offset_Index]
+    priority = Mode120_settings['Priority']
 
     pointing_altitude = Mode120_settings['pointing_altitude']/1000
     yaw_correction = Timeline_settings['yaw_correction']
@@ -101,9 +103,6 @@ def Mode120_date_calculator(configFile):
 
     TLE = configFile.getTLE()
     Logger.debug('TLE used: '+TLE[0]+TLE[1])
-
-    TimeSkips = 0
-    Timeskip = Mode120_settings['TimeSkip']['TimeSkip']
 
     ####################################################
 
@@ -148,9 +147,6 @@ def Mode120_date_calculator(configFile):
     for st in range(nstars): 
         st_vec.append(earth.at(ts_initial).observe(bright_stars)[st].position.km)
         
-
-
-
     ##### Prepare the .csv file output #####
     star_list_excel = []
     star_list_excel.append(['Name'])
@@ -188,8 +184,15 @@ def Mode120_date_calculator(configFile):
     datetimes = []
     timestamps = zeros((timesteps, 1))
 
+    "Prepare the output"
+    SpottedStarList = []
+
 
     ######### SIMULATION ################
+
+    Logger.info('')
+    Logger.info('Start of simulation of MATS for Mode120')
+
     t = 0
     while(current_time < initial_time+DT.timedelta(seconds = duration)):
     
@@ -207,20 +210,12 @@ def Mode120_date_calculator(configFile):
         ############# End of Calculations of orbital and pointing vectors #####
 
         current_time_datetime = current_time
-        year = current_time_datetime.year
-        month = current_time_datetime.month
-        day = current_time_datetime.day
-        hour = current_time_datetime.hour
-        minute = current_time_datetime.minute
-        second = current_time_datetime.second + current_time_datetime.microsecond/1000000
-
-        current_time_skyfield = ts.utc(year, month, day, hour, minute, second)
 
         #### Caluclate star positions on CCD #########
 
         for nstar in range(nstars): 
             inst_xyz=np.matmul(Satellite_dict['InvRotMatrix'],st_vec[nstar])
-            [xang,yang]=xyz2radec(inst_xyz,positivera=False)
+            [xang,yang]=xyz2radec(inst_xyz,positivera=False,deg=True)
             stars_hori_offset[nstar,t] = xang
             stars_vert_offset[nstar,t] = yang
             stars_tot_offset[nstar,t]=np.rad2deg(np.arccos(np.dot(optical_axis[t],st_vec[nstar]/norm(st_vec[nstar]))))
@@ -238,253 +233,57 @@ def Mode120_date_calculator(configFile):
     possibles=np.array([(istar,itime) for istar in range(nstars) for itime in range(len(timestamps))  
                     if (((abs(stars_hori_offset[istar,itime]))< horisontal_filter) and (abs(stars_vert_offset[istar,itime])<vert_filter) )])
 
-    # print("Available stars")
-    # print("StarID     Mag       RA         Dec      X-value    Crosstime")
     for posstar in np.unique(possibles[:,0]):
         possible=np.array([possible for possible in possibles if possible[0]==posstar ])
         star_found = np.where(np.diff(possible[:,1])>2)[0] #check if there is a gap in the indeces larger than 2
-        xvalue = np.zeros((len(star_found)+1,1)) #array to hold horizontal offset in degreess
-
+        star_found = np.insert(star_found,0,0)
+        star_found = np.append(star_found,len(possible))
+        xvalue = np.zeros((len(star_found),1)) #array to hold horizontal offset in degreess
+        
         crosstime = []
-        timerange=possible[0:star_found[0]+1]
-        crosstime.append(DT.datetime.fromtimestamp(np.interp(V_offset,stars_vert_offset[timerange,0][::-1],timestamps[timerange,0][::-1])))
-        xvalue[0]=np.interp(crosstime[0].timestamp(),timestamps[timerange,0],stars_hori_offset[timerange,0])
         for i in range(len(star_found)-1):
-            timerange=possibles[star_found[i]+1:star_found[i+1]+1]
-            crosstime.append(DT.datetime.fromtimestamp(np.interp(V_offset,stars_vert_offset[timerange,0][::-1],timestamps[timerange,0][::-1])))
-            xvalue[i+1]=np.interp(crosstime[i+1].timestamp(),timestamps[timerange,0],stars_hori_offset[timerange,0])
-        timerange=possibles[star_found[-1]+1:]
-        crosstime.append(DT.datetime.fromtimestamp(np.interp(V_offset,stars_vert_offset[timerange,0][::-1],timestamps[timerange,0][::-1])))
-        xvalue[-1]=np.interp(crosstime[-1].timestamp(),timestamps[timerange,0],stars_hori_offset[timerange,0])
+            timerange=possibles[star_found[i]:star_found[i+1]]
+            crosstime.append(DT.datetime.fromtimestamp(np.interp(V_offset,stars_vert_offset[0,timerange[:,1]][::-1],timestamps[timerange[:,1],0][::-1])))
+            xvalue[i]=np.interp(crosstime[i].timestamp(),timestamps[timerange[:,1],0],stars_hori_offset[0,timerange[:,1]])
 
-
-        timerange=slice(possible[0][1],possible[-1][1])
-        #print (timerange)
-        crosstime=DT.datetime.fromtimestamp(np.interp(0,stars_vert_offset[posstar,timerange][-1::-1],timestamps[timerange][-1::-1]))
-        xvalue=np.interp(crosstime.timestamp(),timestamps[timerange],stars_hori_offset[posstar,timerange])
-        mag=df.loc[df.index[posstar]].magnitude
-
+        star = df.loc[df.index[posstar]]
         # print("{:6d} {:7.2f} {:10.3f} {:10.3f}  {:10.5f}  {}".format (posstar, mag,
-        #                                                 Mats(crosstime).FOV_ra,Mats(crosstime).FOV_dec,xvalue, crosstime))
+        #                                                 Mats(crosstime).FOV_ra,Mats(crosstime).FOV_dec,xvalue, crosstime))  
+        for i in range(len(crosstime)):
 
+            Satellite_dict_at_freezepoint = Satellite_Simulator(
+            MATS_skyfield, crosstime[i], Timeline_settings, pointing_altitude, LogFlag, Logger)
 
+            lat_MATS = Satellite_dict_at_freezepoint['Latitude [degrees]']
+            long_MATS = Satellite_dict_at_freezepoint['Longitude [degrees]']
 
+            optical_axis = Satellite_dict_at_freezepoint['OpticalAxis']
+            Dec_optical_axis = Satellite_dict_at_freezepoint['Dec_OpticalAxis [degrees]']
+            RA_optical_axis = Satellite_dict_at_freezepoint['RA_OpticalAxis [degrees]']
 
-    result = Vizier(columns=['all'], row_limit=3000).query_constraints(
-        catalog='I/239/hip_main', Vmag=Mode120_settings['Vmag'])
-    star_cat = result[0]
-    ROWS = star_cat[0][:].count()
-    stars = []
-    stars_dec = zeros((ROWS, 1))
-    stars_ra = zeros((ROWS, 1))
+            "Add the spotted star to the exception list and timestamp it"
+            spotted_star_name.append(star.name)
+            spotted_star_timestamp.append(crosstime)
 
-    "Insert stars into Pyephem"
-    for t in range(ROWS):
-        s = "{},f|M|F7,{},{},{},2000/01/01 11:58:55.816"
-        s = s.format(star_cat[t]['HIP'], deg2HMS(ra=star_cat[t]['_RA.icrs']), deg2HMS(
-            dec=star_cat[t]['_DE.icrs']), star_cat[t]['Vmag'])
-        stars.append(ephem.readdb(s))
-        stars[t].compute(epoch='2000/01/01 11:58:55.816')
-        stars_dec[t] = stars[t].dec
-        stars_ra[t] = stars[t].ra
+            "Append all relevent data for the star"
+            star_list_excel[0].append(star.name)
+            star_list_excel[1].append(str(crosstime))
+            star_list_excel[2].append(str(float(long_MATS)))
+            star_list_excel[3].append(str(float(lat_MATS)))
+            star_list_excel[4].append(str(star.magnitude))
+            star_list_excel[5].append(str(xvalue[i]))
+            star_list_excel[6].append(str(V_offset))
+            star_list_excel[11].append(str(Dec_optical_axis))
+            star_list_excel[12].append(str(RA_optical_axis))
+            star_list_excel[13].append(str(star.dec_degrees))
+            star_list_excel[14].append(str(star.ra_degrees))
 
-    Logger.debug('')
-    Logger.debug('List of stars used: '+str(star_cat))
-    Logger.debug('')
+            "Log data of star relevant to filtering process"
 
-    "Calculate unit-vectors of stars"
-    stars_x = cos(stars_dec) * cos(stars_ra)
-    stars_y = cos(stars_dec) * sin(stars_ra)
-    stars_z = sin(stars_dec)
-    stars_r = array([stars_x, stars_y, stars_z])
-    stars_r = stars_r.transpose()
-
-    "Prepare the .csv file output"
-    star_list_excel = []
-    star_list_excel.append(['Name'])
-    star_list_excel.append(['t1'])
-    star_list_excel.append(['long'])
-    star_list_excel.append(['lat'])
-    star_list_excel.append(['mag'])
-    star_list_excel.append(['H_offset'])
-    star_list_excel.append(['V_offset'])
-    star_list_excel.append(['e_Hpmag'])
-    star_list_excel.append(['Hpscat'])
-    star_list_excel.append(['o_Hpmag'])
-    star_list_excel.append(['Classification'])
-    star_list_excel.append(['Optical Axis Dec (ICRS J2000, eq)'])
-    star_list_excel.append(['Optical Axis RA (ICRS J2000, eq)'])
-    star_list_excel.append(['Star Dec (ICRS J2000, eq)'])
-    star_list_excel.append(['Star RA (ICRS J2000, eq)'])
-
-    "Prepare the output"
-    SpottedStarList = []
-
-    "Pre-allocate space"
-    lat_MATS = zeros((timesteps, 1))
-    long_MATS = zeros((timesteps, 1))
-    optical_axis = zeros((timesteps, 3))
-    stars_r_V_offset_plane = zeros((ROWS, 3))
-    stars_r_H_offset_plane = zeros((ROWS, 3))
-    stars_vert_offset = zeros((timesteps, ROWS))
-    stars_hori_offset = zeros((timesteps, ROWS))
-    stars_offset = zeros((timesteps, ROWS))
-    r_V_offset_normal = zeros((timesteps, 3))
-    r_H_offset_normal = zeros((timesteps, 3))
-    star_counter = 0
-    spotted_star_name = []
-    spotted_star_timestamp = []
-    spotted_star_timecounter = []
-    skip_star_list = []
-    MATS_P = zeros((timesteps, 1))
-
-    Dec_optical_axis = zeros((timesteps, 1))
-    RA_optical_axis = zeros((timesteps, 1))
-
-    angle_between_orbital_plane_and_star = zeros((timesteps, ROWS))
-
-    MATS_skyfield = api.EarthSatellite(TLE[0], TLE[1])
-
-    t = 0
-
-    
-
-    Logger.info('')
-    Logger.info('Start of simulation of MATS for Mode120')
-    ################## Start of Simulation ########################################
-    "Loop and calculate the relevant angle of each star to each direction of MATS's FOV"
-    while(current_time-initial_time < DT.timedelta(seconds=duration)):
-
-        #current_time = ephem.Date(date+ephem.second*timestep*t)
-
-        if(t*timestep % log_timestep == 0):
-            LogFlag = True
-        else:
-            LogFlag = False
-
-        Satellite_dict = Satellite_Simulator(
-            MATS_skyfield, current_time, Timeline_settings, pointing_altitude, LogFlag, Logger)
-
-        MATS_P[t] = Satellite_dict['OrbitalPeriod [s]']
-        lat_MATS[t] = Satellite_dict['Latitude [degrees]']
-        long_MATS[t] = Satellite_dict['Longitude [degrees]']
-        optical_axis[t] = Satellite_dict['OpticalAxis']
-        Dec_optical_axis[t] = Satellite_dict['Dec_OpticalAxis [degrees]']
-        RA_optical_axis[t] = Satellite_dict['RA_OpticalAxis [degrees]']
-        r_H_offset_normal[t] = Satellite_dict['Normal2H_offset']
-        r_V_offset_normal[t] = Satellite_dict['Normal2V_offset']
-
-        OrbitalAngularVelocity = 360 / MATS_P[t]
-        AngularChangePerTimestep = OrbitalAngularVelocity * timestep
-
-        ###################### Star-mapper ####################################
-
-        if(t != 0):
-            "Check position of stars relevant to pointing direction"
-            for x in range(ROWS):
-
-                "Skip star if it is not visible during this epoch"
-                if(stars[x].name in skip_star_list):
-                    continue
-
-                "Check if a star has already been spotted during this orbit."
-                if(stars[x].name in spotted_star_name):
-
-                    time_until_far_outside_of_FOV = DT.timedelta(seconds=180*MATS_P[t].item()/360)
-
-                    "If enough time has passed (half an orbit), the star can be removed from the exception list"
-                    if((current_time - spotted_star_timestamp[spotted_star_name.index(stars[x].name)]) >= time_until_far_outside_of_FOV):
-                        spotted_star_timestamp.pop(
-                            spotted_star_name.index(stars[x].name))
-                        spotted_star_timecounter.pop(
-                            spotted_star_name.index(stars[x].name))
-                        spotted_star_name.remove(stars[x].name)
-                    continue
-
-                "Total angle offset of the star compared to MATS's FOV"
-                stars_offset[t][x] = arccos(dot(
-                    optical_axis[t], stars_r[0][x]) / (norm(optical_axis[t]) * norm(stars_r[0][x]))) / pi*180
-
-                "Project 'star vectors' ontop pointing H-offset and V-offset plane"
-                stars_r_V_offset_plane[x] = stars_r[0][x] - (
-                    dot(stars_r[0][x], r_V_offset_normal[t, 0:3]) * r_V_offset_normal[t, 0:3])
-
-                stars_r_H_offset_plane[x] = stars_r[0][x] - \
-                    (dot(stars_r[0][x], r_H_offset_normal[t]) * r_H_offset_normal[t])
-
-                "Dot product to get the Vertical and Horizontal angle offset of the star in the FOV"
-                stars_vert_offset[t][x] = arccos(dot(optical_axis[t], stars_r_V_offset_plane[x]) / (
-                    norm(optical_axis[t]) * norm(stars_r_V_offset_plane[x]))) / pi*180
-                stars_hori_offset[t][x] = arccos(dot(optical_axis[t], stars_r_H_offset_plane[x]) / (
-                    norm(optical_axis[t]) * norm(stars_r_H_offset_plane[x]))) / pi*180
-
-                "Determine sign of off-set angle where positive V-offset angle is when looking at higher altitude"
-                if(dot(cross(optical_axis[t], stars_r_V_offset_plane[x]), r_V_offset_normal[t, 0:3]) > 0):
-                    stars_vert_offset[t][x] = -stars_vert_offset[t][x]
-                if(dot(cross(optical_axis[t], stars_r_H_offset_plane[x]), r_H_offset_normal[t]) > 0):
-                    stars_hori_offset[t][x] = -stars_hori_offset[t][x]
-
-                "To be able to skip stars far outside the orbital plane of MATS"
-                if(t == 1):
-                    "For first loop of stars, calculate angle between stars and orbital plane"
-                    angle_between_orbital_plane_and_star[t][x] = arccos(
-                        dot(stars_r[0][x], stars_r_V_offset_plane[x]) / norm(stars_r_V_offset_plane[x])) / pi*180
-
-                    "Make exception list for stars not visible during this epoch (relativiely far outside of orbital plane)"
-                    if((abs(angle_between_orbital_plane_and_star[t][x]) > H_offset+(duration)/(365*24*3600)*360 and yaw_correction == False) or
-                       (abs(angle_between_orbital_plane_and_star[t][x]) > H_offset + abs(Timeline_settings['yaw_amplitude']) + (duration)/(365*24*3600)*360 and yaw_correction == True)):
-
-                        Logger.debug('Skip star: '+stars[x].name+', with angle_between_orbital_plane_and_star of: '+str(
-                            angle_between_orbital_plane_and_star[t][x])+' degrees')
-                        skip_star_list.append(stars[x].name)
-                        continue
-
-                "Check that the star is entering at V-offset degrees with a standard timestep and within the H-offset angle"
-                if(V_offset - AngularChangePerTimestep <= stars_vert_offset[t][x] <= V_offset and stars_vert_offset[t-1][x] > V_offset and abs(stars_hori_offset[t][x]) < H_offset):
-
-                    if(t % log_timestep == 0):
-                        Logger.debug('Star: '+stars[x].name+', with H-offset: '+str(
-                            stars_hori_offset[t][x])+' V-offset: '+str(stars_vert_offset[t][x])+' in degrees is available')
-
-                    "Add the spotted star to the exception list and timestamp it"
-                    spotted_star_name.append(stars[x].name)
-                    spotted_star_timestamp.append(current_time)
-                    spotted_star_timecounter.append(t)
-
-                    "Append all relevent data for the star"
-                    star_list_excel[0].append(stars[x].name)
-                    star_list_excel[1].append(str(current_time))
-                    star_list_excel[2].append(str(float(long_MATS[t])))
-                    star_list_excel[3].append(str(float(lat_MATS[t])))
-                    star_list_excel[4].append(str(stars[x].mag))
-                    star_list_excel[5].append(str(stars_hori_offset[t][x]))
-                    star_list_excel[6].append(str(stars_vert_offset[t][x]))
-                    star_list_excel[7].append(str(star_cat[x]['e_Hpmag']))
-                    star_list_excel[8].append(str(star_cat[x]['Hpscat']))
-                    star_list_excel[9].append(str(star_cat[x]['o_Hpmag']))
-                    star_list_excel[10].append(str(star_cat[x]['SpType']))
-                    star_list_excel[11].append(str(Dec_optical_axis[t]))
-                    star_list_excel[12].append(str(RA_optical_axis[t]))
-                    star_list_excel[13].append(str(stars_dec[x]/pi*180))
-                    star_list_excel[14].append(str(stars_ra[x]/pi*180))
-
-                    "Log data of star relevant to filtering process"
-                    SpottedStarList.append({'Date': str(current_time), 'V-offset': stars_vert_offset[t][x], 'H-offset': stars_hori_offset[t][x],
-                                            'long_MATS': float(long_MATS[t]), 'lat_MATS': float(lat_MATS[t]),
-                                            'Dec_optical_axis': Dec_optical_axis[t], 'RA_optical_axis': RA_optical_axis[t],
-                                            'Vmag': stars[x].mag, 'Name': stars[x].name, 'Dec': stars_dec[x]/pi*180, 'RA': stars_ra[x]/pi*180})
-
-                    star_counter = star_counter + 1
-
-            ######################### End of star_mapper #############################
-
-        "Increase Simulation Time with a timestep, or skip ahead if 1 orbit is completed"
-        t += 1
-        if(t*timestep > MATS_P[t-1]*(TimeSkips+1)):
-            current_time = current_time+DT.timedelta(seconds=Timeskip)
-            TimeSkips += 1
-        else:
-            current_time = current_time+DT.timedelta(seconds=timestep)
+            SpottedStarList.append({'Date': str(current_time), 'V-offset': V_offset, 'H-offset': xvalue[i],
+                                    'long_MATS': float(long_MATS), 'lat_MATS': float(lat_MATS),
+                                    'Dec_optical_axis': Dec_optical_axis, 'RA_optical_axis': RA_optical_axis,
+                                    'Vmag': star.magnitude, 'Name': str(star.name), 'Dec': star.dec_degrees, 'RA': star.ra_degrees})
 
     ########################## END OF SIMULATION ############################
 
@@ -532,9 +331,9 @@ def Mode120_date_calculator(configFile):
 def Mode120_date_select(Occupied_Timeline, SpottedStarList, configFile):
     """Subfunction, Schedules a simulated date.
 
-    A date is selected for which the brightest star is visible at the minimum amount of H-offset in the FOV.
-    If the date is occupied the same star will be selected with the 2nd least amount of H-offset and so on. Another star will be chosen in chronological
-    order of availabilty if all the times the brightest star is available are occupied.
+    A date is selected for which the brightest star is visible at the minimum distance to the given H-offset.
+    If the date is occupied the same star will be selected with the 2nd minimum distance to the given H-offset and so on. 
+    Another star will be chosen in chronological order of availabilty if all the times the brightest star is available are occupied.
 
     Arguments:
         Occupied_Timeline (:obj:`dict` of :obj:`list`): Dictionary with keys equal to planned and scheduled Modes/CMDs with entries equal to their start and end time as a list.
@@ -549,6 +348,12 @@ def Mode120_date_select(Occupied_Timeline, SpottedStarList, configFile):
 
     Mode120_settings = configFile.Mode120_settings()
     Timeline_settings = configFile.Timeline_settings()
+    Mode120Iteration = configFile.Mode120Iteration
+
+
+    "Get offset where the star should be"
+    Offset_Index = (Mode120Iteration-1) % (len(Mode120_settings['V_offset']))
+    H_offset = Mode120_settings['H_offset'][Offset_Index]
 
     Logger.info('Start of filtering function')
 
@@ -596,9 +401,9 @@ def Mode120_date_select(Occupied_Timeline, SpottedStarList, configFile):
             arbitraryLargeNumber += 1
 
     "Extract and sort the H-offsets."
-    star_H_offset_abs = [abs(x) for x in star_min_mag_H_offset]
+    star_H_offset_abs = [abs(x-H_offset) for x in star_min_mag_H_offset]
 
-    star_H_offset_sorted = [abs(x) for x in star_min_mag_H_offset]
+    star_H_offset_sorted = [abs(x-H_offset) for x in star_min_mag_H_offset]
     star_H_offset_sorted.sort()
     Logger.debug('star_H_offset_abs: '+str(star_H_offset_abs))
     Logger.debug('star_H_offset_sorted: '+str(star_H_offset_sorted))
