@@ -9,10 +9,7 @@ import logging
 import sys
 import csv
 import os
-import importlib
-import ephem
 from pylab import array, ceil, cos, sin, cross, dot, zeros, norm, pi, arccos, floor
-from astroquery.vizier import Vizier
 from skyfield import api
 from skyfield.data import hipparcos
 from skyfield.api import wgs84, Star
@@ -280,7 +277,7 @@ def Mode120_date_calculator(configFile):
 
             "Log data of star relevant to filtering process"
 
-            SpottedStarList.append({'Date': str(current_time), 'V-offset': V_offset, 'H-offset': xvalue[i],
+            SpottedStarList.append({'Date': current_time.strftime("%Y-%m-%d %H:%M:%S.%f"), 'V-offset': V_offset, 'H-offset': xvalue[i],
                                     'long_MATS': float(long_MATS), 'lat_MATS': float(lat_MATS),
                                     'Dec_optical_axis': Dec_optical_axis, 'RA_optical_axis': RA_optical_axis,
                                     'Vmag': star.magnitude, 'Name': str(star.name), 'Dec': star.dec_degrees, 'RA': star.ra_degrees})
@@ -428,7 +425,7 @@ def Mode120_date_select(Occupied_Timeline, SpottedStarList, configFile):
 
         StartDate = star_date[x]
 
-        StartDate = DT.datetime.strptime(StartDate,'%Y-%m-%d %H:%M:%S') - DT.timedelta(seconds= Mode120_settings['freeze_start'])
+        StartDate = DT.datetime.strptime(StartDate,'%Y-%m-%d %H:%M:%S.%f') - DT.timedelta(seconds= Mode120_settings['freeze_start'])
 
         endDate =StartDate+DT.timedelta(seconds = Mode120_settings['freeze_start'] + Mode120_settings['freeze_duration'] + Timeline_settings['mode_separation'])
 

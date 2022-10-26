@@ -309,6 +309,8 @@ def CheckConfigFile(configFile):
     if not (
         -60000 <= Mode120_settings["pointing_altitude"] <= 230000
         and type(Mode120_settings["pointing_altitude"]) == int
+        and type(Mode124_settings["pointing_altitude_end"])
+        and type(-60000 <= Mode124_settings["pointing_altitude_end"] <= 230000)
     ):
         Logger.error("Mode120_settings['pointing_altitude']")
         raise ValueError
@@ -328,13 +330,16 @@ def CheckConfigFile(configFile):
         raise TypeError
     if not (type(Mode120_settings["V_offset"]) == list):
         Logger.error("Mode120_settings['V_offset'] != list")
+    if not (type(Mode120_settings["H_offset"]) == list):
+        Logger.error("Mode120_settings['H_offset'] != list")
     for x in range(len(Mode120_settings["V_offset"])):
-        if not (
-            abs(Mode120_settings["V_offset"][x]) <= 10
-            and 0 <= abs(Mode120_settings["H_offset"]) <= 10
-        ):
-            Logger.error("Mode120_settings['V_offset'] or Mode120_settings['H_offset']")
-            raise ValueError
+        for y in range(len(Mode120_settings["V_offset"])):
+            if not (
+                abs(Mode120_settings["V_offset"][x]) <= 10
+                and 0 <= abs(Mode120_settings["H_offset"][y]) <= 10
+            ):
+                Logger.error("Mode120_settings['V_offset'] or Mode120_settings['H_offset']")
+                raise ValueError
     if not (type(Mode120_settings["start_date"]) == str):
         Logger.error("Mode120_settings['date']")
         raise TypeError
@@ -355,22 +360,13 @@ def CheckConfigFile(configFile):
     ):
         Logger.error("Mode120_settings['SnapshotSpacing']")
         raise ValueError
-    if not (
-        0 < Mode120_settings["TimeSkip"]["TimeSkip"] <= 2 * 3600 * 24
-        and (
-            type(Mode120_settings["TimeSkip"]["TimeSkip"]) == int
-            or type(Mode120_settings["TimeSkip"]["TimeSkip"]) == float
-        )
-    ):
-        Logger.error("Mode120_settings['TimeSkip']['TimeSkip']")
-        raise ValueError
-    if not (
-        Timeline_settings["StandardPointingAltitude"]
-        < Mode120_settings["pointing_altitude"]
-        and type(Mode120_settings["pointing_altitude"]) == int
-    ):
-        Logger.error("Mode120_settings['pointing_altitude']")
-        raise ValueError
+    # if not (
+    #     Timeline_settings["StandardPointingAltitude"]
+    #     < Mode120_settings["pointing_altitude"]
+    #     and type(Mode120_settings["pointing_altitude"]) == int
+    # ):
+    #     Logger.error("Mode120_settings['pointing_altitude']")
+    #     raise ValueError
     if not (Mode120_settings["TimeToConsider"]["TimeToConsider"] <= Timeline_settings["duration"]["duration"]):
         Logger.error(
             "Mode120_settings['TimeToConsider']['TimeToConsider'] > Timeline_settings['duration']['duration']"
@@ -560,13 +556,16 @@ def CheckConfigFile(configFile):
         raise TypeError
     if not (type(Mode124_settings["V_offset"]) == list):
         Logger.error("Mode124_settings['V_offset'] != list")
+    if not (type(Mode124_settings["H_offset"]) == list):
+        Logger.error("Mode124_settings['H_offset'] != list")
     for x in range(len(Mode124_settings["V_offset"])):
-        if not (
-            abs(Mode124_settings["V_offset"][x]) <= 1
-            and 0 <= abs(Mode124_settings["H_offset"]) <= 10
-        ):
-            Logger.error("Mode124_settings['V_offset'] or Mode124_settings['H_offset']")
-            raise ValueError
+        for y in range(len(Mode124_settings["H_offset"])):
+            if not (
+                abs(Mode124_settings["V_offset"][x]) <= 10
+                and 0 <= abs(Mode124_settings["H_offset"][y]) <= 10
+            ):
+                Logger.error("Mode124_settings['V_offset'] or Mode124_settings['H_offset']")
+                raise ValueError
     if not (type(Mode124_settings["start_date"]) == str):
         Logger.error("Mode124_settings['start_date']")
         raise TypeError
@@ -580,8 +579,7 @@ def CheckConfigFile(configFile):
         Logger.error("Mode124_settings['SnapshotTime']")
         raise ValueError
     if not (
-        Timeline_settings["StandardPointingAltitude"]
-        < Mode124_settings["pointing_altitude"]
+        type(Mode124_settings["pointing_altitude_end"])
         and type(Mode124_settings["pointing_altitude"]) == int
     ):
         Logger.error("Mode124_settings['pointing_altitude']")

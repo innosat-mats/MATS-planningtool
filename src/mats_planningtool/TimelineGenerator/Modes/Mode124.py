@@ -223,7 +223,7 @@ def date_calculator(configFile):
         Dec_optical_axis = Satellite_dict_at_freezepoint['Dec_OpticalAxis [degrees]']
         RA_optical_axis = Satellite_dict_at_freezepoint['RA_OpticalAxis [degrees]']
 
-        SpottedMoonList.append({'Date': str(crosstime[i]), 'V-offset': V_offset, 'H-offset': xvalue[i].item(),
+        SpottedMoonList.append({'Date': crosstime[i].strftime("%Y-%m-%d %H:%M:%S.%f"), 'V-offset': V_offset, 'H-offset': xvalue[i].item(),
                                         'long_MATS': float(long_MATS), 'lat_MATS': float(lat_MATS), 'Dec': moonpos_ra_dec[1].degrees, 'RA': moonpos_ra_dec[0]._degrees,
                                         'Dec FOV': Dec_optical_axis, 'RA FOV': RA_optical_axis, 'FOV': optical_axis})        
 

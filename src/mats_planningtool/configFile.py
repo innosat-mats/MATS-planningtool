@@ -292,8 +292,8 @@ class configFile:
             self.OPT_Config_File["Mode120_settings"][
                 "freeze_duration"
             ] = Library.FreezeDuration_calculator(
-                self.OPT_Config_File["Timeline_settings"]["StandardPointingAltitude"],
                 self.OPT_Config_File["Mode120_settings"]["pointing_altitude"],
+                self.OPT_Config_File["Mode120_settings"]["pointing_altitude_end"],
                 self.getTLE()[1],
             )
 
@@ -326,8 +326,8 @@ class configFile:
             self.OPT_Config_File["Mode121_122_123_settings"][
                 "freeze_duration"
             ] = Library.FreezeDuration_calculator(
-                self.OPT_Config_File["Timeline_settings"]["StandardPointingAltitude"],
-                self.OPT_Config_File["Mode121_122_123_settings"]["pointing_altitude"],
+                self.OPT_Config_File["Mode120_settings"]["pointing_altitude"],
+                self.OPT_Config_File["Mode121_122_123_settings"]["pointing_altitude_end"],
                 self.getTLE()[1],
             )
 
@@ -420,8 +420,8 @@ class configFile:
             self.OPT_Config_File["Mode124_settings"][
                 "freeze_duration"
             ] = Library.FreezeDuration_calculator(
-                self.OPT_Config_File["Timeline_settings"]["StandardPointingAltitude"],
-                self.OPT_Config_File["Mode124_settings"]["pointing_altitude"],
+                self.OPT_Config_File["Mode120_settings"]["pointing_altitude"],
+                self.OPT_Config_File["Mode124_settings"]["pointing_altitude_end"],
                 self.getTLE()[1],
             )
 
