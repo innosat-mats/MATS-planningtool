@@ -300,6 +300,7 @@ def date_select(Occupied_Timeline, SpottedMoonList, configFile):
         x = Moon_H_offset_abs.index(Moon_H_offset_sorted[iterations])
 
         date = DT.datetime.strptime(Moon_date[x],'%Y-%m-%d %H:%M:%S.%f')
+        #Add time before freeze to allow for setting CCDs and moving instrument
         date = date-DT.timedelta(seconds=Mode124_settings['freeze_start'])
 
         endDate = date+DT.timedelta(seconds=Mode124_settings['freeze_start'] +

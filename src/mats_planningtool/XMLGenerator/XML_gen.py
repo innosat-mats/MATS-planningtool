@@ -154,7 +154,7 @@ def XML_generator(configFile, SCIMOD_Path):
 
         Logger.debug('Call XML_generator_select')
         XML_generator_select(root=root, duration=mode_duration, relativeTime=relativeTime,
-                             name=Entry_Name, date=ephem.Date(StartDate), Settings=Settings,                       Timeline_settings=Timeline_settings, configFile=configFile)
+                             name=Entry_Name, date=ephem.Date(StartDate), Settings=Settings, Timeline_settings=Timeline_settings, configFile=configFile)
 
     ### Rewrite path string to allow it to be in the name of the generated XML command file ###
     SCIMOD_Path = SCIMOD_Path.replace('\\', '_')

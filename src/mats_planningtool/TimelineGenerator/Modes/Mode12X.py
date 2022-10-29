@@ -8,7 +8,6 @@ import sys
 import importlib
 import ephem
 from pylab import array, ceil, cos, sin, dot, zeros, norm, pi, arccos, floor
-from astroquery.vizier import Vizier
 from skyfield import api
 import datetime as DT
 

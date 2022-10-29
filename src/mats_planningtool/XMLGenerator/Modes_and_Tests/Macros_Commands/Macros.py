@@ -266,6 +266,7 @@ def Snapshot_Inertial_macro(
     FreezeTime,
     FreezeDuration,
     pointing_altitude,
+    pointing_altitude_end,
     StandardPointingAltitude,
     SnapshotSpacing,
     Snapshot_relativeTime,
@@ -291,6 +292,7 @@ def Snapshot_Inertial_macro(
         FreezeTime (float): Start time of attitude freeze command in on-board time [s].
         FreezeDuration (int): Duration of freeze [s].
         pointing_altitude (int): The altitude of the tangential point [m].
+        pointing_altitude (int): The altitude of the final tangential point [m].
         StandardPointingAltitude (int): The standard altitude of the LP  [m].
         SnapshotSpacing (int): The time in seconds inbetween snapshots of individual CCDs.
         Snapshot_relativeTime (float): The relativeTime (time from start of timeline) at which the first Snapshot is taken.
@@ -362,6 +364,8 @@ def Snapshot_Inertial_macro(
             comment=comment,
         )
         Snapshot_relativeTime += SnapshotSpacing
+
+    configFile.current_pointing = pointing_altitude_end
 
     relativeTime = Commands.TC_acfLimbPointingAltitudeOffset(
         root,

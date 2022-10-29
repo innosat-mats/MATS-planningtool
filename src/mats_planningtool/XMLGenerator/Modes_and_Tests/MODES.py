@@ -939,6 +939,7 @@ def Mode12X(
     FreezeDuration = Mode_settings["freeze_duration"]
 
     pointing_altitude = Mode_settings["pointing_altitude"]
+    pointing_altitude_end = Mode_settings["pointing_altitude_e"]
 
     SnapshotSpacing = Mode_settings["SnapshotSpacing"]
 
@@ -953,6 +954,7 @@ def Mode12X(
         FreezeTime=FreezeTime,
         FreezeDuration=FreezeDuration,
         pointing_altitude=pointing_altitude,
+        pointing_altitude_end=pointing_altitude_end,
         StandardPointingAltitude=Timeline_settings["StandardPointingAltitude"],
         SnapshotSpacing=SnapshotSpacing,
         Snapshot_relativeTime=Snapshot_relativeTime,

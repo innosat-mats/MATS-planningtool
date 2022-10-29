@@ -205,6 +205,6 @@ def test_operational_mode():
 
 if __name__ == "__main__":
 
-    #test_config_file()
+    test_config_file()
     #test_timeline_get()
     test_xml_gen()

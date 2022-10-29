@@ -320,12 +320,17 @@ def CheckConfigFile(configFile):
     ):
         Logger.error("Mode120_settings['timestep']")
         raise ValueError
-    if not (
+    if (Mode120_settings["pointing_altitude"] != Timeline_settings["StandardPointingAltitude"]) and not (
         Mode120_settings["freeze_start"]
         >= Timeline_settings["pointing_stabilization"]
         + 12 * Timeline_settings["CMD_separation"]
         and type(Mode120_settings["freeze_start"]) == int
     ):
+        Logger.error("Mode120_settings")
+        raise TypeError
+    elif (Mode120_settings["pointing_altitude"] == Timeline_settings["StandardPointingAltitude"]) and not (
+        Mode120_settings["freeze_start"] >= 12 * Timeline_settings["CMD_separation"] + 5
+        and type(Mode120_settings["freeze_start"]) == int):
         Logger.error("Mode120_settings")
         raise TypeError
     if not (type(Mode120_settings["V_offset"]) == list):
@@ -546,12 +551,17 @@ def CheckConfigFile(configFile):
     ):
         Logger.error("Mode124_settings['timestep']")
         raise ValueError
-    if not (
+    if (Mode124_settings["pointing_altitude"] != Timeline_settings["StandardPointingAltitude"]) and not (
         Mode124_settings["freeze_start"]
         >= Timeline_settings["pointing_stabilization"]
         + 12 * Timeline_settings["CMD_separation"]
         and type(Mode124_settings["freeze_start"]) == int
     ):
+        Logger.error("Mode124_settings")
+        raise TypeError
+    elif (Mode124_settings["pointing_altitude"] == Timeline_settings["StandardPointingAltitude"]) and not (
+        Mode124_settings["freeze_start"] >= 12 * Timeline_settings["CMD_separation"] + 5
+        and type(Mode124_settings["freeze_start"]) == int):
         Logger.error("Mode124_settings")
         raise TypeError
     if not (type(Mode124_settings["V_offset"]) == list):
