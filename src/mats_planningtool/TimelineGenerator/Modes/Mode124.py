@@ -308,7 +308,9 @@ def date_select(Occupied_Timeline, SpottedMoonList, configFile):
         date = date-DT.timedelta(seconds=Mode124_settings['freeze_start'])
 
         endDate = date+DT.timedelta(seconds=Mode124_settings['freeze_start'] +
-                                                Mode124_settings['freeze_duration'] + configFile.Timeline_settings()['mode_separation'])
+                                                Mode124_settings['freeze_duration'] +
+                                                configFile.Timeline_settings()["pointing_stabilization"] + 
+                                                configFile.Timeline_settings()['mode_separation'])
 
         "Check that the scheduled date is not before the start of the timeline"
         if(date < DT.datetime.strptime(configFile.Timeline_settings()['start_date'],'%Y/%m/%d %H:%M:%S')):

@@ -939,7 +939,7 @@ def Mode12X(
     FreezeDuration = Mode_settings["freeze_duration"]
 
     pointing_altitude = Mode_settings["pointing_altitude"]
-    pointing_altitude_end = Mode_settings["pointing_altitude_e"]
+    pointing_altitude_end = Mode_settings["pointing_altitude_end"]
 
     SnapshotSpacing = Mode_settings["SnapshotSpacing"]
 
@@ -1403,13 +1403,25 @@ def Mode134(root, date, duration, relativeTime, Timeline_settings, configFile, M
         comment=comment,
     )
 
+
     Commands.TC_pafMode(
         root,
-        relativeTimeEndOfMode,
+        relativeTimeEndOfMode-Timeline_settings["pointing_stabilization"]-Timeline_settings["CMD_separation"],
         MODE=2,
         Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
+
+    Commands.TC_acfLimbPointingAltitudeOffset(
+        root,
+        relativeTimeEndOfMode-Timeline_settings["pointing_stabilization"],
+        Initial=Timeline_settings["StandardPointingAltitude"],
+        Final=Timeline_settings["StandardPointingAltitude"],
+        Rate=0,
+        Timeline_settings=Timeline_settings, configFile=configFile,
+        comment=comment,
+    )
+    
 
 
 ################################################################################################

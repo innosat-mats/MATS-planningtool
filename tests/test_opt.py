@@ -19,9 +19,9 @@ def get_test_configfile():
 
     configfile_test = configFile.configFile(
         configfile,
-        "2020/9/25 16:45:00",
-        TLE1="1 54321U 19100G   20172.75043981 0.00000000  00000-0  75180-4 0  0014",
-        TLE2="2 54321  97.7044   6.9210 0014595 313.2372  91.8750 14.93194142000010",
+        "2022/11/04 18:00:00",
+        TLE1="1 99988U 22123    22304.76424065  .00004664  00000-0  44774-3 0 00000",
+        TLE2="2 99988 097.6561 307.5659 0012827 298.3476 106.0390 14.93086308000015",
     )
 
     configfile_test.output_dir = 'test_data_output'
@@ -206,5 +206,5 @@ def test_operational_mode():
 if __name__ == "__main__":
 
     test_config_file()
-    test_timeline_get()
-    #test_xml_gen()
+    #test_timeline_get()
+    test_xml_gen()

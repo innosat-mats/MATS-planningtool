@@ -427,7 +427,7 @@ def Mode120_date_select(Occupied_Timeline, SpottedStarList, configFile):
 
         StartDate = DT.datetime.strptime(StartDate,'%Y-%m-%d %H:%M:%S.%f') - DT.timedelta(seconds= Mode120_settings['freeze_start'])
 
-        endDate =StartDate+DT.timedelta(seconds = Mode120_settings['freeze_start'] + Mode120_settings['freeze_duration'] + Timeline_settings['mode_separation'])
+        endDate =StartDate+DT.timedelta(seconds = Mode120_settings['freeze_start'] + Mode120_settings['freeze_duration'] + configFile.Timeline_settings()["pointing_stabilization"] + Timeline_settings['mode_separation'])
 
         "Check that the scheduled date is not before the start of the timeline"
         if(StartDate < DT.datetime.strptime(configFile.Timeline_settings()['start_date'],'%Y/%m/%d %H:%M:%S')):
