@@ -199,10 +199,14 @@ def date_calculator(configFile):
     possibles=np.array([(itime) for itime in range(len(Moon_hori_offset))  
                     if (((abs(Moon_hori_offset[itime]))< horisontal_filter) and (abs(Moon_vert_offset[itime])< vert_filter))])
 
+    if(len(possibles) == 0):
+        Logger.warning('Moon not found in time to consider')
+        return SpottedMoonList
+
+
     moon_found = np.where(np.diff(possibles)>2)[0] #check if there is a gap in the indeces larger than 2
     moon_found = np.insert(moon_found,0,0)
     moon_found = np.append(moon_found,len(possibles))
-
 
     xvalue = np.zeros((len(moon_found),1)) #array to hold horizontal offset in degreess
 

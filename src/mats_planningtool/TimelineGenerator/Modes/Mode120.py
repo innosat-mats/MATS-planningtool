@@ -153,14 +153,10 @@ def Mode120_date_calculator(configFile):
     star_list_excel.append(['mag'])
     star_list_excel.append(['H_offset'])
     star_list_excel.append(['V_offset'])
-    star_list_excel.append(['e_Hpmag'])
-    star_list_excel.append(['Hpscat'])
-    star_list_excel.append(['o_Hpmag'])
-    star_list_excel.append(['Classification'])
-    star_list_excel.append(['Optical Axis Dec (ICRS J2000, eq)'])
-    star_list_excel.append(['Optical Axis RA (ICRS J2000, eq)'])
-    star_list_excel.append(['Star Dec (ICRS J2000, eq)'])
-    star_list_excel.append(['Star RA (ICRS J2000, eq)'])
+    star_list_excel.append(['Optical Axis Dec (ICRS J2000)'])
+    star_list_excel.append(['Optical Axis RA (ICRS J2000)'])
+    star_list_excel.append(['Star Dec (ICRS J2000)'])
+    star_list_excel.append(['Star RA (ICRS J2000)'])
     
     ############# Pre-allocate space ##########
     lat_MATS = zeros((timesteps, 1))
@@ -228,20 +224,24 @@ def Mode120_date_calculator(configFile):
     vert_filter= 5 #look at stars vertically at +- this filter in degrees (Vertical FOV is 1.52)
 
     possibles=np.array([(istar,itime) for istar in range(nstars) for itime in range(len(timestamps))  
-                    if (((abs(stars_hori_offset[istar,itime]))< horisontal_filter) and (abs(stars_vert_offset[istar,itime])<vert_filter) )])
+                    if ((abs(stars_hori_offset[istar,itime])< horisontal_filter) and (abs(stars_vert_offset[istar,itime])<vert_filter))])
+
+    if(len(possibles) == 0):
+        Logger.warning('Star not found in time to consider')
+        return SpottedStarList
 
     for posstar in np.unique(possibles[:,0]):
         possible=np.array([possible for possible in possibles if possible[0]==posstar ])
         star_found = np.where(np.diff(possible[:,1])>2)[0] #check if there is a gap in the indeces larger than 2
         star_found = np.insert(star_found,0,0)
         star_found = np.append(star_found,len(possible))
-        xvalue = np.zeros((len(star_found),1)) #array to hold horizontal offset in degreess
+        xvalue = np.zeros((len(star_found)-1,1)) #array to hold horizontal offset in degreess
         
         crosstime = []
         for i in range(len(star_found)-1):
             timerange=possibles[star_found[i]:star_found[i+1]]
-            crosstime.append(DT.datetime.fromtimestamp(np.interp(V_offset,stars_vert_offset[0,timerange[:,1]][::-1],timestamps[timerange[:,1],0][::-1])))
-            xvalue[i]=np.interp(crosstime[i].timestamp(),timestamps[timerange[:,1],0],stars_hori_offset[0,timerange[:,1]])
+            crosstime.append(DT.datetime.fromtimestamp(np.interp(V_offset,stars_vert_offset[posstar,timerange[:,1]][::-1],timestamps[timerange[:,1],0][::-1])))
+            xvalue[i]=np.interp(crosstime[i].timestamp(),timestamps[timerange[:,1],0],stars_hori_offset[posstar,timerange[:,1]])
 
         star = df.loc[df.index[posstar]]
         # print("{:6d} {:7.2f} {:10.3f} {:10.3f}  {:10.5f}  {}".format (posstar, mag,
@@ -264,20 +264,20 @@ def Mode120_date_calculator(configFile):
 
             "Append all relevent data for the star"
             star_list_excel[0].append(star.name)
-            star_list_excel[1].append(str(crosstime))
+            star_list_excel[1].append(crosstime[i].strftime("%Y-%m-%d %H:%M:%S"))
             star_list_excel[2].append(str(float(long_MATS)))
             star_list_excel[3].append(str(float(lat_MATS)))
             star_list_excel[4].append(str(star.magnitude))
-            star_list_excel[5].append(str(xvalue[i]))
+            star_list_excel[5].append(str(xvalue[i][0]))
             star_list_excel[6].append(str(V_offset))
-            star_list_excel[11].append(str(Dec_optical_axis))
-            star_list_excel[12].append(str(RA_optical_axis))
-            star_list_excel[13].append(str(star.dec_degrees))
-            star_list_excel[14].append(str(star.ra_degrees))
+            star_list_excel[7].append(str(Dec_optical_axis))
+            star_list_excel[8].append(str(RA_optical_axis))
+            star_list_excel[9].append(str(star.dec_degrees))
+            star_list_excel[10].append(str(star.ra_degrees))
 
             "Log data of star relevant to filtering process"
 
-            SpottedStarList.append({'Date': current_time.strftime("%Y-%m-%d %H:%M:%S.%f"), 'V-offset': V_offset, 'H-offset': xvalue[i],
+            SpottedStarList.append({'Date': crosstime[i].strftime("%Y-%m-%d %H:%M:%S.%f"), 'V-offset': V_offset, 'H-offset': xvalue[i],
                                     'long_MATS': float(long_MATS), 'lat_MATS': float(lat_MATS),
                                     'Dec_optical_axis': Dec_optical_axis, 'RA_optical_axis': RA_optical_axis,
                                     'Vmag': star.magnitude, 'Name': str(star.name), 'Dec': star.dec_degrees, 'RA': star.ra_degrees})
