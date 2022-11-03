@@ -31,7 +31,7 @@ import sys
 import importlib
 import skyfield.api
 from pylab import dot, arccos, zeros, pi, sin, cos, arctan, cross, norm, sqrt
-
+import datetime as DT
 from mats_planningtool import Library
 from mats_planningtool.OrbitSimulator.MatsBana import Satellite_Simulator
 #from mats_planningtool_Config_File import Logger_name, Timeline_settings, getTLE
@@ -39,26 +39,17 @@ from mats_planningtool.OrbitSimulator.MatsBana import Satellite_Simulator
 
 Logger = logging.getLogger("OPT_logger")
 
-
-
-
 ###########################################################################################################
-def WDWJQ_3010(root, date, duration, relativeTime, Timeline_settings, configFile, Test_settings={'ExpTimes': [3000, 6000]}):
-    """Limb_functional_test. 
+def WDWJQ_3010(root, date, duration, relativeTime, Timeline_settings, configFile, Test_settings):
+    """WDWJQ_3010. 
 
-    Schedules Limb_functional_test with defined parameters and simulates MATS propagation from TLE.
-    Scheduling of all daylight and nighttime commands are separated timewise and all commands for one of the two is scheduled first.
+    Schedules WDWJQ_3010 with defined parameters.
     """
 
     Logger.info('')
-    Logger.info('Start of Limb_functional_test')
+    Logger.info('Start of WDWJQ_3010')
 
     Logger.debug('Test_settings from Science Mode List: '+str(Test_settings))
-
-    log_timestep = 500
-    Logger.debug('log_timestep [s]: '+str(log_timestep))
-
-    TLE = configFile.getTLE()
 
     CCD_settings = configFile.CCD_macro_settings('BinnedCalibration')
 
@@ -94,6 +85,10 @@ def WDWJQ_3010(root, date, duration, relativeTime, Timeline_settings, configFile
                     relativeTime = Macros.Snapshot_Limb_Pointing_macro(root, round(
                         relativeTime, 2), CCD_settings, pointing_altitude=altitude, SnapshotSpacing=SnapshotSpacing, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment)
 
+                    relativeTime = relativeTime + SnapshotSpacing
+
+                    relativeTime = Macros.NadirSnapshot_Limb_Pointing_macro(root, round(
+                        relativeTime, 2), CCD_settings, pointing_altitude=altitude, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment)
 
 
     mode_relativeTime = relativeTime - initial_relativeTime
@@ -105,6 +100,69 @@ def WDWJQ_3010(root, date, duration, relativeTime, Timeline_settings, configFile
 
 ####################################################################################
 
+
+
+
+###########################################################################################################
+def FFEXP_3000(root, date, duration, relativeTime, Timeline_settings, configFile, Test_settings):
+    """FFEXP_3000. 
+
+    Schedules FFEXP_3000 with defined parameters.
+    """
+
+    Logger.info('')
+    Logger.info('Start of FFEXP_3000')
+
+    Logger.debug('Test_settings from Science Mode List: '+str(Test_settings))
+
+    CCD_settings = configFile.CCD_macro_settings('FullReadout')
+
+    ExpTimes = Test_settings['ExpTimes']
+    SnapshotTimes = Test_settings['SnapshotTimes']
+    altitude = Test_settings['Altitude']
+    SnapshotSpacing = 10
+
+    Mode_name = sys._getframe(0).f_code.co_name
+
+    t = 0
+
+    initial_relativeTime = relativeTime
+    starttime = DT.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S')
+
+    "Start looping the CCD settings and call for macros"
+    for SnapshotTime in SnapshotTimes:
+
+        snaptime =  DT.datetime.strptime(SnapshotTime,'%Y/%m/%d %H:%M:%S')
+        relativeTime = (snaptime-starttime).seconds
+
+        for ExpTime in ExpTimes:
+
+            for key in CCD_settings.keys():
+                CCD_settings[key]['TEXPMS'] = ExpTime
+
+                    
+            comment = (Mode_name+', '+str(snaptime)+', '+', pointing_altitude = '+str(altitude) +
+                        ', ExpTime = '+str(ExpTime))
+            Logger.debug(comment)
+
+            relativeTime = Macros.Snapshot_Limb_Pointing_macro(root, round(
+                relativeTime, 2), CCD_settings, pointing_altitude=altitude, SnapshotSpacing=SnapshotSpacing, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment)
+
+            relativeTime = relativeTime + SnapshotSpacing
+
+            relativeTime = Macros.NadirSnapshot_Limb_Pointing_macro(root, round(
+                relativeTime, 2), CCD_settings, pointing_altitude=altitude, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment)
+
+
+
+    mode_relativeTime = relativeTime - initial_relativeTime
+    current_time = ephem.Date(date+ephem.second*mode_relativeTime)
+
+    Logger.info('End of FFEXP_3000')
+
+    return relativeTime, current_time
+
+####################################################################################
 
 
 

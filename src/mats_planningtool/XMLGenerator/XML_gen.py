@@ -50,7 +50,7 @@ from mats_planningtool import Library
 Logger = logging.getLogger("OPT_logger")
 
 
-def XML_generator(configFile, SCIMOD_Path):
+def XML_generator(configFile, SCIMOD_Path,test=False):
     """The core function of the XML_gen program.
 
     Reads a *Science Mode Timeline* .json file. Then chronologically goes though the *Science Mode Timeline*, calling for the *XML_generator_select* function.
@@ -90,9 +90,10 @@ def XML_generator(configFile, SCIMOD_Path):
 
     "Check if there are Timeline_settings given in the Science Mode Timeline"
     if(str(SCIMOD[0][0]) == 'Timeline_settings'):
-        Timeline_settings_from_Timeline = SCIMOD[0][4]
+        Timeline_settings_from_Timeline = SCIMOD[0][5]
         Timeline_settings = Library.dict_comparator(
             Timeline_settings_from_Timeline, configFile.Timeline_settings())
+        version = SCIMOD[0][4][-2:]
         Logger.info('Timeline_settings found in Science Mode Timeline. Using them')
 
         TLE_from_Timeline = SCIMOD[0][4]
@@ -115,7 +116,7 @@ def XML_generator(configFile, SCIMOD_Path):
     Logger.info('Call function XML_Initial_Basis_Creator')
     Logger.info('')
     root = XML_Initial_Basis_Creator(
-        timeline_start, timeline_duration, SCIMOD_Path, configFile)
+        timeline_start, timeline_duration, SCIMOD_Path, configFile,version,test)
 
     ######## Loop through SCIMOD TIMELINE lIST, selecting one mode at a time #####
     Logger.info('Loop through Science Mode Timeline List')
@@ -161,10 +162,16 @@ def XML_generator(configFile, SCIMOD_Path):
     SCIMOD_Path = SCIMOD_Path.replace('/', '_')
     SCIMOD_Path = SCIMOD_Path.replace('.json', '')
 
-    ### Write finished XML-tree with all commands to a file #######
-    XML_TIMELINE = os.path.join(configFile.output_dir, 'STP-MTS-' + configFile.ID() + '_' + 
-    datetime.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S').strftime('%y%m%d') +
-    datetime.datetime.now().strftime('%y%m%d') +  configFile.Name() +'.xml')
+    ### Write finished XML-tree with all commands to a file #######   
+    if test:
+        XML_TIMELINE = os.path.join(configFile.output_dir, 'STP-MTS-' + configFile.ID() + '_' + 
+            datetime.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S').strftime('%y%m%d') +
+            datetime.datetime.now().strftime('%y%m%d') +  'T' + configFile.Name() +'.xml')
+    else:
+        XML_TIMELINE = os.path.join(configFile.output_dir, 'STP-MTS-' + configFile.ID() + '_' + 
+            datetime.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S').strftime('%y%m%d') +
+            datetime.datetime.now().strftime('%y%m%d') +  configFile.Name() +'.xml')
+ 
     Logger.info('Write XML-tree to: '+XML_TIMELINE)
     f = open(XML_TIMELINE, 'w')
     f.write(etree.tostring(root, pretty_print=True, encoding='unicode'))
@@ -187,7 +194,7 @@ def XML_generator(configFile, SCIMOD_Path):
 
 ################### XML-tree basis creator ####################################
 
-def XML_Initial_Basis_Creator(timeline_start, timeline_duration, SCIMOD_Path, configFile):
+def XML_Initial_Basis_Creator(timeline_start, timeline_duration, SCIMOD_Path, configFile,version,test=False):
     '''Subfunction, Construct Basis of XML document and adds the description container.
 
     Arguments: 
@@ -224,12 +231,16 @@ def XML_Initial_Basis_Creator(timeline_start, timeline_duration, SCIMOD_Path, co
     ID = configFile.ID()
     Name = configFile.Name()
 
+    if test:
+        teststr = 'T'
+    else:
+        teststr = ''
     etree.SubElement(root[0], 'timelineID', procedureIdentifier=ID,
-                     descriptiveName=StartingDate_name+Generationdate_name+Name, version="1.0")
+                     descriptiveName=StartingDate_name+Generationdate_name+version+teststr+Name, version=version)
 
     etree.SubElement(root[0], 'changeLog')
-    etree.SubElement(root[0][1], 'changeLogItem', version="1.0",
-                     date=str(datetime.date.today()), author="David Skanberg")
+    etree.SubElement(root[0][1], 'changeLogItem', version=version,
+                     date=str(datetime.date.today()), author=configFile.Author())
     root[0][1][0].text = "The file was created using OPT"
 
     etree.SubElement(root[0], 'validity')

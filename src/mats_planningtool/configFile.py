@@ -91,6 +91,16 @@ class configFile:
 
         return self.OPT_Config_File["version_ID"]
 
+    def Author(self):
+        """'Returns the author of this Configuration File.
+
+        Returns:
+            (str): author
+
+        """
+
+        return self.OPT_Config_File["Author"]
+
     def ID(self):
         """'Returns the ID of this Configuration File.
 
@@ -703,7 +713,7 @@ class configFile:
 
         CheckConfigFile(self)
 
-    def Timeline_gen(self):
+    def Timeline_gen(self,test=False):
         """Invokes the Timeline generator part of Operational Planning Tool.
 
         Creates a *Science Mode Timeline* as a .json file. \n
@@ -720,9 +730,9 @@ class configFile:
         """
         from mats_planningtool.TimelineGenerator.Core import Timeline_generator
 
-        Timeline_generator(self)
+        Timeline_generator(self,test)
 
-    def XML_gen(self, SCIMOD_Path=None):
+    def XML_gen(self, SCIMOD_Path=None,test=False):
         """Invokes the XML generator program part of Operational Planning Tool for MATS.
 
         Converts a *Science Mode Timeline*  (.json file) containing a list of scheduled Science Modes/CMDs/Tests into Payload and Platform commands and saves them as a .xml command file.  \n
@@ -746,7 +756,7 @@ class configFile:
                 self.output_dir,
                 "Science_Mode_Timeline_" + os.path.split(self.config_file_name)[1],
             )
-        XML_TIMELINE = XML_generator(self, SCIMOD_Path)
+        XML_TIMELINE = XML_generator(self, SCIMOD_Path,test)
 
         return XML_TIMELINE
 

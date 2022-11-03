@@ -22,7 +22,7 @@ from mats_planningtool import Library
 Logger = logging.getLogger("OPT_logger")
 
 
-def Timeline_generator(configFile):
+def Timeline_generator(configFile,test=False):
     """The core function of the *Timeline_gen* program, part of Operational Planning Tool.
 
     Returns:
@@ -214,6 +214,7 @@ def Timeline_generator(configFile):
     SCIMOD_Timeline.append(['Timeline_settings', 'This Timeline was created using these settings from '+configFile.config_file_name,
                             'Note: These Timeline_settings and TLE will be used when converting into a XML',
                             'Generated on: ' + DT.datetime.now().strftime("%Y/%-m/%d %H:%M:%S") ,
+                            'Version: ' + configFile.Version(),
                             Timeline_settings, configFile.getTLE()])
     Logger.debug('1 entry in Science Mode list: '+str(SCIMOD_Timeline[0]))
 
@@ -262,11 +263,21 @@ def Timeline_generator(configFile):
         os.mkdir(configFile.output_dir)
     except:
         pass
-    SCIMOD_NAME = os.path.join(
-        configFile.output_dir, 'Science_Mode_Timeline_'+configFile.ID() +
-        '_' + Timeline_start_date.strftime("%y%m%d") + 
-        DT.datetime.now().strftime("%y%m%d") +
-        configFile.Name() +'.json')
+    if not test:
+        SCIMOD_NAME = os.path.join(
+            configFile.output_dir, 'Science_Mode_Timeline_'+configFile.ID() +
+            '_' + Timeline_start_date.strftime("%y%m%d") + 
+            DT.datetime.now().strftime("%y%m%d") +
+            configFile.Version() + 
+            configFile.Name() +'.json')
+    if test:
+        SCIMOD_NAME = os.path.join(
+            configFile.output_dir, 'Science_Mode_Timeline_'+configFile.ID() +
+            '_' + Timeline_start_date.strftime("%y%m%d") + 
+            DT.datetime.now().strftime("%y%m%d") +
+            configFile.Version() + 'T' +
+            configFile.Name() +'.json')
+            
     Logger.info('Save mode timeline to file: '+SCIMOD_NAME)
     with open(SCIMOD_NAME, "w") as write_file:
         json.dump(SCIMOD_Timeline, write_file, indent=2)
