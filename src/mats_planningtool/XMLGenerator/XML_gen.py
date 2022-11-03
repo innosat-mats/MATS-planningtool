@@ -90,7 +90,7 @@ def XML_generator(configFile, SCIMOD_Path):
 
     "Check if there are Timeline_settings given in the Science Mode Timeline"
     if(str(SCIMOD[0][0]) == 'Timeline_settings'):
-        Timeline_settings_from_Timeline = SCIMOD[0][3]
+        Timeline_settings_from_Timeline = SCIMOD[0][4]
         Timeline_settings = Library.dict_comparator(
             Timeline_settings_from_Timeline, configFile.Timeline_settings())
         Logger.info('Timeline_settings found in Science Mode Timeline. Using them')
@@ -162,7 +162,9 @@ def XML_generator(configFile, SCIMOD_Path):
     SCIMOD_Path = SCIMOD_Path.replace('.json', '')
 
     ### Write finished XML-tree with all commands to a file #######
-    XML_TIMELINE = os.path.join(configFile.output_dir, 'XML_TIMELINE__'+'FROM__'+SCIMOD_Path+'.xml')
+    XML_TIMELINE = os.path.join(configFile.output_dir, 'STP-MTS-' + configFile.ID() + '_' + 
+    datetime.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S').strftime('%y%m%d') +
+    datetime.datetime.now().strftime('%y%m%d') +  configFile.Name() +'.xml')
     Logger.info('Write XML-tree to: '+XML_TIMELINE)
     f = open(XML_TIMELINE, 'w')
     f.write(etree.tostring(root, pretty_print=True, encoding='unicode'))
@@ -200,6 +202,7 @@ def XML_Initial_Basis_Creator(timeline_start, timeline_duration, SCIMOD_Path, co
 
     TimelineStart_Tuple = timeline_start.tuple()
 
+    Timeline_settings = configFile.Timeline_settings()
     "Because of rounding errors in ephem.Date 0 seconds might be 59.9999... causing error. Add half a second here to fix this error."
     if(int(round(TimelineStart_Tuple[5])) == 60):
         TimelineStart_Tuple = ephem.Date(timeline_start + ephem.second/2).tuple()
@@ -208,7 +211,9 @@ def XML_Initial_Basis_Creator(timeline_start, timeline_duration, SCIMOD_Path, co
                                                TimelineStart_Tuple[3], TimelineStart_Tuple[4], int(round(TimelineStart_Tuple[5])))
 
     StartingDate = TimelineStart_datetime.strftime("%Y-%m-%dT%H:%M:%S")
-
+    
+    StartingDate_name = TimelineStart_datetime.strftime("%Y%m%d")
+    Generationdate_name = datetime.datetime.now().strftime("%Y%m%d")
     #earliestStartingDate = ephem.Date(timeline_start).datetime().strftime("%Y-%m-%dT%H:%M:%S")
     #latestStartingDate = ephem.Date(timeline_start).datetime().strftime("%Y-%m-%dT%H:%M:%S")
 
@@ -216,8 +221,11 @@ def XML_Initial_Basis_Creator(timeline_start, timeline_duration, SCIMOD_Path, co
 
     root.append(etree.Element('description'))
 
-    etree.SubElement(root[0], 'timelineID', procedureIdentifier="",
-                     descriptiveName="", version="1.0")
+    ID = configFile.ID()
+    Name = configFile.Name()
+
+    etree.SubElement(root[0], 'timelineID', procedureIdentifier=ID,
+                     descriptiveName=StartingDate_name+Generationdate_name+Name, version="1.0")
 
     etree.SubElement(root[0], 'changeLog')
     etree.SubElement(root[0][1], 'changeLogItem', version="1.0",
@@ -283,3 +291,39 @@ def XML_generator_select(name, root, date, duration, relativeTime, Settings, Tim
 
 
 ####################### End of Mode selecter #############################
+
+####################### XML-splitter #####################################
+
+def XML_splitter(XML_TIMELINE,splitdates):
+    '''Tool to split XMLtimelines into several shorter timelines
+
+    The tool splits a timesline at a list of given times. The splitter ensures that the splitting do not occur
+    in the middle of a mode (for calibration modes) or in the middle of a macro (for operational modes). 
+
+    Arguments: 
+        XML_TIMELINE (str): Filename of timeline to split in chronological order
+        splitdates (list): list of datetime objects where the splitting shall be done
+        
+    Returns:
+        None
+    '''
+
+    tree = etree.parse('XML_TIMELINE.xml')
+    root = tree.getroot()
+    startdate = datetime.datetime.strptime(root[0][2][0].text,'%Y-%m-%dT%H:%M:%S')
+
+    if splitdates[0]<startdate:
+        raise ValueError('splitting cannot occur prior to first command')
+
+    time_of_last_command = startdate
+    splittime_index = 0
+
+    for command in root[1]:
+        time_of_command = startdate + datetime.timedelta(seconds=int(root[1][command][0].text))
+        if time_of_last_command < splitdates[splittime_index] < time_of_command:
+            pass
+
+        
+
+
+

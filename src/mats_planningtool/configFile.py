@@ -91,6 +91,26 @@ class configFile:
 
         return self.OPT_Config_File["version_ID"]
 
+    def ID(self):
+        """'Returns the ID of this Configuration File.
+
+        Returns:
+            (str): ID
+
+        """
+
+        return self.OPT_Config_File["ID"]
+
+    def Name(self):
+        """'Returns the descriptive name of this Configuration File.
+
+        Returns:
+            (str): descriptive name
+
+        """
+
+        return self.OPT_Config_File["name"]
+
     def Scheduling_priority(self):
         """Returns the Modes (except *Operational Science Modes* (Mode 1,2,5)) and StartUpCMDs planned to be schedueled in a *Science Mode Timeline* using *Timeline_gen*.
 
