@@ -1221,7 +1221,7 @@ def Mode131(root, date, duration, relativeTime, Timeline_settings, configFile, M
 
     pointing_altitude = Mode_settings["pointing_altitude"]
     relativeTimeEndOfMode = (
-        relativeTime + duration - Timeline_settings["mode_separation"]
+        relativeTime + duration - 2*Timeline_settings["mode_separation"] - Timeline_settings["pointing_stabilization"]
     )  # go to idle mode separation (s) before endDate
 
     "CMDs and Macros"
@@ -1237,8 +1237,18 @@ def Mode131(root, date, duration, relativeTime, Timeline_settings, configFile, M
 
     Commands.TC_pafMode(
         root,
-        relativeTimeEndOfMode,
+        relativeTimeEndOfMode-Timeline_settings["mode_separation"],
         MODE=2,
+        Timeline_settings=Timeline_settings, configFile=configFile,
+        comment=comment,
+    )
+
+    Commands.TC_acfLimbPointingAltitudeOffset(
+        root,
+        relativeTimeEndOfMode,
+        Initial=Timeline_settings["StandardPointingAltitude"],
+        Final=Timeline_settings["StandardPointingAltitude"],
+        Rate=0,
         Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )

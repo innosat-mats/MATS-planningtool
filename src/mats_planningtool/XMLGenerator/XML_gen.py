@@ -319,7 +319,7 @@ def XML_splitter(XML_TIMELINE,splitdates):
         None
     '''
 
-    tree = etree.parse('XML_TIMELINE.xml')
+    tree = etree.parse(XML_TIMELINE)
     root = tree.getroot()
     startdate = datetime.datetime.strptime(root[0][2][0].text,'%Y-%m-%dT%H:%M:%S')
 
@@ -337,4 +337,32 @@ def XML_splitter(XML_TIMELINE,splitdates):
         
 
 
+def XML_filter(XML_TIMELINE,commandstr):
+    '''Tool to remove a specific procedure from an XML timeline
+
+    Arguments: 
+        XML_TIMELINE (str): Filename of timeline to split in chronological order
+        command (str): procedure/command to remove
+        
+    Returns:
+        None
+    '''
+
+    tree = etree.parse(XML_TIMELINE)
+    root = tree.getroot()
+
+    f = open(XML_TIMELINE[:-4]+'_non_filtered.xml', 'w')
+    f.write(etree.tostring(root, pretty_print=True, encoding='unicode'))
+    f.close()
+
+    for command in root[1].findall('command'):
+        if command.attrib['mnemonic']==commandstr:
+            Logger.info('Removing ' + commandstr + ': from ' + XML_TIMELINE)
+            root[1].remove(command)
+    
+    Logger.info('Write XML-tree to: '+XML_TIMELINE)
+    f = open(XML_TIMELINE, 'w')
+    f.write(etree.tostring(root, pretty_print=True, encoding='unicode'))
+    f.close()
+    return
 

@@ -3,7 +3,7 @@ from mats_planningtool import configFile as configFile
 
 def get_test_configfile():
 
-    configfile = "./test_data/config_file_test.json"
+    configfile = "./data/config_file_opmode.json"
 
     configfile_test = configFile.configFile(
         configfile,

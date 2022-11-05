@@ -8,7 +8,7 @@ configfile.CheckConfigFile()
 #configfile.Timeline_gen(test=True)
 
 # #Manually remove sciencemode and set dates for snapshots in timeline_file
-configfile.XML_gen("data/early_harvest/Science_Mode_Timeline_3000_22110922110301TFFEXP.json")
+configfile.XML_gen("data/early_harvest/Science_Mode_Timeline_3000_22110922110301TFFEXP.json",test=True)
 
 
 #3010 WDWJQ
@@ -21,7 +21,7 @@ configfile.CheckConfigFile()
 #configfile.Timeline_gen(test=True)
 
 # #Manually remove sciencemode and set dates for snapshots in timeline_file
-configfile.XML_gen("data/early_harvest/Science_Mode_Timeline_3010_22110922110301TWDWJQ.json")
+configfile.XML_gen("data/early_harvest/Science_Mode_Timeline_3010_22110922110301TWDWJQ.json",test=True)
 
 # #3020 FFDAR
 from mats_planningtool import configFile as configFile
@@ -33,7 +33,7 @@ configfile.CheckConfigFile()
 #configfile.Timeline_gen(test=True)
 
 #Manually remove sciencemode and set dates for snapshots in timeline_file
-configfile.XML_gen("data/early_harvest/Science_Mode_Timeline_3020_22110922110301TFFDAR.json")
+configfile.XML_gen("data/early_harvest/Science_Mode_Timeline_3020_22110922110301TFFDAR.json",test=True)
 
 
 #3030 OP3S
