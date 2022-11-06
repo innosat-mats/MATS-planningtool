@@ -397,6 +397,15 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         CCD_settings[16]["TEXPMS"] = 0
                         CCD_settings[32]["TEXPMS"] = 0
                         CCD_settings[64]["TEXPMS"] = TEXPMS_nadir
+
+                        # relativeTime = Commands.TC_pafMode( root, 
+                        #     relativeTime, MODE=1, 
+                        #     Timeline_settings=Timeline_settings, 
+                        #     configFile=configFile, comment=comment
+                        #     )
+                        # Macros.SetCCDs_macro()
+                        # Commands.TC_pafMode()
+
                         new_relativeTime = Macros.Operational_Limb_Pointing_macro(
                             root,
                             relativeTime,

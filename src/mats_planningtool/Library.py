@@ -280,6 +280,25 @@ def utc_to_onboardTime(utc_date):
 
     return onboardGPSTime
 
+def onboardTime_to_utc(onboardGPSTime):
+    """Function which converts a date in utc into onboard time (GPS) in seconds and rounds to nearest 10th of a second.
+
+    Arguments:
+        (float): Onboard GPS time in seconds.
+
+    Returns:
+        utc_date (:obj:`datetime`): return utc time as datetimeobject.
+
+    """
+
+    dateEpochGPS = DT.datetime(1980,1,6,0,0,0,0,tzinfo=api.utc) + DT.timedelta(seconds=-18)
+    utc_date = dateEpochGPS+DT.timedelta(seconds = onboardGPSTime)
+    
+    if utc_date.tzinfo == None:
+        utc_date = utc_date.replace(tzinfo=api.utc)
+
+    return utc_date
+
 def SetupLogger(LoggerName):
     """Removes previous handlers and sets up a logger with both a file handler and a stream handler.
 

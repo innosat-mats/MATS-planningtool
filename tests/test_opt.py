@@ -166,5 +166,5 @@ if __name__ == "__main__":
 
     test_config_file()
     #test_timeline_get()
-    #test_xml_gen()
-    test_timeline_pluto_script()
+    test_xml_gen()
+    #test_timeline_pluto_script()
