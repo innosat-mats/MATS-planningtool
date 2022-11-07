@@ -113,7 +113,7 @@ def CheckConfigFile(configFile):
     #    Logger.error("Timeline_settings['CMD_separation'] * 8 <= Timeline_settings['mode_separation']. Possibility of time separation between CMDs are too large causing CMDs from Science Modes to overlap")
     #    raise ValueError
     if not (
-        40 <= Timeline_settings["pointing_stabilization"]
+        10 <= Timeline_settings["pointing_stabilization"]
         and type(Timeline_settings["pointing_stabilization"]) == int
     ):
         Logger.error("Timeline_settings['pointing_stabilization']")

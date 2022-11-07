@@ -51,7 +51,7 @@ def WDWJQ_3010(root, date, duration, relativeTime, Timeline_settings, configFile
 
     Logger.debug('Test_settings from Science Mode List: '+str(Test_settings))
 
-    CCD_settings = configFile.CCD_macro_settings('BinnedCalibration')
+    CCD_settings = configFile.CCD_macro_settings('CustomBinning')
 
     JPEGQs = Test_settings['JPEGQs']
     WDWs =Test_settings['WDWs']
