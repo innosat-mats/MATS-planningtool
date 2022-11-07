@@ -453,7 +453,7 @@ def Snapshot_Limb_Pointing_macro(
             Timeline_settings=Timeline_settings, configFile=configFile,
             comment=comment,
         )
-        relativeTime += SnapshotSpacing + CCD_settings[CCDSEL]['TEXPMS']
+        relativeTime += SnapshotSpacing + CCD_settings[CCDSEL]['TEXPMS']/1000
 
     # relativeTime = Commands.TC_pafMode(root, relativeTime, MODE = 1, Timeline_settings = Timeline_settings, configFile=configFile, comment = comment)
 

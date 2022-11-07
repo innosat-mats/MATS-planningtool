@@ -57,7 +57,7 @@ def WDWJQ_3010(root, date, duration, relativeTime, Timeline_settings, configFile
     WDWs =Test_settings['WDWs']
     altitudes = Test_settings['Altitudes']
     ExpTimes = Test_settings['ExpTimes']
-    SnapshotSpacing = 10
+    SnapshotSpacing = 5
 
     Mode_name = sys._getframe(0).f_code.co_name
 

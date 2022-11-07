@@ -1,14 +1,14 @@
 <InnoSatTimeline originator="OHB" sdbVersion="9.5.99.2">
   <description>
-    <timelineID procedureIdentifier="3030" descriptiveName="202211092022110602OP5" version="02"/>
+    <timelineID procedureIdentifier="3030" descriptiveName="202211092022110703OP5" version="03"/>
     <changeLog>
-      <changeLogItem version="02" date="2022-11-06" author="OMC">The file was created using OPT</changeLogItem>
+      <changeLogItem version="03" date="2022-11-07" author="OMC">The file was created using OPT</changeLogItem>
     </changeLog>
     <validity>
       <startingDate>2022-11-09T14:30:00</startingDate>
       <scenarioDuration>4200</scenarioDuration>
     </validity>
-    <comment>This command sequence is an Innosat timeline for MATS created with OPT. Science Mode Timeline used to generate: data/early_harvest/Science_Mode_Timeline_3030_22110922110602OP5.json, Configuration File used: data/early_harvest/configfile_3030_OP5.json</comment>
+    <comment>This command sequence is an Innosat timeline for MATS created with OPT. Science Mode Timeline used to generate: data/early_harvest/Science_Mode_Timeline_3030_22110922110703OP5.json, Configuration File used: data/early_harvest/configfile_3030_OP5.json</comment>
   </description>
   <listOfCommands>
     <procedure id="FCP-MTS-0035_Payload_Power_Toggle">
@@ -247,11 +247,11 @@
         <tcArgument mnemonic="GAIN">0</tcArgument>
         <tcArgument mnemonic="NFLUSH">1023</tcArgument>
         <tcArgument mnemonic="NRSKIP">0</tcArgument>
-        <tcArgument mnemonic="NRBIN">63</tcArgument>
-        <tcArgument mnemonic="NROW">8</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
         <tcArgument mnemonic="NCSKIP">0</tcArgument>
-        <tcArgument mnemonic="NCBIN">63</tcArgument>
-        <tcArgument mnemonic="NCOL">31</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
         <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
         <tcArgument mnemonic="SIGMODE">1</tcArgument>
       </tcArguments>
@@ -277,5 +277,12 @@
         <tcArgument mnemonic="MODE">1</tcArgument>
       </tcArguments>
     </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>3800</relativeTime>
+      <comment>Go to idle</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+      </command> 
   </listOfCommands>
 </InnoSatTimeline>

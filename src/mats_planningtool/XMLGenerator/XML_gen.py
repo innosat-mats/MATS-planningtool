@@ -166,11 +166,11 @@ def XML_generator(configFile, SCIMOD_Path,test=False):
     if test:
         XML_TIMELINE = os.path.join(configFile.output_dir, 'STP-MTS-' + configFile.ID() + '_' + 
             datetime.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S').strftime('%y%m%d') +
-            datetime.datetime.now().strftime('%y%m%d') +  'T' + configFile.Name() +'.xml')
+            datetime.datetime.now().strftime('%y%m%d') + configFile.Version() +  'T' + configFile.Name() +'.xml')
     else:
         XML_TIMELINE = os.path.join(configFile.output_dir, 'STP-MTS-' + configFile.ID() + '_' + 
             datetime.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S').strftime('%y%m%d') +
-            datetime.datetime.now().strftime('%y%m%d') +  configFile.Name() +'.xml')
+            datetime.datetime.now().strftime('%y%m%d') + configFile.Version() +  configFile.Name() +'.xml')
  
     Logger.info('Write XML-tree to: '+XML_TIMELINE)
     f = open(XML_TIMELINE, 'w')
