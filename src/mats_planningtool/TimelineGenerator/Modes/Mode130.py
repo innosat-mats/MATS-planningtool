@@ -10,6 +10,7 @@ import sys
 import logging
 import importlib
 import datetime as DT
+import numpy as np
 
 from mats_planningtool.Library import scheduler
 
@@ -31,6 +32,13 @@ def Mode130(Occupied_Timeline, configFile):
 
     Timeline_settings = configFile.Timeline_settings()
     Settings = configFile.Mode130_settings()
+    FullframeMacroSetting = configFile.CCD_macro_settings("FullReadout")
+    ListOfTEXPMS = []
+    for key in FullframeMacroSetting.keys():
+        if key !=64:
+            ListOfTEXPMS.append(FullframeMacroSetting[key]["TEXPMS"])
+    
+    sum_of_exptimes = np.sum(ListOfTEXPMS)/1000
 
     "Get the initially planned date"
     if Settings["start_date"] != "0":
@@ -40,9 +48,10 @@ def Mode130(Occupied_Timeline, configFile):
         initialDate = initialDate = DT.datetime.strptime(Timeline_settings["start_date"],'%Y/%m/%d %H:%M:%S')
         Logger.info("Timeline start_date used as initial date")
 
-    NumberOfCCDs = 7
+    NumberOfCCDs = 6
     endDate = initialDate + DT.timedelta(seconds= Settings['SnapshotSpacing'] * NumberOfCCDs +
-                                                       Timeline_settings['pointing_stabilization'] + Timeline_settings['mode_separation'])
+        sum_of_exptimes +  Timeline_settings['CMD_separation']*(NumberOfCCDs*2+2) +        
+        Timeline_settings['pointing_stabilization'] + Timeline_settings['mode_separation'])
 
     ############### Start of availability schedueler ##########################
 

@@ -446,14 +446,14 @@ def Snapshot_Limb_Pointing_macro(
     )
 
     for CCDSEL in CCDSELs:
-        Commands.TC_pafCCDSnapshot(
+        relativeTime = Commands.TC_pafCCDSnapshot(
             root,
             relativeTime,
             CCDSEL=CCDSEL,
             Timeline_settings=Timeline_settings, configFile=configFile,
             comment=comment,
         )
-        relativeTime += SnapshotSpacing
+        relativeTime += SnapshotSpacing + CCD_settings[CCDSEL]['TEXPMS']
 
     # relativeTime = Commands.TC_pafMode(root, relativeTime, MODE = 1, Timeline_settings = Timeline_settings, configFile=configFile, comment = comment)
 
