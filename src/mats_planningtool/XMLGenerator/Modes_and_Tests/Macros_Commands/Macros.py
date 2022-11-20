@@ -10,6 +10,7 @@ This is important as the images need time to finish their current exposure befor
 
 import importlib
 import logging
+import datetime as DT
 
 
 from mats_planningtool import Library
@@ -304,6 +305,10 @@ def Snapshot_Inertial_macro(
     """
 
     comment = comment + ", Snapshot_Inertial_macro"
+    
+    #FIXME: This is a bit ugly, probably FreezeTime_rel should be used as input argument
+    startdate = DT.datetime.strptime(Timeline_settings["start_date"],'%Y/%m/%d %H:%M:%S')
+    FreezeTime_rel = int((FreezeTime.datetime()-startdate).total_seconds())
 
     "TEXPIMS is unused but still need to be set to a plausible value to not get errors"
     Disregarded, Disregarded, Disregarded, TEXPIMS = Library.SyncArgCalculator(
@@ -339,17 +344,9 @@ def Snapshot_Inertial_macro(
         comment=comment,
     )
 
-    relativeTime = Commands.TC_affArgFreezeStart(
+    relativeTime = Commands.TC_acsPayloadAttitudeFreeze(
         root,
-        relativeTime,
-        StartTime=FreezeTime,
-        Timeline_settings=Timeline_settings, configFile=configFile,
-        comment=comment,
-    )
-
-    relativeTime = Commands.TC_affArgFreezeDuration(
-        root,
-        relativeTime,
+        FreezeTime_rel,
         FreezeDuration=FreezeDuration,
         Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,

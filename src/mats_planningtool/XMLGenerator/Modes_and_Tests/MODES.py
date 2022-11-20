@@ -943,7 +943,7 @@ def Mode12X(
         relativeTime + Mode_settings["freeze_start"] + Mode_settings["SnapshotTime"]
     )
 
-    FreezeTime = utc_to_onboardTime(freeze_start_utc)
+    FreezeTime = freeze_start_utc
 
     FreezeDuration = Mode_settings["freeze_duration"]
 
@@ -953,7 +953,7 @@ def Mode12X(
     SnapshotSpacing = Mode_settings["SnapshotSpacing"]
 
     Logger.debug("freeze_start_utc: " + str(freeze_start_utc))
-    Logger.debug("FreezeTime [GPS]: " + str(FreezeTime))
+    #Logger.debug("FreezeTime [GPS]: " + str(FreezeTime))
     Logger.debug("FreezeDuration: " + str(FreezeDuration))
 
     Macros.Snapshot_Inertial_macro(

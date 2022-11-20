@@ -166,6 +166,182 @@ def FFEXP_3000(root, date, duration, relativeTime, Timeline_settings, configFile
 
 
 
+######################################################################################
+
+def STAR_3040(root, date, duration, relativeTime, Timeline_settings, configFile, Test_settings):
+    """STAR_3040. 
+
+    Schedules STAR_3040 with defined parameters.
+    """
+
+    Logger.info('')
+    Logger.info('Start of STAR_3040')
+    Logger.debug('Test_settings from Science Mode List: '+str(Test_settings))
+
+    CCD_settings = configFile.CCD_macro_settings('FullReadout')
+    ExpTimes = Test_settings['ExpTimes']
+    SnapshotSpacing = 5
+    pointing_altitude = Test_settings["pointing_altitude"]
+    pointing_altitude_end = Test_settings["pointing_altitude_end"] #this is a dummy variable just to get correct time for limb reset
+
+    Mode_name = sys._getframe(0).f_code.co_name
+    comment = Mode_name + " starting date: " + str(date) + ", " + str(Test_settings)
+
+    freeze_start_utc = ephem.Date(date + ephem.second * Test_settings["freeze_start"])
+    FreezeTime = freeze_start_utc
+
+    FreezeDuration = Test_settings["freeze_duration"]
+    SnapshotSpacing = Test_settings["SnapshotSpacing"]
+
+    Logger.debug("freeze_start_utc: " + str(freeze_start_utc))
+    Logger.debug("FreezeDuration: " + str(FreezeDuration))
+
+    comment = comment + ", Snapshot_Inertial_macro"
+    
+    #FIXME: This is a bit ugly, probably FreezeTime_rel should be used as input argument
+    startdate = DT.datetime.strptime(Timeline_settings["start_date"],'%Y/%m/%d %H:%M:%S')
+    FreezeTime_rel = int((FreezeTime.datetime()-startdate).total_seconds())
+
+
+    TEXPIMS = 120000
+
+    relativeTime = Commands.TC_pafMode(
+        root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment
+    )
+
+    relativeTime = Commands.TC_acfLimbPointingAltitudeOffset(
+        root,
+        relativeTime,
+        Initial=pointing_altitude,
+        Final=pointing_altitude,
+        Rate=0,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
+        comment=comment,
+    )
+
+    relativeTime = Macros.SetCCDs_macro(
+        root,
+        relativeTime,
+        CCD_settings,
+        TEXPIMS,
+        Timeline_settings=Timeline_settings, configFile=configFile,
+        comment=comment,
+    )
+
+    relativeTime = Commands.TC_acsPayloadAttitudeFreeze(
+        root,
+        FreezeTime_rel,
+        FreezeDuration=FreezeDuration,
+        Timeline_settings=Timeline_settings, configFile=configFile,
+        comment=comment,
+    )
+
+    for ExpTime in ExpTimes:
+        
+        for key in CCD_settings.keys():
+            CCD_settings[key]['TEXPMS'] = ExpTime
+
+        "CCDSEL arguments in order of increasing TEXPMS"
+        CCDSELs = Test_settings["CCDSELs"]
+
+        relativeTime = Macros.SetCCDs_macro(
+            root,
+            relativeTime,
+            CCD_settings,
+            TEXPIMS=TEXPIMS,
+            Timeline_settings=Timeline_settings, configFile=configFile,
+            CCDList = CCDSELs,
+            comment=comment,
+        )
+        
+        for CCDSEL in CCDSELs:
+            relativeTime = Commands.TC_pafCCDSnapshot(
+                root,
+                relativeTime,
+                CCDSEL=CCDSEL,
+                Timeline_settings=Timeline_settings, configFile=configFile,
+                comment=comment,
+            )
+
+            relativeTime += SnapshotSpacing + CCD_settings[CCDSEL]['TEXPMS']/1000
+
+    configFile.current_pointing = pointing_altitude_end #should be calulated from Freeze time
+
+    relativeTime = Commands.TC_acfLimbPointingAltitudeOffset(
+        root,
+        relativeTime,
+        Initial=Timeline_settings["StandardPointingAltitude"],
+        Final=Timeline_settings["StandardPointingAltitude"],
+        Rate=0,
+        Timeline_settings=Timeline_settings, configFile=configFile,
+        comment=comment,
+    )
+    # relativeTime = Commands.TC_pafMode(root, relativeTime, MODE = 1, Timeline_settings = Timeline_settings, configFile=configFile, comment = comment)
+
+    Logger.info('End of STAR_3040')
+
+    return relativeTime
+
+####################################################################################
+
+
+
+###########################################################################################################
+def LMBF_3050(root, date, duration, relativeTime, Timeline_settings, configFile, Test_settings):
+    """LMBF_3050. 
+
+    Schedules LMBF_3050 with defined parameters.
+    """
+
+    Logger.info('')
+    Logger.info('Start of LMBF_3050')
+
+    Logger.debug('Test_settings from Science Mode List: '+str(Test_settings))
+
+    CCD_settings = configFile.CCD_macro_settings('FullReadout')
+
+    ExpTimes = Test_settings['ExpTimes']
+    SnapshotTimes = Test_settings['SnapshotTimes']
+    altitude = Test_settings['Altitude']
+    SnapshotSpacing = 5
+
+    Mode_name = sys._getframe(0).f_code.co_name
+
+    initial_relativeTime = relativeTime
+    starttime = DT.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S')
+
+    "Start looping the CCD settings and call for macros"
+    for SnapshotTime in SnapshotTimes:
+
+        snaptime =  DT.datetime.strptime(SnapshotTime,'%Y/%m/%d %H:%M:%S')
+        relativeTime = (snaptime-starttime).seconds
+
+        for ExpTime in ExpTimes:
+
+            for key in CCD_settings.keys():
+                CCD_settings[key]['TEXPMS'] = ExpTime
+
+                    
+            comment = (Mode_name+', '+str(snaptime)+', '+', pointing_altitude = '+str(altitude) +
+                        ', ExpTime = '+str(ExpTime))
+            Logger.debug(comment)
+
+            relativeTime = Macros.Snapshot_Limb_Pointing_macro(root, round(
+                relativeTime, 2), CCD_settings, pointing_altitude=altitude, SnapshotSpacing=SnapshotSpacing, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment)
+
+    mode_relativeTime = relativeTime - initial_relativeTime
+    current_time = ephem.Date(date+ephem.second*mode_relativeTime)
+
+    Logger.info('End of LMBF_3050')
+
+    return relativeTime, current_time
+
+####################################################################################
+
+
+
+
 def All_Tests(root, date, duration, relativeTime, Timeline_settings, configFile, Test_settings=['Limb_functional_test', 'Photometer_test_1', 'CCD_stability_test', 'Nadir_functional_test']):
     """ Runs all the Test functions which have their function name as a string in the input *Test_settings*.
 

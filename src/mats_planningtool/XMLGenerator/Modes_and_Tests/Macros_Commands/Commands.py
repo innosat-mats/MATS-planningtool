@@ -132,6 +132,7 @@ def TC_acfLimbPointingAltitudeOffset(
         Logger.debug(
             'Rate != 0, meaning a sweep is scheduled. Next CMD is only staggered by Timeline_settings["CMD_separation"]'
         )
+        raise NotImplementedError('Rate != 0 is not supported by OHB')
     elif current_pointing == Final and current_pointing == Initial:
         configFile.current_pointing = Final
         incremented_time = (
@@ -163,6 +164,7 @@ def TC_acfLimbPointingAltitudeOffset(
 def TC_affArgFreezeStart(
     root, relativeTime, StartTime, Timeline_settings, configFile, comment=""
 ):
+    raise DeprecationWarning('Command no longer supported')
 
     if not (
         configFile.latestRelativeTime
@@ -200,6 +202,8 @@ def TC_affArgFreezeDuration(
     root, relativeTime, FreezeDuration, Timeline_settings, configFile, comment=""
 ):
 
+    raise DeprecationWarning('Command no longer supported')
+
     if not (
         configFile.latestRelativeTime
         <= relativeTime
@@ -229,6 +233,43 @@ def TC_affArgFreezeDuration(
 
     incremented_time = relativeTime + Timeline_settings["CMD_separation"]
     configFile.latestRelativeTime = relativeTime
+
+    return incremented_time
+
+def TC_acsPayloadAttitudeFreeze(
+    root, relativeTime, FreezeDuration, Timeline_settings, configFile, comment=""
+):
+    if not (
+        configFile.latestRelativeTime
+        <= relativeTime
+        <= Timeline_settings["duration"]["duration"]
+    ):
+        Logger.error(
+            "Invalid argument: negative relativeTime, decreasing relativeTime, exceeding timeline duration"
+        )
+        raise ValueError
+    
+    if not (0 < FreezeDuration <= 300):
+        Logger.error("Invalid argument: negative FreezeDuration or too long.")
+        raise ValueError
+
+    etree.SubElement(root[1], "procedure", id="FCP-ACS-0022_Payload_Attitude_Freeze")
+
+    etree.SubElement(root[1][len(root[1]) - 1], "relativeTime")
+    root[1][len(root[1]) - 1][0].text = str(int(relativeTime))
+
+    etree.SubElement(root[1][len(root[1]) - 1], "comment")
+    root[1][len(root[1]) - 1][1].text = comment
+
+    etree.SubElement(root[1][len(root[1]) - 1], "tcArguments")
+    etree.SubElement(
+        root[1][len(root[1]) - 1][2], "tcArgument", mnemonic="FreezeDuration"
+    )
+    root[1][len(root[1]) - 1][2][0].text = str(FreezeDuration)
+
+    incremented_time = relativeTime + Timeline_settings["CMD_separation"]
+    configFile.latestRelativeTime = relativeTime
+
 
     return incremented_time
 
@@ -565,7 +606,7 @@ def TC_pafCCDMain(
     )
     ReadOutTime = T_readout + T_delay + T_Extra
     # Logger.debug('ReadOutTime = '+str(ReadOutTime))
-    if not (0 <= TEXPMS <= 32000 and TEXPMS + ReadOutTime < TEXPIMS):
+    if not (0 <= TEXPMS <= 120000 and TEXPMS + ReadOutTime < TEXPIMS):
         Logger.error(
             "Invalid argument: 32000 < TEXPMS < 0 or TEXPMS + ReadOutTime > TEXPIMS"
         )

@@ -184,7 +184,7 @@ def Timeline_generator(configFile,test=False):
             OpSciMode = 'Mode1'
         else:
             Logger.info('Not NLC season (Mode2)')
-            OpSciMode = 'Mode2'
+            OpSciMode = 'Mode2'      
 
     Occupied_Timeline.update({OpSciMode: []})
 
