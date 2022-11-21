@@ -341,6 +341,66 @@ def LMBF_3050(root, date, duration, relativeTime, Timeline_settings, configFile,
 
 
 
+###########################################################################################################
+def NADF_3060(root, date, duration, relativeTime, Timeline_settings, configFile, Test_settings):
+    """NADF_3060. 
+
+    Schedules NADF_3060 with defined parameters.
+    """
+
+    Logger.info('')
+    Logger.info('Start of NADF_3060')
+
+    Logger.debug('Test_settings from Science Mode List: '+str(Test_settings))
+
+    CCD_settings = configFile.CCD_macro_settings('FullReadout')
+
+    ExpTimes = Test_settings['ExpTimes']
+    SnapshotTimes = Test_settings['SnapshotTimes']
+    altitude = Test_settings['Altitude']
+    SnapshotSpacing = 3
+
+    Mode_name = sys._getframe(0).f_code.co_name
+
+    t = 0
+
+    initial_relativeTime = relativeTime
+    starttime = DT.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S')
+
+    "Start looping the CCD settings and call for macros"
+    for SnapshotTime in SnapshotTimes:
+
+        snaptime =  DT.datetime.strptime(SnapshotTime,'%Y/%m/%d %H:%M:%S')
+        relativeTime = (snaptime-starttime).seconds
+
+        for ExpTime in ExpTimes:
+
+            for key in CCD_settings.keys():
+                CCD_settings[key]['TEXPMS'] = ExpTime
+
+                    
+            comment = (Mode_name+', '+str(snaptime)+', '+', pointing_altitude = '+str(altitude) +
+                        ', ExpTime = '+str(ExpTime))
+            Logger.debug(comment)
+
+            relativeTime = Macros.NadirSnapshot_Limb_Pointing_macro(root, round(
+                relativeTime, 2), CCD_settings, pointing_altitude=altitude, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment)
+
+            relativeTime = relativeTime + SnapshotSpacing
+
+
+    mode_relativeTime = relativeTime - initial_relativeTime
+    current_time = ephem.Date(date+ephem.second*mode_relativeTime)
+
+    Logger.info('End of NADF_3060')
+
+    return relativeTime, current_time
+
+####################################################################################
+
+
+
+
 
 def All_Tests(root, date, duration, relativeTime, Timeline_settings, configFile, Test_settings=['Limb_functional_test', 'Photometer_test_1', 'CCD_stability_test', 'Nadir_functional_test']):
     """ Runs all the Test functions which have their function name as a string in the input *Test_settings*.
