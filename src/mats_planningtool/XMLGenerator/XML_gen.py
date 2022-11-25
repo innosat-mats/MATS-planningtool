@@ -235,7 +235,7 @@ def XML_Initial_Basis_Creator(timeline_start, timeline_duration, SCIMOD_Path, co
         teststr = 'T'
     else:
         teststr = ''
-    etree.SubElement(root[0], 'timelineID', procedureIdentifier=ID,
+    etree.SubElement(root[0], 'timelineID', procedureIdentifier='STP-MTS-' + ID,
                      descriptiveName=StartingDate_name+Generationdate_name+version+teststr+Name, version=version)
 
     etree.SubElement(root[0], 'changeLog')

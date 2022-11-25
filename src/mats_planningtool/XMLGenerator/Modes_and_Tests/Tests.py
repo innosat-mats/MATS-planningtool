@@ -311,11 +311,24 @@ def LMBF_3050(root, date, duration, relativeTime, Timeline_settings, configFile,
     initial_relativeTime = relativeTime
     starttime = DT.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S')
 
+
+    #Run simulator for time to get SZA
+    TLE = configFile.getTLE()
+    MATS_skyfield = skyfield.api.EarthSatellite(TLE[0], TLE[1])
+    
     "Start looping the CCD settings and call for macros"
     for SnapshotTime in SnapshotTimes:
 
         snaptime =  DT.datetime.strptime(SnapshotTime,'%Y/%m/%d %H:%M:%S')
         relativeTime = (snaptime-starttime).seconds
+
+        Satellite_dict = Satellite_Simulator(MATS_skyfield,
+            snaptime,
+            Timeline_settings,
+            altitude,
+            LogFlag=False,
+            Logger=None)
+
 
         for ExpTime in ExpTimes:
 
@@ -324,7 +337,9 @@ def LMBF_3050(root, date, duration, relativeTime, Timeline_settings, configFile,
 
                     
             comment = (Mode_name+', '+str(snaptime)+', '+', pointing_altitude = '+str(altitude) +
-                        ', ExpTime = '+str(ExpTime))
+                        ', ExpTime = '+str(ExpTime)+  ', SolarZenithAngleTP = ' + 
+                        str(Satellite_dict["SolarZenithAngleTP"]) + 
+                        ', SolarZenithAngleNadir = '+str(Satellite_dict["SolarZenithAngleNadir"]))
             Logger.debug(comment)
 
             relativeTime = Macros.Snapshot_Limb_Pointing_macro(root, round(
@@ -362,16 +377,27 @@ def NADF_3060(root, date, duration, relativeTime, Timeline_settings, configFile,
 
     Mode_name = sys._getframe(0).f_code.co_name
 
-    t = 0
 
     initial_relativeTime = relativeTime
     starttime = DT.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S')
+
+    #Run simulator for time to get SZA
+    TLE = configFile.getTLE()
+    MATS_skyfield = skyfield.api.EarthSatellite(TLE[0], TLE[1])
+
 
     "Start looping the CCD settings and call for macros"
     for SnapshotTime in SnapshotTimes:
 
         snaptime =  DT.datetime.strptime(SnapshotTime,'%Y/%m/%d %H:%M:%S')
         relativeTime = (snaptime-starttime).seconds
+
+        Satellite_dict = Satellite_Simulator(MATS_skyfield,
+            snaptime,
+            Timeline_settings,
+            altitude,
+            LogFlag=False,
+            Logger=None)
 
         for ExpTime in ExpTimes:
 
@@ -380,7 +406,10 @@ def NADF_3060(root, date, duration, relativeTime, Timeline_settings, configFile,
 
                     
             comment = (Mode_name+', '+str(snaptime)+', '+', pointing_altitude = '+str(altitude) +
-                        ', ExpTime = '+str(ExpTime))
+                        ', ExpTime = '+str(ExpTime)+  ', SolarZenithAngleTP = ' + 
+                        str(Satellite_dict["SolarZenithAngleTP"]) + 
+                        ', SolarZenithAngleNadir = '+str(Satellite_dict["SolarZenithAngleNadir"]))
+
             Logger.debug(comment)
 
             relativeTime = Macros.NadirSnapshot_Limb_Pointing_macro(root, round(

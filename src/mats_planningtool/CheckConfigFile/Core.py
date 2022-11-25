@@ -185,6 +185,7 @@ def CheckConfigFile(configFile):
                     "LowPixel",
                     "FullReadout",
                     "BinnedCalibration",
+                    "CCDOFF",
                 ]
             ):
                 Logger.error(

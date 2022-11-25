@@ -93,15 +93,16 @@ def Operational_Limb_Pointing_macro(
         comment=comment,
     )
 
-    relativeTime = Commands.TC_pafCCDSYNCHRONIZE(
-        root,
-        relativeTime,
-        CCDSEL=CCDSEL,
-        NCCD=NCCD,
-        TEXPIOFS=TEXPIOFS,
-        Timeline_settings=Timeline_settings, configFile=configFile,
-        comment=comment,
-    )
+    if not (CCDSEL == 0): #No CCDs to be synchronized
+        relativeTime = Commands.TC_pafCCDSYNCHRONIZE(
+            root,
+            relativeTime,
+            CCDSEL=CCDSEL,
+            NCCD=NCCD,
+            TEXPIOFS=TEXPIOFS,
+            Timeline_settings=Timeline_settings, configFile=configFile,
+            comment=comment,
+        )
 
     relativeTime = Commands.TC_pafMode(
         root, relativeTime, MODE=1, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment

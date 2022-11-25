@@ -133,7 +133,7 @@ def Satellite_Simulator(
 
     Arguments:
         Satellite_skyfield (:obj:`skyfield.sgp4lib.EarthSatellite`): A Skyfield object representing an EarthSatellite defined by a TLE.
-        SimulationTime (:obj:`ephem.Date`): The time of the simulation.
+        SimulationTime (:obj:`ephem.Date` or 'datetime'): The time of the simulation.
         Timeline_settings (dict): A dictionary containing relevant settings to the simulation.
         pointing_altitude (float): Contains the pointing altitude of the simulation [km].
         LogFlag (bool): If data from the simulation shall be logged.
@@ -213,10 +213,17 @@ def Satellite_Simulator(
     #Get tangent point
     scaling_factor = findtangent(current_time_skyfield,ECI_pos,FOV_sky).x #find distance to the nearest point to the geoid (m)
     tangent_point = ECI_pos + scaling_factor * FOV_sky #position in ECI units of the tangent point
-    tangent_point=ICRF(Distance(m=tangent_point).au,t=current_time_skyfield,center=399)
+    tangent_point = ICRF(Distance(m=tangent_point).au,t=current_time_skyfield,center=399)
     tangent_point_lat = (wgs84.subpoint(tangent_point).latitude.degrees)
     tangent_point_lon = (wgs84.subpoint(tangent_point).longitude.degrees)
-    
+
+    planets=sfapi.load('de421.bsp')
+    earth,sun= planets['earth'], planets['sun']
+    sundir=(earth+wgs84.subpoint(tangent_point)).at(current_time_skyfield).observe(sun).apparent()
+    obs=sundir.altaz()
+    SolarZenithAngle = (90-obs[0].degrees)
+    SolarScatteringAngle = (np.rad2deg(np.arccos(np.dot(FOV_sky,sundir.position.m/norm(sundir.position.m)))))
+    SolarZenithAngleNadir = 90-(earth+wgs84.subpoint(Satellite_geo)).at(current_time_skyfield).observe(sun).apparent().altaz()[0].degrees
 
     r_dash=np.cross(FOV_sky,normal_orbit)
 
@@ -260,6 +267,9 @@ def Satellite_Simulator(
         "RA_OpticalAxis [degrees]": FOV_ra,
         "EstimatedLatitude_LP [degrees]": tangent_point_lat,
         "EstimatedLongitude_LP [degrees]": tangent_point_lon,
+        "SolarZenithAngleTP": SolarZenithAngle,
+        "SolarScatteringAngleTP": SolarScatteringAngle,
+        "SolarZenithAngleNadir": SolarZenithAngleNadir,
         "InvRotMatrix": invrotmatrix #Rotation matrix from ECI to CCD coordinates
     }
 

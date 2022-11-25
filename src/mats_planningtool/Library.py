@@ -726,8 +726,11 @@ def SyncArgCalculator(CCD_settings, ExtraOffset, ExtraIntervalTime):
         TEXPIOFS.remove(-1)
 
     TransferTimesCombined = sum(TransferTimes)
-
-    ExpInterval = max(ExpIntervals)
+    if ExpTimes  == [0,0,0,0,0,0]:
+        ExpInterval = 10000
+        TEXPIOFS = [0,0,0,0,0,0]
+    else:
+        ExpInterval = max(ExpIntervals)
 
     for FirstExpTime in ExpTimes:
         if FirstExpTime != 0:

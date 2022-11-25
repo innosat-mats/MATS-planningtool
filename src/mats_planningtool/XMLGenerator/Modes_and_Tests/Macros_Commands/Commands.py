@@ -166,75 +166,12 @@ def TC_affArgFreezeStart(
 ):
     raise DeprecationWarning('Command no longer supported')
 
-    if not (
-        configFile.latestRelativeTime
-        <= relativeTime
-        <= Timeline_settings["duration"]["duration"]
-    ):
-        Logger.error(
-            "Invalid argument: negative relativeTime, decreasing relativeTime, exceeding timeline duration"
-        )
-        raise ValueError
-    "Within the years 2019-2100"
-    if not (1198843200 < StartTime <= 1893067200):
-        Logger.error("Invalid argument: StartTime")
-        raise ValueError
-
-    etree.SubElement(root[1], "command", mnemonic="TC_affArgFreezeStart")
-
-    etree.SubElement(root[1][len(root[1]) - 1], "relativeTime")
-    root[1][len(root[1]) - 1][0].text = str(int(relativeTime))
-
-    etree.SubElement(root[1][len(root[1]) - 1], "comment")
-    root[1][len(root[1]) - 1][1].text = comment
-
-    etree.SubElement(root[1][len(root[1]) - 1], "tcArguments")
-    etree.SubElement(root[1][len(root[1]) - 1][2], "tcArgument", mnemonic="StartTime")
-    root[1][len(root[1]) - 1][2][0].text = str(StartTime)
-
-    incremented_time = relativeTime + Timeline_settings["CMD_separation"]
-    configFile.latestRelativeTime = relativeTime
-
-    return incremented_time
-
 
 def TC_affArgFreezeDuration(
     root, relativeTime, FreezeDuration, Timeline_settings, configFile, comment=""
 ):
 
     raise DeprecationWarning('Command no longer supported')
-
-    if not (
-        configFile.latestRelativeTime
-        <= relativeTime
-        <= Timeline_settings["duration"]["duration"]
-    ):
-        Logger.error(
-            "Invalid argument: negative relativeTime, decreasing relativeTime, exceeding timeline duration"
-        )
-        raise ValueError
-    if not (0 < FreezeDuration <= 3600):
-        Logger.error("Invalid argument: negative FreezeDuration or too long.")
-        raise ValueError
-
-    etree.SubElement(root[1], "command", mnemonic="TC_affArgFreezeDuration")
-
-    etree.SubElement(root[1][len(root[1]) - 1], "relativeTime")
-    root[1][len(root[1]) - 1][0].text = str(int(relativeTime))
-
-    etree.SubElement(root[1][len(root[1]) - 1], "comment")
-    root[1][len(root[1]) - 1][1].text = comment
-
-    etree.SubElement(root[1][len(root[1]) - 1], "tcArguments")
-    etree.SubElement(
-        root[1][len(root[1]) - 1][2], "tcArgument", mnemonic="FreezeDuration"
-    )
-    root[1][len(root[1]) - 1][2][0].text = str(FreezeDuration)
-
-    incremented_time = relativeTime + Timeline_settings["CMD_separation"]
-    configFile.latestRelativeTime = relativeTime
-
-    return incremented_time
 
 def TC_acsPayloadAttitudeFreeze(
     root, relativeTime, FreezeDuration, Timeline_settings, configFile, comment=""
@@ -261,9 +198,9 @@ def TC_acsPayloadAttitudeFreeze(
     etree.SubElement(root[1][len(root[1]) - 1], "comment")
     root[1][len(root[1]) - 1][1].text = comment
 
-    etree.SubElement(root[1][len(root[1]) - 1], "tcArguments")
+    etree.SubElement(root[1][len(root[1]) - 1], "parameters")
     etree.SubElement(
-        root[1][len(root[1]) - 1][2], "tcArgument", mnemonic="FreezeDuration"
+        root[1][len(root[1]) - 1][2], "parameter", name="duration"
     )
     root[1][len(root[1]) - 1][2][0].text = str(FreezeDuration)
 
