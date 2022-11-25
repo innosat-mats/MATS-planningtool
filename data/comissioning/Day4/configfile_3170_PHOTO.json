@@ -1,9 +1,9 @@
 {
     "Logger_name": "OPT_logger",
-    "version_ID": "02",
+    "version_ID": "01",
     "Author": "OMC",
-    "ID": "3102",
-    "name": "MODE5" ,
+    "ID": "3170",
+    "name": "PHOTO" ,
     "Modes_priority": [
         "Payload_Power_Toggle",
         "ArgEnableYawComp",
@@ -16,10 +16,10 @@
     "TLE1": "1 99988U 22123    22304.76424065  .00004664  00000-0  44774-3 0 00000",
     "TLE2": "2 99988 097.6561 307.5659 0012827 298.3476 106.0390 14.93086308000015",
     "Timeline_settings": {
-        "start_date": "2022/11/23 18:00:00",
+        "start_date": "2022/11/25 18:00:00",
         "duration": {
-            "day": 0,
-            "hours": 12,
+            "day": 3,
+            "hours": 0,
             "seconds": 0
         },
         "Mode1_2_5_minDuration": 300,
@@ -45,7 +45,7 @@
         "lat": 45,
         "log_timestep": 800,
         "timestep": 8,
-        "Choose_Mode5CCDMacro": "CustomBinning"
+        "Choose_Mode5CCDMacro": "CCDOFF"
     },
     "Mode100_settings": {
         "pointing_altitude_from": 40000,
@@ -196,8 +196,8 @@
         "BC": []
     },
     "PM_settings": {
-        "TEXPMS": 3000,
-        "TEXPIMS": 4000
+        "TEXPMS": 6000,
+        "TEXPIMS": 7000
     },
     "CCDBIAS_settings": {
         "CCDSEL": 127,
@@ -281,7 +281,7 @@
                 "WDW": 128,
                 "JPEGQ": 100,
                 "SYNC": 0,
-                "TEXPMS": 5000,
+                "TEXPMS": 3000,
                 "GAIN": 0,
                 "NFLUSH": 1023,
                 "NRSKIP": 95,
@@ -298,7 +298,7 @@
                 "WDW": 128,
                 "JPEGQ": 100,
                 "SYNC": 0,
-                "TEXPMS": 5000,
+                "TEXPMS": 3000,
                 "GAIN": 0,
                 "NFLUSH": 1023,
                 "NRSKIP": 95,
@@ -813,6 +813,128 @@
                 "NCSKIP": 0,
                 "NCBIN": 1,
                 "NCOL": 2047,
+                "NCBINFPGA": 0,
+                "SIGMODE": 1
+            }
+        },
+        "CCDOFF": {
+            "CCD_settings_UV1": {
+                "PWR": 1,
+                "WDW": 7,
+                "JPEGQ": 100,
+                "SYNC": 0,
+                "TEXPMS": 0,
+                "GAIN": 0,
+                "NFLUSH": 1023,
+                "NRSKIP": 0,
+                "NRBIN": 63,
+                "NROW": 7,
+                "NCSKIP": 0,
+                "NCBIN": 255,
+                "NCOL": 7,
+                "NCBINFPGA": 0,
+                "SIGMODE": 1
+            },
+            "CCD_settings_UV2": {
+                "PWR": 1,
+                "WDW": 7,
+                "JPEGQ": 100,
+                "SYNC": 0,
+                "TEXPMS": 0,
+                "GAIN": 0,
+                "NFLUSH": 1023,
+                "NRSKIP": 0,
+                "NRBIN": 63,
+                "NROW": 7,
+                "NCSKIP": 0,
+                "NCBIN": 255,
+                "NCOL": 7,
+                "NCBINFPGA": 0,
+                "SIGMODE": 1
+            },
+            "CCD_settings_IR1": {
+                "PWR": 1,
+                "WDW": 7,
+                "JPEGQ": 100,
+                "SYNC": 0,
+                "TEXPMS": 0,
+                "GAIN": 0,
+                "NFLUSH": 1023,
+                "NRSKIP": 0,
+                "NRBIN": 63,
+                "NROW": 7,
+                "NCSKIP": 0,
+                "NCBIN": 255,
+                "NCOL": 7,
+                "NCBINFPGA": 0,
+                "SIGMODE": 1
+            },
+            "CCD_settings_IR2": {
+                "PWR": 1,
+                "WDW": 7,
+                "JPEGQ": 100,
+                "SYNC": 0,
+                "TEXPMS": 0,
+                "GAIN": 0,
+                "NFLUSH": 1023,
+                "NRSKIP": 0,
+                "NRBIN": 63,
+                "NROW": 7,
+                "NCSKIP": 0,
+                "NCBIN": 255,
+                "NCOL": 7,
+                "NCBINFPGA": 0,
+                "SIGMODE": 1
+            },
+            "CCD_settings_IR3": {
+                "PWR": 1,
+                "WDW": 7,
+                "JPEGQ": 100,
+                "SYNC": 0,
+                "TEXPMS": 0,
+                "GAIN": 0,
+                "NFLUSH": 1023,
+                "NRSKIP": 0,
+                "NRBIN": 63,
+                "NROW": 7,
+                "NCSKIP": 0,
+                "NCBIN": 255,
+                "NCOL": 7,
+                "NCBINFPGA": 0,
+                "SIGMODE": 1
+            },
+            "CCD_settings_IR4": {
+                "PWR": 1,
+                "WDW": 7,
+                "JPEGQ": 100,
+                "SYNC": 0,
+                "TEXPMS": 0,
+                "GAIN": 0,
+                "NFLUSH": 1023,
+                "NRSKIP": 0,
+                "NRBIN": 63,
+                "NROW": 7,
+                "NCSKIP": 0,
+                "NCBIN": 255,
+                "NCOL": 7,
+                "NCBINFPGA": 0,
+                "SIGMODE": 1
+            },
+            "CCD_settings_Nadir": {
+                "PWR": 1,
+                "WDW": 7,
+                "JPEGQ": 100,
+                "SYNC": 0,
+                "TEXPMS": 0,
+                "TEXPIMS": 2000,
+                "GAIN": 0,
+                "NFLUSH": 1023,
+                "NRSKIP": 0,
+                "NRBIN": 63,
+                "NROW": 7,
+                "NCSKIP": 0,
+                "NCBIN": 255,
+                "NCOL": 7,
                 "NCBINFPGA": 0,
                 "SIGMODE": 1
             }

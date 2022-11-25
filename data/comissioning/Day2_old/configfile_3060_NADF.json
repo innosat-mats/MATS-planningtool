@@ -1,9 +1,9 @@
 {
     "Logger_name": "OPT_logger",
-    "version_ID": "02",
+    "version_ID": "01",
     "Author": "OMC",
-    "ID": "3102",
-    "name": "MODE5" ,
+    "ID": "3060",
+    "name": "NADF" ,
     "Modes_priority": [
         "Payload_Power_Toggle",
         "ArgEnableYawComp",
@@ -11,16 +11,17 @@
         "CCDBadColumn",
         "CCDBIAS",
         "PM",
-        "TurnONCCDs"       
+        "TurnONCCDs",
+        "Mode130"
     ],
-    "TLE1": "1 99988U 22123    22304.76424065  .00004664  00000-0  44774-3 0 00000",
-    "TLE2": "2 99988 097.6561 307.5659 0012827 298.3476 106.0390 14.93086308000015",
+    "TLE1": "1 54228U 22147B   22322.22980655  .00014039  00000+0  13611-2 0  9995",
+    "TLE2": "2 54228  97.6578 324.5811 0012588 257.7072 102.0551 14.92732403  2015",
     "Timeline_settings": {
-        "start_date": "2022/11/23 18:00:00",
+        "start_date": "2022/11/23 08:10:00",
         "duration": {
             "day": 0,
-            "hours": 12,
-            "seconds": 0
+            "hours": 1,
+            "seconds": 1800
         },
         "Mode1_2_5_minDuration": 300,
         "mode_separation": 15,
@@ -33,7 +34,7 @@
             "y":0,
             "z":0
         },
-        "Choose_Operational_Science_Mode": 5,
+        "Choose_Operational_Science_Mode": 0,
         "StandardPointingAltitude": 92500,
         "CMD_separation": 2,
         "pointing_stabilization": 10,
@@ -69,11 +70,9 @@
         "pointing_altitude": 92500,
         "pointing_altitude_end": 230000,
         "V_offset": [
-            -0,
             0
         ],
         "H_offset": [
-            -0,
             0
         ],
         "TimeToConsider": {
@@ -91,10 +90,7 @@
         "SnapshotTime": 3,
         "SnapshotSpacing": 6,
         "CCDSELs": [
-            16,
-            32,
-            1,
-            8
+            4
         ]
     },
     "Mode124_settings": {
@@ -196,8 +192,8 @@
         "BC": []
     },
     "PM_settings": {
-        "TEXPMS": 3000,
-        "TEXPIMS": 4000
+        "TEXPMS": 1500,
+        "TEXPIMS": 2000
     },
     "CCDBIAS_settings": {
         "CCDSEL": 127,
@@ -210,10 +206,10 @@
         "CustomBinning": {
             "CCD_settings_UV1": {
                 "PWR": 1,
-                "WDW": 128,
-                "JPEGQ": 100,
+                "WDW": 4,
+                "JPEGQ": 90,
                 "SYNC": 0,
-                "TEXPMS": 5000,
+                "TEXPMS": 3000,
                 "GAIN": 0,
                 "NFLUSH": 1023,
                 "NRSKIP": 0,
@@ -227,10 +223,10 @@
             },
             "CCD_settings_UV2": {
                 "PWR": 1,
-                "WDW": 128,
-                "JPEGQ": 100,
+                "WDW": 4,
+                "JPEGQ": 90,
                 "SYNC": 0,
-                "TEXPMS": 5000,
+                "TEXPMS": 3000,
                 "GAIN": 0,
                 "NFLUSH": 1023,
                 "NRSKIP": 0,
@@ -244,8 +240,8 @@
             },
             "CCD_settings_IR1": {
                 "PWR": 1,
-                "WDW": 128,
-                "JPEGQ": 100,
+                "WDW": 4,
+                "JPEGQ": 90,
                 "SYNC": 0,
                 "TEXPMS": 5000,
                 "GAIN": 0,
@@ -261,8 +257,8 @@
             },
             "CCD_settings_IR2": {
                 "PWR": 1,
-                "WDW": 128,
-                "JPEGQ": 100,
+                "WDW": 4,
+                "JPEGQ": 90,
                 "SYNC": 0,
                 "TEXPMS": 5000,
                 "GAIN": 0,
@@ -278,57 +274,57 @@
             },
             "CCD_settings_IR3": {
                 "PWR": 1,
-                "WDW": 128,
-                "JPEGQ": 100,
+                "WDW": 4,
+                "JPEGQ": 90,
                 "SYNC": 0,
                 "TEXPMS": 5000,
                 "GAIN": 0,
                 "NFLUSH": 1023,
-                "NRSKIP": 95,
-                "NRBIN": 6,
-                "NROW": 53,
-                "NCSKIP": 23,
-                "NCBIN": 200,
-                "NCOL": 9,
+                "NRSKIP": 0,
+                "NRBIN": 2,
+                "NROW": 255,
+                "NCSKIP": 0,
+                "NCBIN": 40,
+                "NCOL": 50,
                 "NCBINFPGA": 0,
                 "SIGMODE": 1
             },
             "CCD_settings_IR4": {
                 "PWR": 1,
-                "WDW": 128,
-                "JPEGQ": 100,
+                "WDW": 4,
+                "JPEGQ": 90,
                 "SYNC": 0,
                 "TEXPMS": 5000,
                 "GAIN": 0,
                 "NFLUSH": 1023,
-                "NRSKIP": 95,
-                "NRBIN": 6,
-                "NROW": 53,
-                "NCSKIP": 23,
-                "NCBIN": 200,
-                "NCOL": 9,
+                "NRSKIP": 0,
+                "NRBIN": 2,
+                "NROW": 255,
+                "NCSKIP": 0,
+                "NCBIN": 40,
+                "NCOL": 50,
                 "NCBINFPGA": 0,
                 "SIGMODE": 1
             },
             "CCD_settings_Nadir": {
                 "PWR": 1,
-                "WDW": 128,
-                "JPEGQ": 100,
+                "WDW": 4,
+                "JPEGQ": 90,
                 "SYNC": 0,
                 "TEXPMS": 1500,
-                "TEXPIMS": 2000,
+                "TEXPIMS": 62800,
                 "GAIN": 0,
                 "NFLUSH": 1023,
                 "NRSKIP": 0,
-                "NRBIN": 36,
-                "NROW": 14,
+                "NRBIN": 63,
+                "NROW": 8,
                 "NCSKIP": 0,
-                "NCBIN": 36,
-                "NCOL": 55,
+                "NCBIN": 63,
+                "NCOL": 31,
                 "NCBINFPGA": 0,
                 "SIGMODE": 1
             }
-         },
+        },
         "HighResUV": {
             "CCD_settings_UV1": {
                 "PWR": 1,
@@ -803,7 +799,7 @@
                 "WDW": 7,
                 "JPEGQ": 100,
                 "SYNC": 0,
-                "TEXPMS": 0,
+                "TEXPMS": 1500,
                 "TEXPIMS": 62800,
                 "GAIN": 0,
                 "NFLUSH": 1023,
