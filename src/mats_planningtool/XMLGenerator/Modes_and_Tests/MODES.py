@@ -78,6 +78,7 @@ def Mode5(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
         PM_settings=PM_settings,
         pointing_altitude=pointing_altitude,
         Timeline_settings=Timeline_settings, configFile=configFile,
+        TEXPIMS_fixed=Mode_settings['TEXPIMS'],
         comment=comment,
     )
 

@@ -29,6 +29,7 @@ def Operational_Limb_Pointing_macro(
     PM_settings,
     pointing_altitude,
     Timeline_settings, configFile,
+    TEXPIMS_fixed = 0,
     comment="",
 ):
     """ Macro that corresponds to pointing towards a Limb altitude in Operational Mode.
@@ -59,6 +60,9 @@ def Operational_Limb_Pointing_macro(
         Timeline_settings["CCDSYNC_ExtraOffset"],
         Timeline_settings["CCDSYNC_ExtraIntervalTime"],
     )
+    if TEXPIMS_fixed != 0:
+        TEXPIMS = TEXPIMS_fixed
+
 
     relativeTime = Commands.TC_pafMode(
         root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment

@@ -304,7 +304,7 @@ def LMBF_3050(root, date, duration, relativeTime, Timeline_settings, configFile,
     ExpTimes = Test_settings['ExpTimes']
     SnapshotTimes = Test_settings['SnapshotTimes']
     altitude = Test_settings['Altitude']
-    SnapshotSpacing = 5
+    SnapshotSpacing = 10
 
     Mode_name = sys._getframe(0).f_code.co_name
 
