@@ -12,7 +12,7 @@ import os
 from pylab import array, ceil, cos, sin, cross, dot, zeros, norm, pi, arccos, floor
 from skyfield import api
 from skyfield.data import hipparcos
-from skyfield.api import wgs84, Star
+from skyfield.api import wgs84, Star,utc
 import numpy as np
 import datetime as DT
 
@@ -121,6 +121,7 @@ def Mode120_date_calculator(configFile):
 
     timeline_start = DT.datetime.strptime(Timeline_settings["start_date"],'%Y/%m/%d %H:%M:%S')
     initial_time = timeline_start + DT.timedelta(seconds=Mode120_settings['freeze_start'])
+    initial_time = initial_time.replace(tzinfo=utc)
     current_time = initial_time
     Logger.info('Initial simulation date set to: '+str(initial_time))
 
@@ -130,6 +131,7 @@ def Mode120_date_calculator(configFile):
 
     planets = api.load('de421.bsp')
     earth=planets['Earth']
+    moon=planets['Moon']
 
     "Get relevant stars"
     st_vec=[]
@@ -143,7 +145,9 @@ def Mode120_date_calculator(configFile):
     
     for st in range(nstars): 
         st_vec.append(earth.at(ts_initial).observe(bright_stars)[st].position.km)
-        
+    st_vec.append(earth.at(ts_initial).observe(moon).position.km)
+
+ 
     ##### Prepare the .csv file output #####
     star_list_excel = []
     star_list_excel.append(['Name'])
@@ -162,9 +166,9 @@ def Mode120_date_calculator(configFile):
     lat_MATS = zeros((timesteps, 1))
     long_MATS = zeros((timesteps, 1))
     optical_axis = zeros((timesteps, 3))
-    stars_vert_offset = zeros((nstars,timesteps))
-    stars_hori_offset = zeros((nstars,timesteps))
-    stars_tot_offset = zeros((nstars,timesteps))
+    stars_vert_offset = zeros((nstars+1,timesteps))
+    stars_hori_offset = zeros((nstars+1,timesteps))
+    stars_tot_offset = zeros((nstars+1,timesteps))
     star_counter = 0
     spotted_star_name = []
     spotted_star_timestamp = []
@@ -205,8 +209,10 @@ def Mode120_date_calculator(configFile):
         current_time_datetime = current_time
 
         #### Caluclate star positions on CCD #########
+        st_vec.pop(-1) #remove moon
+        st_vec.append(earth.at(ts.from_datetime(current_time_datetime)).observe(moon).position.km) #add moon at new time
 
-        for nstar in range(nstars): 
+        for nstar in range(nstars+1): 
             inst_xyz=np.matmul(Satellite_dict['InvRotMatrix'],st_vec[nstar])
             [xang,yang]=xyz2radec(inst_xyz,positivera=False,deg=True)
             stars_hori_offset[nstar,t] = xang
@@ -220,10 +226,10 @@ def Mode120_date_calculator(configFile):
         t = t + 1
 
     #Filtering on moon inside horizontal FOV and not too far outside vertical FOV (interpolation is done later)   
-    horisontal_filter=3 #look for stars horizontally +- total degrees (Horistontal FOV is 6.06)
-    vert_filter= 5 #look at stars vertically at +- this filter in degrees (Vertical FOV is 1.52)
+    horisontal_filter=5 #look for stars horizontally +- total degrees (Horistontal FOV is 6.06)
+    vert_filter= 10 #look at stars vertically at +- this filter in degrees (Vertical FOV is 1.52)
 
-    possibles=np.array([(istar,itime) for istar in range(nstars) for itime in range(len(timestamps))  
+    possibles=np.array([(istar,itime) for istar in range(nstars+1) for itime in range(len(timestamps))  
                     if ((abs(stars_hori_offset[istar,itime])< horisontal_filter) and (abs(stars_vert_offset[istar,itime])<vert_filter))])
 
     if(len(possibles) == 0):
@@ -243,7 +249,14 @@ def Mode120_date_calculator(configFile):
             crosstime.append(DT.datetime.fromtimestamp(np.interp(V_offset,stars_vert_offset[posstar,timerange[:,1]][::-1],timestamps[timerange[:,1],0][::-1])))
             xvalue[i]=np.interp(crosstime[i].timestamp(),timestamps[timerange[:,1],0],stars_hori_offset[posstar,timerange[:,1]])
 
-        star = df.loc[df.index[posstar]]
+        if posstar == nstar: #last star is moon
+            star.name = 'moon'
+            star.magnitude = -12.60
+            star.dec_degrees = xyz2radec(st_vec[nstar],positivera=False,deg=True)[0]
+            star.ra_degrees = xyz2radec(st_vec[nstar],positivera=False,deg=True)[1]
+
+        else:
+            star = df.loc[df.index[posstar]]
         # print("{:6d} {:7.2f} {:10.3f} {:10.3f}  {:10.5f}  {}".format (posstar, mag,
         #                                                 Mats(crosstime).FOV_ra,Mats(crosstime).FOV_dec,xvalue, crosstime))  
         for i in range(len(crosstime)):

@@ -271,6 +271,7 @@ def Snapshot_Inertial_macro(
     CCD_settings,
     FreezeTime,
     FreezeDuration,
+    FreezeStabilization,
     pointing_altitude,
     pointing_altitude_end,
     StandardPointingAltitude,
@@ -297,6 +298,7 @@ def Snapshot_Inertial_macro(
         CCD_settings (dict of dict of int): Settings for the CCDs.. Defined in the *Configuration File*.
         FreezeTime (float): Start time of attitude freeze command in on-board time [s].
         FreezeDuration (int): Duration of freeze [s].
+        FreezeStabilization (int) : Time to wait after freeze has started before scheduling next command.
         pointing_altitude (int): The altitude of the tangential point [m].
         pointing_altitude (int): The altitude of the final tangential point [m].
         StandardPointingAltitude (int): The standard altitude of the LP  [m].
@@ -356,6 +358,8 @@ def Snapshot_Inertial_macro(
         Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
+
+    relativeTime = relativeTime + FreezeStabilization
 
     for CCDSEL in CCDSELs:
         relativeTime = Commands.TC_pafCCDSnapshot(

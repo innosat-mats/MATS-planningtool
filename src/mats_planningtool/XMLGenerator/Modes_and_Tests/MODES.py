@@ -945,9 +945,9 @@ def Mode12X(
     )
 
     FreezeTime = freeze_start_utc
-
     FreezeDuration = Mode_settings["freeze_duration"]
-
+    FreezeStabilization = Mode_settings["freeze_stabilization"]
+    
     pointing_altitude = Mode_settings["pointing_altitude"]
     pointing_altitude_end = Mode_settings["pointing_altitude_end"]
 
@@ -963,6 +963,7 @@ def Mode12X(
         CCD_settings,
         FreezeTime=FreezeTime,
         FreezeDuration=FreezeDuration,
+        FreezeStabilization=FreezeStabilization,
         pointing_altitude=pointing_altitude,
         pointing_altitude_end=pointing_altitude_end,
         StandardPointingAltitude=Timeline_settings["StandardPointingAltitude"],

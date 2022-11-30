@@ -164,6 +164,77 @@ def FFEXP_3000(root, date, duration, relativeTime, Timeline_settings, configFile
 
 ####################################################################################
 
+###########################################################################################################
+def NADLMB_3110(root, date, duration, relativeTime, Timeline_settings, configFile, Test_settings):
+    """NADLMB_3110. 
+
+    Schedules NADLMB_3110 with defined parameters.
+    """
+
+    Logger.info('')
+    Logger.info('Start of NADLMB_3110')
+
+    Logger.debug('Test_settings from Science Mode List: '+str(Test_settings))
+
+    CCD_settings = configFile.CCD_macro_settings('FullReadout')
+    
+    CCDSELs = Test_settings["CCDSELs"]
+    SnapshotSpacing = Test_settings['SnapshotInterval']
+    EndBuffer = Test_settings['EndBuffer']
+
+    Mode_name = sys._getframe(0).f_code.co_name
+
+    initial_relativeTime = relativeTime
+    itertime = 0
+
+    comment = (Mode_name+', '+str(date)+', '+', SnapshotInterval = '+str(SnapshotSpacing) +
+                        ', CCDSELs = '+str(CCDSELs))
+
+    Disregarded, Disregarded, Disregarded, TEXPIMS = Library.SyncArgCalculator(
+        CCD_settings,
+        Timeline_settings["CCDSYNC_ExtraOffset"],
+        Timeline_settings["CCDSYNC_ExtraIntervalTime"],
+    )
+    "CCDSEL arguments in order of increasing TEXPMS"
+    CCDSELs = Test_settings["CCDSELs"]
+    
+    relativeTime = Commands.TC_pafMode(
+        root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment
+    )
+
+    relativeTime = Macros.SetCCDs_macro(
+        root,
+        relativeTime,
+        CCD_settings,
+        TEXPIMS=TEXPIMS,
+        Timeline_settings=Timeline_settings, configFile=configFile,
+        comment=comment,
+    )
+
+    "Start looping the CCD settings and call for macros"
+    while relativeTime < (initial_relativeTime+duration-EndBuffer):
+
+        for CCDSEL in CCDSELs:
+            relativeTime = Commands.TC_pafCCDSnapshot(
+                root,
+                relativeTime,
+                CCDSEL=CCDSEL,
+                Timeline_settings=Timeline_settings, configFile=configFile,
+                comment=comment,
+            )
+            
+            relativeTime += SnapshotSpacing + CCD_settings[CCDSEL]['TEXPMS']/1000
+    
+    
+    mode_relativeTime = relativeTime - initial_relativeTime
+    current_time = ephem.Date(date+ephem.second*mode_relativeTime)
+
+    Logger.info('End of NADLMB_3110')
+
+    return relativeTime, current_time
+
+####################################################################################
+
 
 
 ######################################################################################
@@ -180,7 +251,6 @@ def STAR_3040(root, date, duration, relativeTime, Timeline_settings, configFile,
 
     CCD_settings = configFile.CCD_macro_settings('FullReadout')
     ExpTimes = Test_settings['ExpTimes']
-    SnapshotSpacing = 5
     pointing_altitude = Test_settings["pointing_altitude"]
     pointing_altitude_end = Test_settings["pointing_altitude_end"] #this is a dummy variable just to get correct time for limb reset
 
@@ -236,6 +306,8 @@ def STAR_3040(root, date, duration, relativeTime, Timeline_settings, configFile,
         Timeline_settings=Timeline_settings, configFile=configFile,
         comment=comment,
     )
+
+    relativeTime = relativeTime + Test_settings["freeze_stabilization"]
 
     for ExpTime in ExpTimes:
         
@@ -426,6 +498,104 @@ def NADF_3060(root, date, duration, relativeTime, Timeline_settings, configFile,
     return relativeTime, current_time
 
 ####################################################################################
+
+###########################################################################################################
+def CROP_3120(root, date, duration, relativeTime, Timeline_settings, configFile, Test_settings):
+    """CROP_3120. 
+
+    Schedules CROP_3120 with defined parameters.
+    """
+
+    Logger.info('')
+    Logger.info('Start of CROP_3120')
+
+    Logger.debug('Test_settings from Science Mode List: '+str(Test_settings))
+
+    CCD_settings = configFile.CCD_macro_settings('FullReadout')
+    
+    NRSKIP = Test_settings['NRSKIP']
+    NCSKIP = Test_settings['NCSKIP']
+    SnapshotSpacing = Test_settings['SnapshotSpacing']
+    CCDSELs = Test_settings["CCDSELs"]
+
+
+    Mode_name = sys._getframe(0).f_code.co_name
+
+    initial_relativeTime = relativeTime
+
+    comment = (Mode_name+', '+str(date)+', '+', SnapshotInterval = '+str(SnapshotSpacing) +
+                        ', CCDSELs = '+str(CCDSELs))
+
+    Disregarded, Disregarded, Disregarded, TEXPIMS = Library.SyncArgCalculator(
+        CCD_settings,
+        Timeline_settings["CCDSYNC_ExtraOffset"],
+        Timeline_settings["CCDSYNC_ExtraIntervalTime"],
+    )
+    
+    relativeTime = Commands.TC_pafMode(
+        root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment
+    )
+
+    relativeTime = Commands.TC_acfLimbPointingAltitudeOffset(
+        root,
+        relativeTime,
+        Initial=Timeline_settings["StandardPointingAltitude"],
+        Final=Timeline_settings["StandardPointingAltitude"],
+        Rate=0,
+        Timeline_settings=Timeline_settings,
+        configFile=configFile,
+        comment=comment,
+    )
+
+    relativeTime = Macros.SetCCDs_macro(
+        root,
+        relativeTime,
+        CCD_settings,
+        TEXPIMS=TEXPIMS,
+        Timeline_settings=Timeline_settings, configFile=configFile,
+        comment=comment,
+    )
+
+    for CCDSEL in CCDSELs:
+        relativeTime = Commands.TC_pafCCDSnapshot(
+            root,
+            relativeTime,
+            CCDSEL=CCDSEL,
+            Timeline_settings=Timeline_settings, configFile=configFile,
+            comment=comment,
+        )
+        
+        CCD_settings[CCDSEL]['NRSKIP'] = NRSKIP
+        CCD_settings[CCDSEL]['NCSKIP'] = NCSKIP
+        CCD_settings[CCDSEL]['NROW'] = CCD_settings[CCDSEL]['NROW']-NRSKIP
+        CCD_settings[CCDSEL]['NCOL'] = CCD_settings[CCDSEL]['NCOL']-NCSKIP
+
+        Macros.SetCCDs_macro(root, relativeTime, CCD_settings, TEXPIMS, Timeline_settings, configFile, 
+        CCDList = [CCDSEL], comment="")
+
+        relativeTime += SnapshotSpacing + CCD_settings[CCDSEL]['TEXPMS']/1000
+
+        relativeTime = Commands.TC_pafCCDSnapshot(
+            root,
+            relativeTime,
+            CCDSEL=CCDSEL,
+            Timeline_settings=Timeline_settings, configFile=configFile,
+            comment=comment,
+        )
+
+        relativeTime += SnapshotSpacing + CCD_settings[CCDSEL]['TEXPMS']/1000
+
+    
+    
+    mode_relativeTime = relativeTime - initial_relativeTime
+    current_time = ephem.Date(date+ephem.second*mode_relativeTime)
+
+    Logger.info('End of CROP_3120')
+
+    return relativeTime, current_time
+
+####################################################################################
+
 
 
 

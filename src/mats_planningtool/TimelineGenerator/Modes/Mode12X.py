@@ -52,7 +52,7 @@ def UserProvidedDateScheduler(Occupied_Timeline, Settings, configFile):
 
     ############### Start of availability schedueler ##########################
 
-    StartDate, endDate, iterations = scheduler(Occupied_Timeline, StartDate, endDate)
+    StartDate, endDate, iterations = scheduler(Occupied_Timeline, StartDate.datetime(), endDate.datetime())
 
     ############### End of availability schedueler ##########################
 

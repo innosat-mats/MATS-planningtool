@@ -88,6 +88,10 @@ def CheckConfigFile(configFile):
     ):
         Logger.error('Timeline_settings["start_date"]')
         raise ValueError
+    if not(type(Timeline_settings["idle_at_end"]) == bool):
+        Logger.error('Timeline_settings["idle_at_end"]')
+        raise ValueError
+    
     if not (
         30 <= Timeline_settings["CMD_duration"]
         and type(Timeline_settings["CMD_duration"]) == int
@@ -201,6 +205,10 @@ def CheckConfigFile(configFile):
             elif key == "lat":
                 if not (0 <= Operational_Science_Mode_settings[key] <= 90):
                     Logger.error('Operational_Science_Mode_settings["lat"]')
+                    raise ValueError
+            elif key == 'TEXPIMS':
+                if not (type(Operational_Science_Mode_settings[key]) == int):
+                    Logger.error('Operational_Science_Mode_settings["TEXPIMS"]')
                     raise ValueError
             elif not (
                 Operational_Science_Mode_settings[key] > 0
