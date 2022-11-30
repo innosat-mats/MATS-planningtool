@@ -41,3 +41,14 @@ from mats_planningtool.XMLGenerator.XML_gen import XML_filter
 
 # #configfile.Timeline_gen()
 # configfile.XML_gen("data/comissioning/Science_Mode_Timeline_3120_22120222113001CROP.json")
+
+# #3103 Operational mode 1
+
+configfile = configFile.configFile("data/comissioning/configfile_3103_MODE1.json")
+configfile.output_dir = "data/comissioning/"
+configfile.CheckConfigFile()
+
+configfile.Timeline_gen()
+
+configfile.XML_gen("data/comissioning/Science_Mode_Timeline_3103_22120122113004MODE1.json")
+

@@ -257,8 +257,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
         lat_MATS[t] = Satellite_dict["Latitude [degrees]"]
         optical_axis[t] = Satellite_dict["OpticalAxis"]
         lat_LP[t] = Satellite_dict["EstimatedLatitude_LP [degrees]"]
-
-        sun_angle[t] = SunAngle(r_MATS[t], current_time)
+        sun_angle[t] = Satellite_dict["SolarZenithAngleNadir"]
 
         if t * timestep % log_timestep == 0:
             Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
