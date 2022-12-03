@@ -162,16 +162,10 @@ def XML_generator(configFile, SCIMOD_Path,test=False):
     SCIMOD_Path = SCIMOD_Path.replace('/', '_')
     SCIMOD_Path = SCIMOD_Path.replace('.json', '')
 
-    ### Write finished XML-tree with all commands to a file #######   
-    if test:
-        XML_TIMELINE = os.path.join(configFile.output_dir, 'STP-MTS-' + configFile.ID() + '_' + 
-            datetime.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S').strftime('%y%m%d') +
-            datetime.datetime.now().strftime('%y%m%d') + configFile.Version() +  'T' + configFile.Name() +'.xml')
-    else:
-        XML_TIMELINE = os.path.join(configFile.output_dir, 'STP-MTS-' + configFile.ID() + '_' + 
-            datetime.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S').strftime('%y%m%d') +
-            datetime.datetime.now().strftime('%y%m%d') + configFile.Version() +  configFile.Name() +'.xml')
- 
+    ### Write finished XML-tree with all commands to a file #######
+
+    XML_TIMELINE = get_timeline_name(configFile,Timeline_settings,test) 
+        
     Logger.info('Write XML-tree to: '+XML_TIMELINE)
     f = open(XML_TIMELINE, 'w')
     f.write(etree.tostring(root, pretty_print=True, encoding='unicode'))
@@ -366,3 +360,16 @@ def XML_filter(XML_TIMELINE,commandstr):
     f.close()
     return
 
+
+def get_timeline_name(configFile,Timeline_settings,test=False):
+    
+    if test:
+        XML_TIMELINE = os.path.join(configFile.output_dir, 'STP-MTS-' + configFile.ID() + '_' + 
+            datetime.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S').strftime('%y%m%d') +
+            datetime.datetime.now().strftime('%y%m%d') + configFile.Version() +  'T' + configFile.Name() +'.xml')
+    else:
+        XML_TIMELINE = os.path.join(configFile.output_dir, 'STP-MTS-' + configFile.ID() + '_' + 
+            datetime.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S').strftime('%y%m%d') +
+            datetime.datetime.now().strftime('%y%m%d') + configFile.Version() +  configFile.Name() +'.xml')
+
+    return XML_TIMELINE

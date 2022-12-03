@@ -2,8 +2,8 @@
     "Logger_name": "OPT_logger",
     "version_ID": "01",
     "Author": "OMC",
-    "ID": "3102",
-    "name": "MODE5" ,
+    "ID": "3160",
+    "name": "ODIN1" ,
     "Modes_priority": [
         "Payload_Power_Toggle",
         "ArgEnableYawComp",
@@ -16,12 +16,13 @@
     "TLE1": "1 99988U 22123    22304.76424065  .00004664  00000-0  44774-3 0 00000",
     "TLE2": "2 99988 097.6561 307.5659 0012827 298.3476 106.0390 14.93086308000015",
     "Timeline_settings": {
-        "start_date": "2022/11/23 17:45:00",
+        "start_date": "2022/12/02 20:00:00",
         "duration": {
             "day": 0,
-            "hours": 14,
-            "seconds": 0
+            "hours": 1,
+            "seconds": 1800
         },
+        "idle_at_end": true,
         "Mode1_2_5_minDuration": 300,
         "mode_separation": 15,
         "CMD_duration": 30,
@@ -34,18 +35,19 @@
             "z":0
         },
         "Choose_Operational_Science_Mode": 5,
-        "StandardPointingAltitude": 92500,
+        "StandardPointingAltitude": 90000,
         "CMD_separation": 2,
         "pointing_stabilization": 10,
-        "CCDSYNC_ExtraOffset": 50,
-        "CCDSYNC_ExtraIntervalTime": 200,
+        "CCDSYNC_ExtraOffset": 100,
+        "CCDSYNC_ExtraIntervalTime": 500,
         "CCDSYNC_Waittime": 20
     },
     "Operational_Science_Mode_settings": {
         "lat": 45,
         "log_timestep": 800,
         "timestep": 8,
-        "Choose_Mode5CCDMacro": "CustomBinning"
+        "Choose_Mode5CCDMacro": "CustomBinning",
+        "TEXPIMS": 0
     },
     "Mode100_settings": {
         "pointing_altitude_from": 40000,
@@ -66,7 +68,7 @@
         "Exp_Time_UV": 3000
     },
     "Mode120_settings": {
-        "pointing_altitude": 92500,
+        "pointing_altitude": 90000,
         "pointing_altitude_end": 230000,
         "V_offset": [
             -0,
@@ -98,7 +100,7 @@
         ]
     },
     "Mode124_settings": {
-        "pointing_altitude": 92500,
+        "pointing_altitude": 90000,
         "pointing_altitude_end": 230000,
         "V_offset": [
             0,
@@ -196,8 +198,8 @@
         "BC": []
     },
     "PM_settings": {
-        "TEXPMS": 3000,
-        "TEXPIMS": 4000
+        "TEXPMS": 1500,
+        "TEXPIMS": 2000
     },
     "CCDBIAS_settings": {
         "CCDSEL": 127,
@@ -210,7 +212,7 @@
         "CustomBinning": {
             "CCD_settings_UV1": {
                 "PWR": 1,
-                "WDW": 128,
+                "WDW": 7,
                 "JPEGQ": 100,
                 "SYNC": 0,
                 "TEXPMS": 5000,
@@ -227,7 +229,7 @@
             },
             "CCD_settings_UV2": {
                 "PWR": 1,
-                "WDW": 128,
+                "WDW": 7,
                 "JPEGQ": 100,
                 "SYNC": 0,
                 "TEXPMS": 5000,
@@ -244,7 +246,7 @@
             },
             "CCD_settings_IR1": {
                 "PWR": 1,
-                "WDW": 128,
+                "WDW": 7,
                 "JPEGQ": 100,
                 "SYNC": 0,
                 "TEXPMS": 5000,
@@ -261,7 +263,7 @@
             },
             "CCD_settings_IR2": {
                 "PWR": 1,
-                "WDW": 128,
+                "WDW": 7,
                 "JPEGQ": 100,
                 "SYNC": 0,
                 "TEXPMS": 5000,
@@ -278,7 +280,7 @@
             },
             "CCD_settings_IR3": {
                 "PWR": 1,
-                "WDW": 128,
+                "WDW": 7,
                 "JPEGQ": 100,
                 "SYNC": 0,
                 "TEXPMS": 5000,
@@ -295,7 +297,7 @@
             },
             "CCD_settings_IR4": {
                 "PWR": 1,
-                "WDW": 128,
+                "WDW": 7,
                 "JPEGQ": 100,
                 "SYNC": 0,
                 "TEXPMS": 5000,
@@ -312,7 +314,7 @@
             },
             "CCD_settings_Nadir": {
                 "PWR": 1,
-                "WDW": 128,
+                "WDW": 7,
                 "JPEGQ": 100,
                 "SYNC": 0,
                 "TEXPMS": 1500,
