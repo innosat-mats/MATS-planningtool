@@ -210,7 +210,7 @@ def Mode120_date_calculator(configFile):
 
         #### Caluclate star positions on CCD #########
         st_vec.pop(-1) #remove moon
-        st_vec.append(earth.at(ts.from_datetime(current_time_datetime)).observe(moon).position.km) #add moon at new time
+        st_vec.append((earth+wgs84.subpoint(MATS_skyfield.at(ts.from_datetime(current_time_datetime)))).at(ts.from_datetime(current_time_datetime)).observe(moon).position.km) #add moon at new time
 
         for nstar in range(nstars+1): 
             inst_xyz=np.matmul(Satellite_dict['InvRotMatrix'],st_vec[nstar])
@@ -245,8 +245,8 @@ def Mode120_date_calculator(configFile):
         
         crosstime = []
         for i in range(len(star_found)-1):
-            timerange=possibles[star_found[i]:star_found[i+1]]
-            crosstime.append(DT.datetime.fromtimestamp(np.interp(V_offset,stars_vert_offset[posstar,timerange[:,1]][::-1],timestamps[timerange[:,1],0][::-1])))
+            timerange=possible[star_found[i]:star_found[i+1]]
+            crosstime.append(DT.datetime.utcfromtimestamp(np.interp(V_offset,stars_vert_offset[posstar,timerange[:,1]][::-1],timestamps[timerange[:,1],0][::-1])))
             xvalue[i]=np.interp(crosstime[i].timestamp(),timestamps[timerange[:,1],0],stars_hori_offset[posstar,timerange[:,1]])
 
         if posstar == nstar: #last star is moon

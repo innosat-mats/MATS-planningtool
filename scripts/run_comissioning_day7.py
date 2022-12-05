@@ -12,12 +12,12 @@ from mats_planningtool.XMLGenerator.XML_gen import XML_filter
 
 
 
-# #  93  -12.60    -22.035    -15.039    -0.02952  2022-11-30 04:55:14.781030
+##  93  -12.60    -22.035    -15.039    -0.02952  2022-11-30 04:55:14.781030
 # configfile = configFile.configFile("data/comissioning/configfile_3070_MOON.json")
 # configfile.output_dir = "data/comissioning/"
 # configfile.CheckConfigFile()
 
-# #configfile.Timeline_gen()
+# configfile.Timeline_gen()
 
 # configfile.XML_gen("data/comissioning/Science_Mode_Timeline_3070_22113022112902MOON.json")
 
