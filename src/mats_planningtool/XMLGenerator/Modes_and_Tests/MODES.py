@@ -45,6 +45,12 @@ Logger = logging.getLogger("OPT_logger")
 "######### Operational Science Modes #########################"
 "##############################################################"
 
+def check_lat(lat_position,lat_limit):
+    if lat_limit<0:
+        return lat_position<lat_limit
+    else:
+        return lat_position>lat_limit 
+
 
 def Mode5(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
     """Mode5

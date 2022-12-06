@@ -9,7 +9,7 @@ Unit tests for single functions
 from mats_planningtool.Library import utc_to_onboardTime
 from mats_planningtool.OrbitSimulator.MatsBana import Satellite_Simulator
 from mats_planningtool.OrbitSimulator.MatsBana import findpitch
-
+from mats_planningtool.XMLGenerator.Modes_and_Tests.MODES import check_lat
 import ephem
 from skyfield import api
 import skyfield.sgp4lib as sgp4lib
@@ -106,8 +106,22 @@ def run_Satellite_Simulator(extratime = 0):
     return Satellite_dict   
 
 
+def test_check_lat():
+    lat_limit = 45
+    assert check_lat(-60,lat_limit) == False
+    assert check_lat(-20,lat_limit) == False
+    assert check_lat(-0,lat_limit) == False
+    assert check_lat(20,lat_limit) == False
+    assert check_lat(60,lat_limit) == True
+
+    lat_limit = -45
+    assert check_lat(-60,lat_limit) == True
+    assert check_lat(-20,lat_limit) == False
+    assert check_lat(-0,lat_limit) == False
+    assert check_lat(20,lat_limit) == False
+    assert check_lat(60,lat_limit) == False
+
+
 if __name__ == "__main__":
 
-    test_utc_to_onboardTime()
-    test_findpitch()
-    test_Satellite_Simulator()
+    test_check_lat()

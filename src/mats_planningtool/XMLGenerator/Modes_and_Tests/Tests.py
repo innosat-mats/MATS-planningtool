@@ -570,10 +570,10 @@ def CROP_3120(root, date, duration, relativeTime, Timeline_settings, configFile,
         CCD_settings[CCDSEL]['NROW'] = CCD_settings[CCDSEL]['NROW']-NRSKIP
         CCD_settings[CCDSEL]['NCOL'] = CCD_settings[CCDSEL]['NCOL']-NCSKIP
 
-        Macros.SetCCDs_macro(root, relativeTime, CCD_settings, TEXPIMS, Timeline_settings, configFile, 
-        CCDList = [CCDSEL], comment="")
-
         relativeTime += SnapshotSpacing + CCD_settings[CCDSEL]['TEXPMS']/1000
+
+        relativeTime = Macros.SetCCDs_macro(root, relativeTime, CCD_settings, TEXPIMS, Timeline_settings, configFile, 
+        CCDList = [CCDSEL], comment="")
 
         relativeTime = Commands.TC_pafCCDSnapshot(
             root,
