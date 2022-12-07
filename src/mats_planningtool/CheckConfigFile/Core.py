@@ -138,9 +138,9 @@ def CheckConfigFile(configFile):
     if not (type(Timeline_settings["yaw_correction"]) == bool):
         Logger.error("Timeline_settings['yaw_correction']")
         raise TypeError
-    if not (Timeline_settings["Choose_Operational_Science_Mode"] in [0, 1, 2, 5]):
+    if not (Timeline_settings["Choose_Operational_Science_Mode"] in [-1, 0, 1, 2, 5]):
         Logger.error(
-            "Timeline_settings['Choose_Operational_Science_Mode'] != 0, 1, 2, or 5"
+            "Timeline_settings['Choose_Operational_Science_Mode'] != -1, 0, 1, 2, or 5"
         )
         raise ValueError
     if not (
@@ -203,7 +203,7 @@ def CheckConfigFile(configFile):
                     Logger.error('Operational_Science_Mode_settings["timestep"]')
                     raise ValueError
             elif key == "lat":
-                if not (0 <= Operational_Science_Mode_settings[key] <= 90):
+                if not (-90 <= Operational_Science_Mode_settings[key] <= 90):
                     Logger.error('Operational_Science_Mode_settings["lat"]')
                     raise ValueError
             elif key == 'TEXPIMS':

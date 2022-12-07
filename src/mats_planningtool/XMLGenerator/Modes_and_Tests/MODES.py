@@ -45,6 +45,21 @@ Logger = logging.getLogger("OPT_logger")
 "######### Operational Science Modes #########################"
 "##############################################################"
 
+def write_comment(current_state,current_time,Mode_settings,lat_LP,sun_angle):
+    comment = (
+        current_state
+        + ": "
+        + str(current_time)
+        + ", parameters: "
+        + str(Mode_settings)
+        + " position: "
+        + str(lat_LP)
+        + " sun angle"
+        + str(sun_angle)
+    )
+
+    return comment
+
 def check_lat(lat_position,lat_limit):
     if lat_limit<0:
         return lat_position<lat_limit
@@ -275,15 +290,9 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
             "Check if night or day"
             if sun_angle[t] > MATS_nadir_eclipse_angle:
 
-                if abs(lat_LP[t]) < lat:
+                if ~check_lat(lat_LP[t],lat):
                     current_state = "Mode1_night_UV_off"
-                    comment = (
-                        current_state
-                        + ": "
-                        + str(current_time)
-                        + ", parameters: "
-                        + str(Mode_settings)
-                    )
+                    comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
                     # new_relativeTime = Macros.Mode1_macro(root,relativeTime, pointing_altitude=pointing_altitude, UV_on = False, nadir_on = True, Timeline_settings = Timeline_settings, comment = comment)
                     CCD_settings[16]["TEXPMS"] = 0
                     CCD_settings[32]["TEXPMS"] = 0
@@ -298,7 +307,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         comment=comment,
                     )
 
-                elif abs(lat_LP[t]) > lat:
+                elif check_lat(lat_LP[t],lat):
                     current_state = "Mode1_night_UV_on"
                     comment = (
                         current_state
@@ -324,15 +333,10 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
 
             elif sun_angle[t] < MATS_nadir_eclipse_angle:
 
-                if abs(lat_LP[t]) < lat:
+                if ~check_lat(lat_LP[t],lat):
                     current_state = "Mode1_day_UV_off"
-                    comment = (
-                        current_state
-                        + ": "
-                        + str(current_time)
-                        + ", parameters: "
-                        + str(Mode_settings)
-                    )
+                    comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
+
                     # new_relativeTime = Macros.Mode1_macro(root,relativeTime,pointing_altitude, UV_on = False, nadir_on = False, Timeline_settings = Timeline_settings, comment = comment)
                     CCD_settings[16]["TEXPMS"] = 0
                     CCD_settings[32]["TEXPMS"] = 0
@@ -347,15 +351,9 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         comment=comment,
                     )
 
-                elif abs(lat_LP[t]) > lat:
+                elif check_lat(lat_LP[t],lat):
                     current_state = "Mode1_day_UV_on"
-                    comment = (
-                        current_state
-                        + ": "
-                        + str(current_time)
-                        + ", parameters: "
-                        + str(Mode_settings)
-                    )
+                    comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
                     # new_relativeTime = Macros.Mode1_macro(root,relativeTime,pointing_altitude, UV_on = True, nadir_on = False, Timeline_settings = Timeline_settings, comment = comment)
                     CCD_settings[16]["TEXPMS"] = TEXPMS_16
                     CCD_settings[32]["TEXPMS"] = TEXPMS_32
@@ -382,23 +380,18 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
             if sun_angle[t] > MATS_nadir_eclipse_angle:
 
                 # Check latitude
-                if abs(lat_LP[t]) < lat and current_state != "Mode1_night_UV_off":
+                if ~check_lat(lat_LP[t],lat) and current_state != "Mode1_night_UV_off":
 
                     # Check dusk/dawn and latitude boundaries
                     if (
                         sun_angle[t] > MATS_nadir_eclipse_angle
                         and sun_angle[t - 1] < MATS_nadir_eclipse_angle
-                    ) or (abs(lat_LP[t]) < lat and abs(lat_LP[t - 1]) > lat):
+                    ) or (~check_lat(lat_LP[t],lat) and check_lat(lat_LP[t-1],lat)):
 
                         Logger.debug("")
                         current_state = "Mode1_night_UV_off"
-                        comment = (
-                            current_state
-                            + ": "
-                            + str(current_time)
-                            + ", parameters: "
-                            + str(Mode_settings)
-                        )
+                        comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
+
                         # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude, UV_on = False, nadir_on = True, Timeline_settings = Timeline_settings, comment = comment)
                         CCD_settings[16]["TEXPMS"] = 0
                         CCD_settings[32]["TEXPMS"] = 0
@@ -431,23 +424,18 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         Logger.debug("")
 
                 # Check latitude
-                if abs(lat_LP[t]) > lat and current_state != "Mode1_night_UV_on":
+                if check_lat(lat_LP[t],lat) and current_state != "Mode1_night_UV_on":
 
                     # Check dusk/dawn and latitude boundaries
                     if (
                         sun_angle[t] > MATS_nadir_eclipse_angle
                         and sun_angle[t - 1] < MATS_nadir_eclipse_angle
-                    ) or (abs(lat_LP[t]) > lat and abs(lat_LP[t - 1]) < lat):
+                    ) or (check_lat(lat_LP[t],lat) and ~check_lat(lat_LP[t-1],lat)):
 
                         Logger.debug("")
                         current_state = "Mode1_night_UV_on"
-                        comment = (
-                            current_state
-                            + ": "
-                            + str(current_time)
-                            + ", parameters: "
-                            + str(Mode_settings)
-                        )
+                        comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
+
                         # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude=pointing_altitude, UV_on = True, nadir_on = True, Timeline_settings = Timeline_settings, comment = comment)
                         CCD_settings[16]["TEXPMS"] = TEXPMS_16
                         CCD_settings[32]["TEXPMS"] = TEXPMS_32
@@ -475,23 +463,18 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
             if sun_angle[t] < MATS_nadir_eclipse_angle:
 
                 # Check latitude
-                if abs(lat_LP[t]) < lat and current_state != "Mode1_day_UV_off":
+                if ~check_lat(lat_LP[t],lat) and current_state != "Mode1_day_UV_off":
 
                     # Check dusk/dawn and latitude boundaries
                     if (
                         sun_angle[t] < MATS_nadir_eclipse_angle
                         and sun_angle[t - 1] > MATS_nadir_eclipse_angle
-                    ) or (abs(lat_LP[t]) < lat and abs(lat_LP[t - 1]) > lat):
+                    ) or (~check_lat(lat_LP[t],lat) and check_lat(lat_LP[t-1],lat)):
 
                         Logger.debug("")
                         current_state = "Mode1_day_UV_off"
-                        comment = (
-                            current_state
-                            + ": "
-                            + str(current_time)
-                            + ", parameters: "
-                            + str(Mode_settings)
-                        )
+                        comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
+
                         # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude=pointing_altitude, UV_on = False, nadir_on = False, Timeline_settings = Timeline_settings, comment = comment)
                         CCD_settings[16]["TEXPMS"] = 0
                         CCD_settings[32]["TEXPMS"] = 0
@@ -515,23 +498,18 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         Logger.debug("")
 
                 # Check latitude
-                if abs(lat_LP[t]) > lat and current_state != "Mode1_day_UV_on":
+                if check_lat(lat_LP[t],lat) and current_state != "Mode1_day_UV_on":
 
                     # Check dusk/dawn and latitude boundaries
                     if (
                         sun_angle[t] > MATS_nadir_eclipse_angle
                         and sun_angle[t - 1] < MATS_nadir_eclipse_angle
-                    ) or (abs(lat_LP[t]) > lat and abs(lat_LP[t - 1]) < lat):
+                    ) or (check_lat(lat_LP[t],lat) and ~check_lat(lat_LP[t-1],lat)):
 
                         Logger.debug("")
                         current_state = "Mode1_day_UV_on"
-                        comment = (
-                            current_state
-                            + ": "
-                            + str(current_time)
-                            + ", parameters: "
-                            + str(Mode_settings)
-                        )
+                        comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
+
                         # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude=pointing_altitude, UV_on = True, nadir_on = False, Timeline_settings = Timeline_settings, comment = comment)
                         CCD_settings[16]["TEXPMS"] = TEXPMS_16
                         CCD_settings[32]["TEXPMS"] = TEXPMS_32
