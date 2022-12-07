@@ -164,7 +164,7 @@ def XML_generator(configFile, SCIMOD_Path,test=False):
 
     ### Write finished XML-tree with all commands to a file #######
 
-    XML_TIMELINE = get_timeline_name(configFile,Timeline_settings,test) 
+    XML_TIMELINE = get_timeline_name(configFile,Timeline_settings) 
         
     Logger.info('Write XML-tree to: '+XML_TIMELINE)
     f = open(XML_TIMELINE, 'w')
@@ -361,15 +361,10 @@ def XML_filter(XML_TIMELINE,commandstr):
     return
 
 
-def get_timeline_name(configFile,Timeline_settings,test=False):
-    
-    if test:
-        XML_TIMELINE = os.path.join(configFile.output_dir, 'STP-MTS-' + configFile.ID() + '_' + 
+def get_timeline_name(configFile,Timeline_settings):
+
+    XML_TIMELINE = os.path.join(configFile.output_dir, 'STP-MTS-' + configFile.ID() + '_' + 
             datetime.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S').strftime('%y%m%d') +
             datetime.datetime.now().strftime('%y%m%d') + configFile.Version() +  'T' + configFile.Name() +'.xml')
-    else:
-        XML_TIMELINE = os.path.join(configFile.output_dir, 'STP-MTS-' + configFile.ID() + '_' + 
-            datetime.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S').strftime('%y%m%d') +
-            datetime.datetime.now().strftime('%y%m%d') + configFile.Version() +  configFile.Name() +'.xml')
 
     return XML_TIMELINE

@@ -2,6 +2,7 @@ from mats_planningtool import Library
 
 import json
 import os
+import datetime as DT
 
 
 class configFile:
@@ -752,11 +753,14 @@ class configFile:
         self.current_pointing = None
 
         if SCIMOD_Path == None:
-            SCIMOD_Path = os.path.join(
-                self.output_dir,
-                "Science_Mode_Timeline_" + os.path.split(self.config_file_name)[1],
-            )
-        XML_TIMELINE = XML_generator(self, SCIMOD_Path,test)
+            
+            SCIMOD_Path = self.get_scimod_name(self)
+            
+            # os.path.join(
+            #     self.output_dir,
+            #     "Science_Mode_Timeline_" + os.path.split(self.config_file_name)[1],
+            # )
+        XML_TIMELINE = XML_generator(self, SCIMOD_Path)
 
         return XML_TIMELINE
 
@@ -922,3 +926,18 @@ class configFile:
         )
 
         return
+
+
+    def get_scimod_name(self,Timeline_start_date):
+        
+        Timeline_settings = self.Timeline_settings()
+        Timeline_start_date = DT.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S')
+
+        name = os.path.join(
+            self.output_dir, 'Science_Mode_Timeline_'+self.ID() +
+            '_' + Timeline_start_date.strftime("%y%m%d") + 
+            DT.datetime.now().strftime("%y%m%d") +
+            self.Version() + 
+            self.Name() +'.json')
+        
+        return name

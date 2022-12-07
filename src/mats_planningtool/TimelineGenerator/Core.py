@@ -272,20 +272,8 @@ def Timeline_generator(configFile,test=False):
         os.mkdir(configFile.output_dir)
     except:
         pass
-    if not test:
-        SCIMOD_NAME = os.path.join(
-            configFile.output_dir, 'Science_Mode_Timeline_'+configFile.ID() +
-            '_' + Timeline_start_date.strftime("%y%m%d") + 
-            DT.datetime.now().strftime("%y%m%d") +
-            configFile.Version() + 
-            configFile.Name() +'.json')
-    if test:
-        SCIMOD_NAME = os.path.join(
-            configFile.output_dir, 'Science_Mode_Timeline_'+configFile.ID() +
-            '_' + Timeline_start_date.strftime("%y%m%d") + 
-            DT.datetime.now().strftime("%y%m%d") +
-            configFile.Version() + 'T' +
-            configFile.Name() +'.json')
+
+    SCIMOD_NAME = configFile.get_scimod_name(Timeline_start_date)
             
     Logger.info('Save mode timeline to file: '+SCIMOD_NAME)
     with open(SCIMOD_NAME, "w") as write_file:
@@ -295,3 +283,4 @@ def Timeline_generator(configFile,test=False):
     configFile.Mode120Iteration = 1
     configFile.Mode124Iteration = 1
     logging.shutdown()
+    
