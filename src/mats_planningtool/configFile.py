@@ -12,7 +12,7 @@ class configFile:
     def __init__(
         self,
         config_file_name,
-        date="2022/11/04 18:00:00",
+        date=None,
         TLE1="1 99988U 22123A   22309.05746528  .00000000  00000-0  24354-3 0    77",
         TLE2="2 99988  97.6526 311.7765 0012080 308.6344 230.9588 14.92664144000050",
     ):
@@ -27,12 +27,11 @@ class configFile:
             OPT_Config_File = json.load(json_file)
 
         self.OPT_Config_File = OPT_Config_File
+        
+        if date != None:
+            self.OPT_Config_File["Timeline_settings"]['start_date'] = date
 
-        self.OPT_Config_File["Timeline_settings"]["duration"]["duration"] = (
-            self.OPT_Config_File["Timeline_settings"]["duration"]["day"] * 24 * 3600
-            + self.OPT_Config_File["Timeline_settings"]["duration"]["hours"] * 3600
-            + self.OPT_Config_File["Timeline_settings"]["duration"]["seconds"]
-        )
+        self.set_duration()
 
         self.OPT_Config_File["Mode120_settings"]["TimeToConsider"]["TimeToConsider"] = (
             self.OPT_Config_File["Mode120_settings"]["TimeToConsider"]["hours"] * 3600
@@ -191,6 +190,13 @@ class configFile:
             )
 
         return [TLE1, TLE2]
+
+    def set_duration(self):
+        self.OPT_Config_File["Timeline_settings"]["duration"]["duration"] = (
+            self.OPT_Config_File["Timeline_settings"]["duration"]["day"] * 24 * 3600
+            + self.OPT_Config_File["Timeline_settings"]["duration"]["hours"] * 3600
+            + self.OPT_Config_File["Timeline_settings"]["duration"]["seconds"]
+        )
 
     def Timeline_settings(self):
         """Returns settings related to a *Science Mode Timeline* as a whole.

@@ -241,6 +241,8 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
     new_relativeTime = relativeTime
     current_time = ephem.Date(date)
 
+    mode_change_time = Timeline_settings["Mode1_2_5_minDuration"]
+
     # for t in range(int(duration/timestep)):
     "Simulation begins here"
     while current_time < ephem.second * duration + ephem.Date(date):
@@ -388,40 +390,42 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         and sun_angle[t - 1] < MATS_nadir_eclipse_angle
                     ) or (~check_lat(lat_LP[t],lat) and check_lat(lat_LP[t-1],lat)):
 
-                        Logger.debug("")
-                        current_state = "Mode1_night_UV_off"
-                        comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
+                        if (current_time+mode_change_time) <= Timeline_settings["duration"]["duration"]:
 
-                        # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude, UV_on = False, nadir_on = True, Timeline_settings = Timeline_settings, comment = comment)
-                        CCD_settings[16]["TEXPMS"] = 0
-                        CCD_settings[32]["TEXPMS"] = 0
-                        CCD_settings[64]["TEXPMS"] = TEXPMS_nadir
+                            Logger.debug("")
+                            current_state = "Mode1_night_UV_off"
+                            comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
 
-                        # relativeTime = Commands.TC_pafMode( root, 
-                        #     relativeTime, MODE=1, 
-                        #     Timeline_settings=Timeline_settings, 
-                        #     configFile=configFile, comment=comment
-                        #     )
-                        # Macros.SetCCDs_macro()
-                        # Commands.TC_pafMode()
+                            # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude, UV_on = False, nadir_on = True, Timeline_settings = Timeline_settings, comment = comment)
+                            CCD_settings[16]["TEXPMS"] = 0
+                            CCD_settings[32]["TEXPMS"] = 0
+                            CCD_settings[64]["TEXPMS"] = TEXPMS_nadir
 
-                        new_relativeTime = Macros.Operational_Limb_Pointing_macro(
-                            root,
-                            relativeTime,
-                            CCD_settings,
-                            PM_settings=PM_settings,
-                            pointing_altitude=pointing_altitude,
-                            Timeline_settings=Timeline_settings,
-                            configFile=configFile,
-                            comment=comment,
-                        )
+                            # relativeTime = Commands.TC_pafMode( root, 
+                            #     relativeTime, MODE=1, 
+                            #     Timeline_settings=Timeline_settings, 
+                            #     configFile=configFile, comment=comment
+                            #     )
+                            # Macros.SetCCDs_macro()
+                            # Commands.TC_pafMode()
 
-                        Logger.debug(current_state)
-                        Logger.debug("current_time: " + str(current_time))
-                        Logger.debug("lat_MATS [degrees]: " + str(lat_MATS[t]))
-                        Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
-                        Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
-                        Logger.debug("")
+                            new_relativeTime = Macros.Operational_Limb_Pointing_macro(
+                                root,
+                                relativeTime,
+                                CCD_settings,
+                                PM_settings=PM_settings,
+                                pointing_altitude=pointing_altitude,
+                                Timeline_settings=Timeline_settings,
+                                configFile=configFile,
+                                comment=comment,
+                            )
+
+                            Logger.debug(current_state)
+                            Logger.debug("current_time: " + str(current_time))
+                            Logger.debug("lat_MATS [degrees]: " + str(lat_MATS[t]))
+                            Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
+                            Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
+                            Logger.debug("")
 
                 # Check latitude
                 if check_lat(lat_LP[t],lat) and current_state != "Mode1_night_UV_on":
@@ -432,32 +436,34 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         and sun_angle[t - 1] < MATS_nadir_eclipse_angle
                     ) or (check_lat(lat_LP[t],lat) and ~check_lat(lat_LP[t-1],lat)):
 
-                        Logger.debug("")
-                        current_state = "Mode1_night_UV_on"
-                        comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
+                        if (current_time+mode_change_time) <= Timeline_settings["duration"]["duration"]:
 
-                        # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude=pointing_altitude, UV_on = True, nadir_on = True, Timeline_settings = Timeline_settings, comment = comment)
-                        CCD_settings[16]["TEXPMS"] = TEXPMS_16
-                        CCD_settings[32]["TEXPMS"] = TEXPMS_32
-                        CCD_settings[64]["TEXPMS"] = TEXPMS_nadir
-                        new_relativeTime = Macros.Operational_Limb_Pointing_macro(
-                            root,
-                            relativeTime,
-                            CCD_settings,
-                            PM_settings=PM_settings,
-                            pointing_altitude=pointing_altitude,
-                            Timeline_settings=Timeline_settings,
-                            configFile=configFile,
-                            comment=comment,
-                        )
+                            Logger.debug("")
+                            current_state = "Mode1_night_UV_on"
+                            comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
 
-                        Logger.debug(current_state)
-                        Logger.debug("current_time: " + str(current_time))
-                        Logger.debug("lat_MATS [degrees]: " + str(lat_MATS[t]))
-                        Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
-                        Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
-                        Logger.debug("")
-                        # Mode1_macro(root,str(t+relativeTime),pointing_altitude, Timeline_settings = Timeline_settings, comment = comment)
+                            # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude=pointing_altitude, UV_on = True, nadir_on = True, Timeline_settings = Timeline_settings, comment = comment)
+                            CCD_settings[16]["TEXPMS"] = TEXPMS_16
+                            CCD_settings[32]["TEXPMS"] = TEXPMS_32
+                            CCD_settings[64]["TEXPMS"] = TEXPMS_nadir
+                            new_relativeTime = Macros.Operational_Limb_Pointing_macro(
+                                root,
+                                relativeTime,
+                                CCD_settings,
+                                PM_settings=PM_settings,
+                                pointing_altitude=pointing_altitude,
+                                Timeline_settings=Timeline_settings,
+                                configFile=configFile,
+                                comment=comment,
+                            )
+
+                            Logger.debug(current_state)
+                            Logger.debug("current_time: " + str(current_time))
+                            Logger.debug("lat_MATS [degrees]: " + str(lat_MATS[t]))
+                            Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
+                            Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
+                            Logger.debug("")
+                            # Mode1_macro(root,str(t+relativeTime),pointing_altitude, Timeline_settings = Timeline_settings, comment = comment)
 
             # Check if night or day#
             if sun_angle[t] < MATS_nadir_eclipse_angle:
@@ -471,31 +477,33 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         and sun_angle[t - 1] > MATS_nadir_eclipse_angle
                     ) or (~check_lat(lat_LP[t],lat) and check_lat(lat_LP[t-1],lat)):
 
-                        Logger.debug("")
-                        current_state = "Mode1_day_UV_off"
-                        comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
+                        if (current_time+mode_change_time) <= Timeline_settings["duration"]["duration"]:
 
-                        # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude=pointing_altitude, UV_on = False, nadir_on = False, Timeline_settings = Timeline_settings, comment = comment)
-                        CCD_settings[16]["TEXPMS"] = 0
-                        CCD_settings[32]["TEXPMS"] = 0
-                        CCD_settings[64]["TEXPMS"] = 0
-                        new_relativeTime = Macros.Operational_Limb_Pointing_macro(
-                            root,
-                            relativeTime,
-                            CCD_settings,
-                            PM_settings=PM_settings,
-                            pointing_altitude=pointing_altitude,
-                            Timeline_settings=Timeline_settings,
-                            configFile=configFile,
-                            comment=comment,
-                        )
+                            Logger.debug("")
+                            current_state = "Mode1_day_UV_off"
+                            comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
 
-                        Logger.debug(current_state)
-                        Logger.debug("current_time: " + str(current_time))
-                        Logger.debug("lat_MATS [degrees]: " + str(lat_MATS[t]))
-                        Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
-                        Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
-                        Logger.debug("")
+                            # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude=pointing_altitude, UV_on = False, nadir_on = False, Timeline_settings = Timeline_settings, comment = comment)
+                            CCD_settings[16]["TEXPMS"] = 0
+                            CCD_settings[32]["TEXPMS"] = 0
+                            CCD_settings[64]["TEXPMS"] = 0
+                            new_relativeTime = Macros.Operational_Limb_Pointing_macro(
+                                root,
+                                relativeTime,
+                                CCD_settings,
+                                PM_settings=PM_settings,
+                                pointing_altitude=pointing_altitude,
+                                Timeline_settings=Timeline_settings,
+                                configFile=configFile,
+                                comment=comment,
+                            )
+
+                            Logger.debug(current_state)
+                            Logger.debug("current_time: " + str(current_time))
+                            Logger.debug("lat_MATS [degrees]: " + str(lat_MATS[t]))
+                            Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
+                            Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
+                            Logger.debug("")
 
                 # Check latitude
                 if check_lat(lat_LP[t],lat) and current_state != "Mode1_day_UV_on":
@@ -506,31 +514,32 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         and sun_angle[t - 1] < MATS_nadir_eclipse_angle
                     ) or (check_lat(lat_LP[t],lat) and ~check_lat(lat_LP[t-1],lat)):
 
-                        Logger.debug("")
-                        current_state = "Mode1_day_UV_on"
-                        comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
+                        if (current_time+mode_change_time) <= Timeline_settings["duration"]["duration"]:
+                            Logger.debug("")
+                            current_state = "Mode1_day_UV_on"
+                            comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
 
-                        # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude=pointing_altitude, UV_on = True, nadir_on = False, Timeline_settings = Timeline_settings, comment = comment)
-                        CCD_settings[16]["TEXPMS"] = TEXPMS_16
-                        CCD_settings[32]["TEXPMS"] = TEXPMS_32
-                        CCD_settings[64]["TEXPMS"] = 0
-                        new_relativeTime = Macros.Operational_Limb_Pointing_macro(
-                            root,
-                            relativeTime,
-                            CCD_settings,
-                            PM_settings=PM_settings,
-                            pointing_altitude=pointing_altitude,
-                            Timeline_settings=Timeline_settings,
-                            configFile=configFile,
-                            comment=comment,
-                        )
+                            # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude=pointing_altitude, UV_on = True, nadir_on = False, Timeline_settings = Timeline_settings, comment = comment)
+                            CCD_settings[16]["TEXPMS"] = TEXPMS_16
+                            CCD_settings[32]["TEXPMS"] = TEXPMS_32
+                            CCD_settings[64]["TEXPMS"] = 0
+                            new_relativeTime = Macros.Operational_Limb_Pointing_macro(
+                                root,
+                                relativeTime,
+                                CCD_settings,
+                                PM_settings=PM_settings,
+                                pointing_altitude=pointing_altitude,
+                                Timeline_settings=Timeline_settings,
+                                configFile=configFile,
+                                comment=comment,
+                            )
 
-                        Logger.debug(current_state)
-                        Logger.debug("current_time: " + str(current_time))
-                        Logger.debug("lat_MATS [degrees]: " + str(lat_MATS[t]))
-                        Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
-                        Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
-                        Logger.debug("")
+                            Logger.debug(current_state)
+                            Logger.debug("current_time: " + str(current_time))
+                            Logger.debug("lat_MATS [degrees]: " + str(lat_MATS[t]))
+                            Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
+                            Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
+                            Logger.debug("")
                         # Mode1_macro(root,str(t+relativeTime),pointing_altitude, Timeline_settings = Timeline_settings, comment = comment)
 
             ############### End of SCI-mode operation planner #################

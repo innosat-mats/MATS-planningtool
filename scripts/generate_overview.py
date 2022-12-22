@@ -49,6 +49,9 @@ for i,filename in enumerate(filenames):
     
     XML_name = '/'.join(filename.split('/')[:-1]) + '/' + 'STP-MTS-' + id + '_' + start_date.strftime('%y%m%d') + generation_date.strftime('%y%m%d') + version  + name + '.xml'
     xml_file_exists = os.path.isfile(XML_name)
+    if not xml_file_exists:
+        XML_name = '/'.join(filename.split('/')[:-1]) + '/' + 'STP-MTS-' + id + '_' + start_date.strftime('%y%m%d') + generation_date.strftime('%y%m%d') + version  + 'T' + name + '.xml'
+        xml_file_exists = os.path.isfile(XML_name)
 
     if xml_file_exists:
         tree = ET.parse(XML_name)    
