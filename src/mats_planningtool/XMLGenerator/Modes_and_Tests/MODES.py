@@ -390,7 +390,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         and sun_angle[t - 1] < MATS_nadir_eclipse_angle
                     ) or (~check_lat(lat_LP[t],lat) and check_lat(lat_LP[t-1],lat)):
 
-                        if (current_time+mode_change_time) <= Timeline_settings["duration"]["duration"]:
+                        if (new_relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
 
                             Logger.debug("")
                             current_state = "Mode1_night_UV_off"
@@ -436,7 +436,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         and sun_angle[t - 1] < MATS_nadir_eclipse_angle
                     ) or (check_lat(lat_LP[t],lat) and ~check_lat(lat_LP[t-1],lat)):
 
-                        if (current_time+mode_change_time) <= Timeline_settings["duration"]["duration"]:
+                        if (new_relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
 
                             Logger.debug("")
                             current_state = "Mode1_night_UV_on"
@@ -477,7 +477,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         and sun_angle[t - 1] > MATS_nadir_eclipse_angle
                     ) or (~check_lat(lat_LP[t],lat) and check_lat(lat_LP[t-1],lat)):
 
-                        if (current_time+mode_change_time) <= Timeline_settings["duration"]["duration"]:
+                        if (new_relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
 
                             Logger.debug("")
                             current_state = "Mode1_day_UV_off"
@@ -514,7 +514,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         and sun_angle[t - 1] < MATS_nadir_eclipse_angle
                     ) or (check_lat(lat_LP[t],lat) and ~check_lat(lat_LP[t-1],lat)):
 
-                        if (current_time+mode_change_time) <= Timeline_settings["duration"]["duration"]:
+                        if (new_relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
                             Logger.debug("")
                             current_state = "Mode1_day_UV_on"
                             comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
