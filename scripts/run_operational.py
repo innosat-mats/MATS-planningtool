@@ -10,6 +10,9 @@ def get_MATS_tle():
     return tle
 
 def generate_operational_mode(startdate,duration):
+
+    tle = get_MATS_tle()
+
     configfile = configFile.configFile(
         "data/Operational/configfile_1100_MODE1y.json",
         DT.datetime.strftime(startdate,"%Y/%m/%d %H:%M:%S"),
@@ -25,8 +28,25 @@ def generate_operational_mode(startdate,duration):
 
     return
 
+def generate_star_staring_mode(startdate,duration):
 
-tle = get_MATS_tle()
+    tle = get_MATS_tle()
+
+    configfile = configFile.configFile(
+        "data/Operational/configfile_3040_STAR.json",
+        DT.datetime.strftime(startdate,"%Y/%m/%d %H:%M:%S"),
+        TLE1=tle[0],
+        TLE2=tle[1],
+    )
+    configfile.Timeline_settings()["duration"]["hours"] = duration
+    configfile.set_duration()
+    configfile.output_dir = "data/Operational/"
+    configfile.CheckConfigFile()    
+    configfile.Timeline_gen()
+    configfile.XML_gen()
+
+    return
+
 
 
 # generate_operational_mode(DT.datetime(2022,12,21,18,00),6)
@@ -36,5 +56,13 @@ tle = get_MATS_tle()
 # generate_operational_mode(DT.datetime(2022,12,25,18,00),9)
 # generate_operational_mode(DT.datetime(2022,12,26,18,00),9)
 # generate_operational_mode(DT.datetime(2022,12,27,18,00),9)
-generate_operational_mode(DT.datetime(2022,12,28,18,00),9)
-generate_operational_mode(DT.datetime(2022,12,29,18,00),9)
+# generate_operational_mode(DT.datetime(2022,12,28,18,00),9)
+# generate_operational_mode(DT.datetime(2022,12,29,18,00),9)
+
+# generate_operational_mode(DT.datetime(2022,12,30,18,00),6)
+# generate_star_staring_mode(DT.datetime(2022,12,30,6,00),6)
+# generate_operational_mode(DT.datetime(2022,12,31,18,00),12)
+# generate_operational_mode(DT.datetime(2023,1,1,18,00),9)
+# generate_operational_mode(DT.datetime(2023,1,2,18,00),12)
+# generate_operational_mode(DT.datetime(2023,1,3,18,00),9)
+# generate_operational_mode(DT.datetime(2023,1,4,18,00),12)

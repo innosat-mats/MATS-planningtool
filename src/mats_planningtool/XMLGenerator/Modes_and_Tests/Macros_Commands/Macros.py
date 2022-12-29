@@ -364,24 +364,27 @@ def Snapshot_Inertial_macro(
     for CCDSEL in CCDSELs:
         relativeTime = Commands.TC_pafCCDSnapshot(
             root,
-            Snapshot_relativeTime,
+            relativeTime,
             CCDSEL=CCDSEL,
             Timeline_settings=Timeline_settings, configFile=configFile,
             comment=comment,
         )
-        Snapshot_relativeTime += SnapshotSpacing
+        relativeTime += SnapshotSpacing
 
     configFile.current_pointing = pointing_altitude_end
 
-    relativeTime = Commands.TC_acfLimbPointingAltitudeOffset(
-        root,
-        relativeTime,
-        Initial=StandardPointingAltitude,
-        Final=StandardPointingAltitude,
-        Rate=0,
-        Timeline_settings=Timeline_settings, configFile=configFile,
-        comment=comment,
-    )
+    if relativeTime > FreezeTime_rel + FreezeDuration - configFile.LargestSetTEXPMS/1000:
+        raise ValueError("Snapshot exposure occuring after Freeze duration ended")
+
+    # relativeTime = Commands.TC_acfLimbPointingAltitudeOffset(
+    #     root,
+    #     relativeTime,
+    #     Initial=StandardPointingAltitude,
+    #     Final=StandardPointingAltitude,
+    #     Rate=0,
+    #     Timeline_settings=Timeline_settings, configFile=configFile,
+    #     comment=comment,
+    # )
     # relativeTime = Commands.TC_pafMode(root, relativeTime, MODE = 1, Timeline_settings = Timeline_settings, configFile=configFile, comment = comment)
 
     return relativeTime

@@ -226,7 +226,7 @@ def Mode120_date_calculator(configFile):
         t = t + 1
 
     #Filtering on moon inside horizontal FOV and not too far outside vertical FOV (interpolation is done later)   
-    horisontal_filter=5 #look for stars horizontally +- total degrees (Horistontal FOV is 6.06)
+    horisontal_filter=3 #look for stars horizontally +- total degrees (Horistontal FOV is 6.06)
     vert_filter= 10 #look at stars vertically at +- this filter in degrees (Vertical FOV is 1.52)
 
     possibles=np.array([(istar,itime) for istar in range(nstars+1) for itime in range(len(timestamps))  
