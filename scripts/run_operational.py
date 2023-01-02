@@ -66,3 +66,12 @@ def generate_star_staring_mode(startdate,duration):
 # generate_operational_mode(DT.datetime(2023,1,2,18,00),12)
 # generate_operational_mode(DT.datetime(2023,1,3,18,00),9)
 # generate_operational_mode(DT.datetime(2023,1,4,18,00),12)
+
+
+generate_star_staring_mode(DT.datetime(2023,1,5,6,00),6)
+generate_operational_mode(DT.datetime(2023,1,5,18,00),6)
+generate_operational_mode(DT.datetime(2023,1,6,18,00),9)
+generate_operational_mode(DT.datetime(2023,1,7,18,00),9)
+generate_operational_mode(DT.datetime(2023,1,8,18,00),9)
+generate_operational_mode(DT.datetime(2023,1,9,18,00),9)
+generate_operational_mode(DT.datetime(2023,1,10,18,00),9)
