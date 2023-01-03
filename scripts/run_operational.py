@@ -9,12 +9,12 @@ def get_MATS_tle():
     print('using Mats tle \n',tle)
     return tle
 
-def generate_operational_mode(startdate,duration):
+def generate_operational_mode(startdate,duration,mode='1100'):
 
     tle = get_MATS_tle()
 
     configfile = configFile.configFile(
-        "data/Operational/configfile_1100_MODE1y.json",
+        "data/Operational/configfile_" + mode +"_MODE1y.json",
         DT.datetime.strftime(startdate,"%Y/%m/%d %H:%M:%S"),
         TLE1=tle[0],
         TLE2=tle[1],
@@ -68,10 +68,11 @@ def generate_star_staring_mode(startdate,duration):
 # generate_operational_mode(DT.datetime(2023,1,4,18,00),12)
 
 
-generate_star_staring_mode(DT.datetime(2023,1,5,6,00),6)
-generate_operational_mode(DT.datetime(2023,1,5,18,00),6)
-generate_operational_mode(DT.datetime(2023,1,6,18,00),9)
-generate_operational_mode(DT.datetime(2023,1,7,18,00),9)
-generate_operational_mode(DT.datetime(2023,1,8,18,00),9)
-generate_operational_mode(DT.datetime(2023,1,9,18,00),9)
-generate_operational_mode(DT.datetime(2023,1,10,18,00),9)
+# generate_star_staring_mode(DT.datetime(2023,1,5,6,00),6)
+# generate_operational_mode(DT.datetime(2023,1,5,18,00),6)
+# generate_operational_mode(DT.datetime(2023,1,6,18,00),12,'1101')
+# generate_operational_mode(DT.datetime(2023,1,7,18,00),12)
+# generate_operational_mode(DT.datetime(2023,1,8,18,00),12)
+# generate_operational_mode(DT.datetime(2023,1,9,18,00),12)
+# generate_operational_mode(DT.datetime(2023,1,10,18,00),12)
+generate_operational_mode(DT.datetime(2023,1,11,18,00),12)

@@ -698,10 +698,10 @@ class configFile:
         CCD_settings[8] = self.OPT_Config_File["CCD_macro_settings"][CCDMacroSelect][
             "CCD_settings_IR2"
         ]
-        CCD_settings[2] = self.OPT_Config_File["CCD_macro_settings"][CCDMacroSelect][
+        CCD_settings[4] = self.OPT_Config_File["CCD_macro_settings"][CCDMacroSelect][
             "CCD_settings_IR3"
         ]
-        CCD_settings[4] = self.OPT_Config_File["CCD_macro_settings"][CCDMacroSelect][
+        CCD_settings[2] = self.OPT_Config_File["CCD_macro_settings"][CCDMacroSelect][
             "CCD_settings_IR4"
         ]
         CCD_settings[64] = self.OPT_Config_File["CCD_macro_settings"][CCDMacroSelect][
