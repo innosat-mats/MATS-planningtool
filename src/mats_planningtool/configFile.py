@@ -13,15 +13,15 @@ class configFile:
         self,
         config_file_name,
         date=None,
-        TLE1="1 99988U 22123A   22309.05746528  .00000000  00000-0  24354-3 0    77",
-        TLE2="2 99988  97.6526 311.7765 0012080 308.6344 230.9588 14.92664144000050",
+        TLE1=None,
+        TLE2=None,
     ):
 
         self.config_file_name = config_file_name
         self.output_dir = 'Output'
-        self.TLE1 = TLE1
-        self.TLE2 = TLE2
-        self.date = date
+        # self.TLE1 = None
+        # self.TLE2 = None
+        # self.date = date
 
         with open(self.config_file_name) as json_file:
             OPT_Config_File = json.load(json_file)
@@ -30,6 +30,10 @@ class configFile:
         
         if date != None:
             self.OPT_Config_File["Timeline_settings"]['start_date'] = date
+        
+        if TLE1 != None:
+            self.OPT_Config_File['TLE1'] = TLE1
+            self.OPT_Config_File['TLE2'] = TLE2
 
         self.set_duration()
 
@@ -177,17 +181,8 @@ class configFile:
 
         """
 
-        if (not self.TLE1 == ("")) and (not self.TLE2 == ("")):
-            TLE1 = self.OPT_Config_File["TLE1"]
-            TLE2 = self.OPT_Config_File["TLE2"]
-        else:
-            "If no TLE has been chosen with *Set_ConfigFile*, these values are used instead."
-            TLE1 = (
-                "1 54321U 19100G   20172.75043981 0.00000000  00000-0  75180-4 0  0014"
-            )
-            TLE2 = (
-                "2 54321  97.7044   6.9210 0014595 313.2372  91.8750 14.93194142000010"
-            )
+        TLE1 = self.OPT_Config_File["TLE1"]
+        TLE2 = self.OPT_Config_File["TLE2"]
 
         return [TLE1, TLE2]
 
