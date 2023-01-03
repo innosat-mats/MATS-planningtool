@@ -39,6 +39,8 @@ def generate_star_staring_mode(startdate,duration):
         TLE2=tle[1],
     )
     configfile.Timeline_settings()["duration"]["hours"] = duration
+    configfile.Mode120_settings()['TimeToConsider']['hours'] = duration
+    configfile.Mode120_settings()['TimeToConsider']['TimeToConsider'] = duration*3600
     configfile.set_duration()
     configfile.output_dir = "data/Operational/"
     configfile.CheckConfigFile()    
