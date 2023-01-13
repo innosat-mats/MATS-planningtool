@@ -50,7 +50,7 @@ from mats_planningtool import Library
 Logger = logging.getLogger("OPT_logger")
 
 
-def XML_generator(configFile, SCIMOD_Path,test=False):
+def XML_generator(configFile, SCIMOD_Path):
     """The core function of the XML_gen program.
 
     Reads a *Science Mode Timeline* .json file. Then chronologically goes though the *Science Mode Timeline*, calling for the *XML_generator_select* function.
@@ -116,7 +116,7 @@ def XML_generator(configFile, SCIMOD_Path,test=False):
     Logger.info('Call function XML_Initial_Basis_Creator')
     Logger.info('')
     root = XML_Initial_Basis_Creator(
-        timeline_start, timeline_duration, SCIMOD_Path, configFile,version,test)
+        timeline_start, timeline_duration, SCIMOD_Path, configFile,version)
 
     ######## Loop through SCIMOD TIMELINE lIST, selecting one mode at a time #####
     Logger.info('Loop through Science Mode Timeline List')
@@ -188,7 +188,7 @@ def XML_generator(configFile, SCIMOD_Path,test=False):
 
 ################### XML-tree basis creator ####################################
 
-def XML_Initial_Basis_Creator(timeline_start, timeline_duration, SCIMOD_Path, configFile,version,test=False):
+def XML_Initial_Basis_Creator(timeline_start, timeline_duration, SCIMOD_Path, configFile,version):
     '''Subfunction, Construct Basis of XML document and adds the description container.
 
     Arguments: 
@@ -225,12 +225,8 @@ def XML_Initial_Basis_Creator(timeline_start, timeline_duration, SCIMOD_Path, co
     ID = configFile.ID()
     Name = configFile.Name()
 
-    if test:
-        teststr = 'T'
-    else:
-        teststr = ''
     etree.SubElement(root[0], 'timelineID', procedureIdentifier='STP-MTS-' + ID,
-                     descriptiveName=StartingDate_name+Generationdate_name+version+teststr+Name, version=version)
+                     descriptiveName=StartingDate_name+Generationdate_name+version+Name, version=version)
 
     etree.SubElement(root[0], 'changeLog')
     etree.SubElement(root[0][1], 'changeLogItem', version=version,

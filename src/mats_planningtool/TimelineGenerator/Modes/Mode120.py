@@ -238,7 +238,7 @@ def Mode120_date_calculator(configFile):
 
     for posstar in np.unique(possibles[:,0]):
         possible=np.array([possible for possible in possibles if possible[0]==posstar ])
-        star_found = np.where(np.diff(possible[:,1])>2)[0] #check if there is a gap in the indeces larger than 2
+        star_found = np.where(np.diff(possible[:,1])>2)[0]+1 #check if there is a gap in the indeces larger than 2
         star_found = np.insert(star_found,0,0)
         star_found = np.append(star_found,len(possible))
         xvalue = np.zeros((len(star_found)-1,1)) #array to hold horizontal offset in degreess
