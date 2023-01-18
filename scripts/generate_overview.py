@@ -6,7 +6,8 @@ import xml.etree.ElementTree as ET
 import os
 
 all_timelines = []
-filenames = glob.glob("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/comissioning/**/Science_Mode_Timeline*.json", recursive=True)
+#filenames = glob.glob("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/comissioning/**/Science_Mode_Timeline*.json", recursive=True)
+filenames = glob.glob("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational/Science_Mode_Timeline*.json", recursive=True)
 
 for i,filename in enumerate(filenames):
     with open(filename) as json_file:
