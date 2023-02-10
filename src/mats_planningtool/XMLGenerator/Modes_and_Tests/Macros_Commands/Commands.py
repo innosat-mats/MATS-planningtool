@@ -523,8 +523,8 @@ def TC_pafCCDMain(
     if not (0 <= NFLUSH <= 1023 and type(NFLUSH) == int):
         Logger.error("Invalid argument: NFLUSH")
         raise ValueError
-    if not (NROW * NRBIN + NRSKIP <= 511):
-        Logger.error("Invalid argument: NROW * NRBIN + NRSKIP exceeds 511")
+    if not (NROW * NRBIN + NRSKIP <= 515):
+        Logger.error("Invalid argument: NROW * NRBIN + NRSKIP exceeds 515")
         raise ValueError
     if not ((NCOL + 1) * NCBIN * 2 ** NCBINFPGA + NCSKIP <= 2048):
         Logger.error(
