@@ -28,6 +28,7 @@ from mats_planningtool.Library import (
     utc_to_onboardTime,
     SunAngle,
     CCDSELExtracter,
+    SyncArgCalculator,
 )
 from mats_planningtool.OrbitSimulator.MatsBana import Satellite_Simulator
 import ephem
@@ -36,7 +37,7 @@ import sys
 import pylab
 import importlib
 import skyfield.api
-
+import copy
 
 # Timeline_settings = configFile.Timeline_settings()
 Logger = logging.getLogger("OPT_logger")
@@ -192,16 +193,16 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
     pi = pylab.pi
     arccos = pylab.arccos
 
-    CCD_settings = configFile.CCD_macro_settings("HighResUV")
+    CCD_settings = copy.deepcopy(configFile.CCD_macro_settings("HighResUV"))
     PM_settings = configFile.PM_settings()
     Mode_settings_ConfigFile = configFile.Operational_Science_Mode_settings()
 
     Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
 
     timestep = Mode_settings["timestep"]
-    TEXPMS_16 = CCD_settings[16]["TEXPMS"]
-    TEXPMS_32 = CCD_settings[32]["TEXPMS"]
-    TEXPMS_nadir = CCD_settings[64]["TEXPMS"]
+
+    mode_change_time = Timeline_settings["Mode1_2_5_minDuration"]
+
 
     log_timestep = Mode_settings["log_timestep"]
     Logger.debug("log_timestep [s]: " + str(log_timestep))
@@ -211,8 +212,6 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
     "Pre-allocate space"
     lat_MATS = zeros((duration, 1))
     r_MATS = zeros((duration, 3))
-    r_MATS_ECEF = zeros((duration, 3))
-    r_MATS_unit_vector = zeros((duration, 3))
     optical_axis = zeros((duration, 3))
     lat_LP = zeros((duration, 1))
     MATS_P = zeros((duration, 1))
@@ -234,6 +233,62 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
 
     Logger.debug("MATS_nadir_eclipse_angle : " + str(MATS_nadir_eclipse_angle))
     Logger.debug("")
+
+
+    ########################## Global setup ################
+
+    comment = "Mode 1 setup"
+    
+    CCDSEL, NCCD, TEXPIOFS, TEXPIMS = SyncArgCalculator(
+        CCD_settings,
+        Timeline_settings["CCDSYNC_ExtraOffset"],
+        Timeline_settings["CCDSYNC_ExtraIntervalTime"],
+    )
+
+    relativeTime = Commands.TC_pafMode(
+        root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment
+    )
+
+    # relativeTime_OperationalMode = relativeTime+Timeline_settings['pointing_stabilization']
+    relativeTime = Commands.TC_acfLimbPointingAltitudeOffset(
+        root,
+        relativeTime,
+        Initial=pointing_altitude,
+        Final=pointing_altitude,
+        Rate=0,
+        Timeline_settings=Timeline_settings, configFile=configFile,
+        comment=comment,
+    )
+
+    relativeTime = Commands.TC_pafPM(
+        root,
+        relativeTime,
+        TEXPMS=PM_settings["TEXPMS"],
+        TEXPIMS=PM_settings["TEXPIMS"],
+        Timeline_settings=Timeline_settings, configFile=configFile,
+        comment=comment,
+    )
+
+    relativeTime = Macros.SetCCDs_macro(
+        root,
+        relativeTime,
+        CCD_settings=CCD_settings,
+        TEXPIMS=TEXPIMS,
+        Timeline_settings=Timeline_settings, configFile=configFile,
+        comment=comment,
+    )
+
+    relativeTime = Commands.TC_pafCCDSYNCHRONIZE(
+        root,
+        relativeTime,
+        CCDSEL=CCDSEL,
+        NCCD=NCCD,
+        TEXPIOFS=TEXPIOFS,
+        Timeline_settings=Timeline_settings, configFile=configFile,
+        comment=comment,
+    )
+
+    #Simulate satellite and generate mode
     t = -1
 
     MATS_skyfield = skyfield.api.EarthSatellite(TLE[0], TLE[1])
@@ -241,7 +296,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
     new_relativeTime = relativeTime
     current_time = ephem.Date(date)
 
-    mode_change_time = Timeline_settings["Mode1_2_5_minDuration"]
+    sattelite_state = {"UV_on": True, "Nadir_on": True}
 
     # for t in range(int(duration/timestep)):
     "Simulation begins here"
@@ -296,15 +351,13 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                     current_state = "Mode1_night_UV_off"
                     comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
                     # new_relativeTime = Macros.Mode1_macro(root,relativeTime, pointing_altitude=pointing_altitude, UV_on = False, nadir_on = True, Timeline_settings = Timeline_settings, comment = comment)
-                    CCD_settings[16]["TEXPMS"] = 0
-                    CCD_settings[32]["TEXPMS"] = 0
-                    CCD_settings[64]["TEXPMS"] = TEXPMS_nadir
-                    new_relativeTime = Macros.Operational_Limb_Pointing_macro(
+                    new_relativeTime = Macros.Mode1(
                         root,
                         relativeTime,
                         CCD_settings,
-                        PM_settings=PM_settings,
-                        pointing_altitude=pointing_altitude,
+                        TEXPIMS,
+                        sattelite_state,
+                        UV_on = False, Nadir_on = True,
                         Timeline_settings=Timeline_settings, configFile=configFile,
                         comment=comment,
                     )
@@ -319,17 +372,14 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         + str(Mode_settings)
                     )
                     # new_relativeTime = Macros.Mode1_macro(root,relativeTime, pointing_altitude=pointing_altitude, UV_on = True, nadir_on = True, Timeline_settings = Timeline_settings, comment = comment)
-                    CCD_settings[16]["TEXPMS"] = TEXPMS_16
-                    CCD_settings[32]["TEXPMS"] = TEXPMS_32
-                    CCD_settings[64]["TEXPMS"] = TEXPMS_nadir
-                    new_relativeTime = Macros.Operational_Limb_Pointing_macro(
+                    new_relativeTime = Macros.Mode1(
                         root,
                         relativeTime,
                         CCD_settings,
-                        PM_settings=PM_settings,
-                        pointing_altitude=pointing_altitude,
-                        Timeline_settings=Timeline_settings,
-                        configFile=configFile,
+                        TEXPIMS,
+                        sattelite_state,
+                        UV_on = True, Nadir_on = True,
+                        Timeline_settings=Timeline_settings, configFile=configFile,
                         comment=comment,
                     )
 
@@ -340,15 +390,13 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                     comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
 
                     # new_relativeTime = Macros.Mode1_macro(root,relativeTime,pointing_altitude, UV_on = False, nadir_on = False, Timeline_settings = Timeline_settings, comment = comment)
-                    CCD_settings[16]["TEXPMS"] = 0
-                    CCD_settings[32]["TEXPMS"] = 0
-                    CCD_settings[64]["TEXPMS"] = 0
-                    new_relativeTime = Macros.Operational_Limb_Pointing_macro(
+                    new_relativeTime = Macros.Mode1(
                         root,
                         relativeTime,
                         CCD_settings,
-                        PM_settings=PM_settings,
-                        pointing_altitude=pointing_altitude,
+                        TEXPIMS,
+                        sattelite_state,
+                        UV_on = False, Nadir_on = False,
                         Timeline_settings=Timeline_settings, configFile=configFile,
                         comment=comment,
                     )
@@ -357,15 +405,13 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                     current_state = "Mode1_day_UV_on"
                     comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
                     # new_relativeTime = Macros.Mode1_macro(root,relativeTime,pointing_altitude, UV_on = True, nadir_on = False, Timeline_settings = Timeline_settings, comment = comment)
-                    CCD_settings[16]["TEXPMS"] = TEXPMS_16
-                    CCD_settings[32]["TEXPMS"] = TEXPMS_32
-                    CCD_settings[64]["TEXPMS"] = 0
-                    new_relativeTime = Macros.Operational_Limb_Pointing_macro(
+                    new_relativeTime = Macros.Mode1(
                         root,
                         relativeTime,
                         CCD_settings,
-                        PM_settings=PM_settings,
-                        pointing_altitude=pointing_altitude,
+                        TEXPIMS,
+                        sattelite_state,
+                        UV_on = True, Nadir_on = False,
                         Timeline_settings=Timeline_settings, configFile=configFile,
                         comment=comment,
                     )
@@ -397,26 +443,15 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                             comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
 
                             # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude, UV_on = False, nadir_on = True, Timeline_settings = Timeline_settings, comment = comment)
-                            CCD_settings[16]["TEXPMS"] = 0
-                            CCD_settings[32]["TEXPMS"] = 0
-                            CCD_settings[64]["TEXPMS"] = TEXPMS_nadir
 
-                            # relativeTime = Commands.TC_pafMode( root, 
-                            #     relativeTime, MODE=1, 
-                            #     Timeline_settings=Timeline_settings, 
-                            #     configFile=configFile, comment=comment
-                            #     )
-                            # Macros.SetCCDs_macro()
-                            # Commands.TC_pafMode()
-
-                            new_relativeTime = Macros.Operational_Limb_Pointing_macro(
+                            new_relativeTime = Macros.Mode1(
                                 root,
                                 relativeTime,
                                 CCD_settings,
-                                PM_settings=PM_settings,
-                                pointing_altitude=pointing_altitude,
-                                Timeline_settings=Timeline_settings,
-                                configFile=configFile,
+                                TEXPIMS,
+                                sattelite_state,
+                                UV_on = False, Nadir_on = True,
+                                Timeline_settings=Timeline_settings, configFile=configFile,
                                 comment=comment,
                             )
 
@@ -442,20 +477,18 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                             current_state = "Mode1_night_UV_on"
                             comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
 
-                            # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude=pointing_altitude, UV_on = True, nadir_on = True, Timeline_settings = Timeline_settings, comment = comment)
-                            CCD_settings[16]["TEXPMS"] = TEXPMS_16
-                            CCD_settings[32]["TEXPMS"] = TEXPMS_32
-                            CCD_settings[64]["TEXPMS"] = TEXPMS_nadir
-                            new_relativeTime = Macros.Operational_Limb_Pointing_macro(
+
+                            new_relativeTime = Macros.Mode1(
                                 root,
                                 relativeTime,
                                 CCD_settings,
-                                PM_settings=PM_settings,
-                                pointing_altitude=pointing_altitude,
-                                Timeline_settings=Timeline_settings,
-                                configFile=configFile,
+                                TEXPIMS,
+                                sattelite_state,
+                                UV_on = True, Nadir_on = True,
+                                Timeline_settings=Timeline_settings, configFile=configFile,
                                 comment=comment,
                             )
+
 
                             Logger.debug(current_state)
                             Logger.debug("current_time: " + str(current_time))
@@ -484,17 +517,14 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                             comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
 
                             # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude=pointing_altitude, UV_on = False, nadir_on = False, Timeline_settings = Timeline_settings, comment = comment)
-                            CCD_settings[16]["TEXPMS"] = 0
-                            CCD_settings[32]["TEXPMS"] = 0
-                            CCD_settings[64]["TEXPMS"] = 0
-                            new_relativeTime = Macros.Operational_Limb_Pointing_macro(
+                            new_relativeTime = Macros.Mode1(
                                 root,
                                 relativeTime,
                                 CCD_settings,
-                                PM_settings=PM_settings,
-                                pointing_altitude=pointing_altitude,
-                                Timeline_settings=Timeline_settings,
-                                configFile=configFile,
+                                TEXPIMS,
+                                sattelite_state,
+                                UV_on = False, Nadir_on = False,
+                                Timeline_settings=Timeline_settings, configFile=configFile,
                                 comment=comment,
                             )
 
@@ -520,17 +550,14 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                             comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
 
                             # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude=pointing_altitude, UV_on = True, nadir_on = False, Timeline_settings = Timeline_settings, comment = comment)
-                            CCD_settings[16]["TEXPMS"] = TEXPMS_16
-                            CCD_settings[32]["TEXPMS"] = TEXPMS_32
-                            CCD_settings[64]["TEXPMS"] = 0
-                            new_relativeTime = Macros.Operational_Limb_Pointing_macro(
+                            new_relativeTime = Macros.Mode1(
                                 root,
                                 relativeTime,
                                 CCD_settings,
-                                PM_settings=PM_settings,
-                                pointing_altitude=pointing_altitude,
-                                Timeline_settings=Timeline_settings,
-                                configFile=configFile,
+                                TEXPIMS,
+                                sattelite_state,
+                                UV_on = True, Nadir_on = False,
+                                Timeline_settings=Timeline_settings, configFile=configFile,
                                 comment=comment,
                             )
 
