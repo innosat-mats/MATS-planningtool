@@ -22,6 +22,126 @@ from . import Commands
 Logger = logging.getLogger("OPT_logger")
 
 
+def Mode1(
+    root,
+    relativeTime,
+    CCD_settings,
+    TEXPIMS,
+    sattelite_state,
+    UV_on, Nadir_on,
+    Timeline_settings, configFile,
+    comment="",
+):
+    """ Macro that corresponds to pointing towards a Limb altitude in Operational Mode.
+
+    1. Set Payload to idle mode
+    5. Run CCD Commands with given settings.
+    6. Set Payload to operational mode
+
+    Arguments:
+        root (lxml.etree._Element):  XML tree structure. Main container object for the ElementTree API.
+        relativeTime (float): The relative starting time of the macro with regard to the start of the timeline [s]
+        CCD_settings (:obj:`dict` of :obj:`dict` of int): Settings for the CCDs. Defined in the *Configuration File*.
+        sattelite_state (dict): The current sattelite state.
+        UV_on: wether to turn on UV.
+        Nadir_on: whether to turn on Nadir camera.
+        Timeline_settings (dict): Dictionary containing the settings of the Timeline given in either the *Science_Mode_Timeline* or the *Configuration File*.
+        comment (str): A comment for the macro. Will be printed in the genereated XML-file.
+
+    Returns:
+        relativeTime (float): Time in seconds equal to the input "relativeTime" with added delay from the scheduling of commands.
+    """
+
+    comment = comment + ", Operational_Limb_Pointing_macro"
+
+
+    relativeTime = Commands.TC_pafMode(
+        root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment
+    )
+
+    #Change UV
+    if UV_on and (sattelite_state["UV_on"]):
+        pass
+    elif (not UV_on) and (not sattelite_state["UV_on"]):
+        pass
+    elif (not UV_on) and (sattelite_state["UV_on"]):
+        #Turn off UV
+        sattelite_state["UV_on"] =  False
+
+        CCD_settings[16]["TEXPMS"] = 0
+        CCD_settings[32]["TEXPMS"] = 0
+
+        relativeTime = SetCCDs_macro(
+            root,
+            relativeTime,
+            CCD_settings=CCD_settings,
+            TEXPIMS=TEXPIMS,
+            CCDList=[16,32],
+            Timeline_settings=Timeline_settings, configFile=configFile,
+            comment=comment,
+        )
+
+    elif UV_on and (not sattelite_state["UV_on"]):
+        #Turn on UV
+        sattelite_state["UV_on"] = True
+        
+        CCD_settings[16]["TEXPMS"] = configFile.CCD_macro_settings("HighResUV")[16]["TEXPMS"]
+        CCD_settings[32]["TEXPMS"] = configFile.CCD_macro_settings("HighResUV")[32]["TEXPMS"]
+
+        relativeTime = SetCCDs_macro(
+            root,
+            relativeTime,
+            CCD_settings=CCD_settings,
+            TEXPIMS=TEXPIMS,
+            CCDList=[16,32],
+            Timeline_settings=Timeline_settings, configFile=configFile,
+            comment=comment,
+        )
+    #Change Nadir
+    if Nadir_on and (sattelite_state["Nadir_on"]):
+        pass
+    elif (not Nadir_on) and (not sattelite_state["Nadir_on"]):
+        pass
+    elif (not Nadir_on) and (sattelite_state["Nadir_on"]):
+        #Turn off UV
+        sattelite_state["Nadir_on"] = False
+
+        CCD_settings[64]["TEXPMS"] = 0
+
+        relativeTime = SetCCDs_macro(
+            root,
+            relativeTime,
+            CCD_settings=CCD_settings,
+            TEXPIMS=TEXPIMS,
+            CCDList=[64],
+            Timeline_settings=Timeline_settings, configFile=configFile,
+            comment=comment,
+        )
+
+    elif Nadir_on and (not sattelite_state["Nadir_on"]):
+        #Turn on UV
+        sattelite_state["Nadir_on"] = True
+        
+        CCD_settings[64]["TEXPMS"] = configFile.CCD_macro_settings("HighResUV")[64]["TEXPMS"]
+
+        relativeTime = SetCCDs_macro(
+            root,
+            relativeTime,
+            CCD_settings=CCD_settings,
+            TEXPIMS=TEXPIMS,
+            CCDList=[64],
+            Timeline_settings=Timeline_settings, configFile=configFile,
+            comment=comment,
+        )
+
+    relativeTime = Commands.TC_pafMode(
+        root, relativeTime, MODE=1, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment
+    )
+
+    return relativeTime
+
+
+
 def Operational_Limb_Pointing_macro(
     root,
     relativeTime,

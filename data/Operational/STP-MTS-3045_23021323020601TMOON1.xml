@@ -1,0 +1,317 @@
+<InnoSatTimeline originator="OHB" sdbVersion="9.5.99.2">
+  <description>
+    <timelineID procedureIdentifier="STP-MTS-3045" descriptiveName="202302132023020601MOON" version="01"/>
+    <changeLog>
+      <changeLogItem version="01" date="2023-02-06" author="OMC">The file was created using OPT</changeLogItem>
+    </changeLog>
+    <validity>
+      <startingDate>2023-02-13T06:00:00</startingDate>
+      <scenarioDuration>7200</scenarioDuration>
+    </validity>
+    <comment>This command sequence is an Innosat timeline for MATS created with OPT. Science Mode Timeline used to generate: data/Operational_dump/Science_Mode_Timeline_3045_23021323020601MOON.json, Configuration File used: data/Operational/configfile_3045_MOON.json</comment>
+  </description>
+  <listOfCommands>
+    <procedure id="FCP-MTS-0035_Payload_Power_Toggle">
+      <relativeTime>0</relativeTime>
+      <comment>Payload_Power_Toggle, 2023/2/13 06:00:00</comment>
+      <parameters/>
+    </procedure>
+    <command mnemonic="TC_acfArgEnableYawComp">
+      <relativeTime>45</relativeTime>
+      <comment>2023/2/13 06:00:45</comment>
+      <tcArguments>
+        <tcArgument mnemonic="EnableYawComp">0</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCDFlushBadColumns">
+      <relativeTime>90</relativeTime>
+      <comment>2023/2/13 06:01:30</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">127</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCDBadColumn">
+      <relativeTime>135</relativeTime>
+      <comment>2023/2/13 06:02:15</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">1</tcArgument>
+        <tcArgument mnemonic="NBC">0</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCDBIAS">
+      <relativeTime>180</relativeTime>
+      <comment>2023/2/13 06:03:00</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">127</tcArgument>
+        <tcArgument mnemonic="VGATE">0</tcArgument>
+        <tcArgument mnemonic="VSUBST">128</tcArgument>
+        <tcArgument mnemonic="VRD">126</tcArgument>
+        <tcArgument mnemonic="VOD">100</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafPM">
+      <relativeTime>225</relativeTime>
+      <comment>2023/2/13 06:03:45</comment>
+      <tcArguments>
+        <tcArgument mnemonic="TEXPMS">1500</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>270</relativeTime>
+      <comment>TurnONCCDs, 2023/2/13 06:04:30</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">127</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">7</tcArgument>
+        <tcArgument mnemonic="JPEGQ">100</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">6000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">1</tcArgument>
+        <tcArgument mnemonic="NROW">1</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">1</tcArgument>
+        <tcArgument mnemonic="NCOL">1</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>5360</relativeTime>
+      <comment>Mode120 starting date: 2023/2/13 07:29:20, {'pointing_altitude': 90000, 'pointing_altitude_end': 230000, 'V_offset': [0], 'H_offset': [0], 'TimeToConsider': {'hours': 2, 'seconds': 0, 'TimeToConsider': 7200}, 'Vmag': 2, 'Priority': 'mag', 'timestep': 10, 'log_timestep': 3600, 'automatic': True, 'start_date': '0', 'freeze_start': 60, 'freeze_duration': 300, 'freeze_stabilization': 30, 'SnapshotTime': 5, 'SnapshotSpacing': 20, 'CCDSELs': [1, 2, 4, 8, 16, 32]}, Snapshot_Inertial_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_acfLimbPointingAltitudeOffset">
+      <relativeTime>5362</relativeTime>
+      <comment>Mode120 starting date: 2023/2/13 07:29:20, {'pointing_altitude': 90000, 'pointing_altitude_end': 230000, 'V_offset': [0], 'H_offset': [0], 'TimeToConsider': {'hours': 2, 'seconds': 0, 'TimeToConsider': 7200}, 'Vmag': 2, 'Priority': 'mag', 'timestep': 10, 'log_timestep': 3600, 'automatic': True, 'start_date': '0', 'freeze_start': 60, 'freeze_duration': 300, 'freeze_stabilization': 30, 'SnapshotTime': 5, 'SnapshotSpacing': 20, 'CCDSELs': [1, 2, 4, 8, 16, 32]}, Snapshot_Inertial_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="Initial">90000</tcArgument>
+        <tcArgument mnemonic="Final">90000</tcArgument>
+        <tcArgument mnemonic="Rate">0</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>5392</relativeTime>
+      <comment>Mode120 starting date: 2023/2/13 07:29:20, {'pointing_altitude': 90000, 'pointing_altitude_end': 230000, 'V_offset': [0], 'H_offset': [0], 'TimeToConsider': {'hours': 2, 'seconds': 0, 'TimeToConsider': 7200}, 'Vmag': 2, 'Priority': 'mag', 'timestep': 10, 'log_timestep': 3600, 'automatic': True, 'start_date': '0', 'freeze_start': 60, 'freeze_duration': 300, 'freeze_stabilization': 30, 'SnapshotTime': 5, 'SnapshotSpacing': 20, 'CCDSELs': [1, 2, 4, 8, 16, 32]}, Snapshot_Inertial_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">16</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">7</tcArgument>
+        <tcArgument mnemonic="JPEGQ">100</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">62800</tcArgument>
+        <tcArgument mnemonic="TEXPMS">15000</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">1</tcArgument>
+        <tcArgument mnemonic="NROW">511</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">1</tcArgument>
+        <tcArgument mnemonic="NCOL">2047</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>5394</relativeTime>
+      <comment>Mode120 starting date: 2023/2/13 07:29:20, {'pointing_altitude': 90000, 'pointing_altitude_end': 230000, 'V_offset': [0], 'H_offset': [0], 'TimeToConsider': {'hours': 2, 'seconds': 0, 'TimeToConsider': 7200}, 'Vmag': 2, 'Priority': 'mag', 'timestep': 10, 'log_timestep': 3600, 'automatic': True, 'start_date': '0', 'freeze_start': 60, 'freeze_duration': 300, 'freeze_stabilization': 30, 'SnapshotTime': 5, 'SnapshotSpacing': 20, 'CCDSELs': [1, 2, 4, 8, 16, 32]}, Snapshot_Inertial_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">32</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">7</tcArgument>
+        <tcArgument mnemonic="JPEGQ">100</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">62800</tcArgument>
+        <tcArgument mnemonic="TEXPMS">15000</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">1</tcArgument>
+        <tcArgument mnemonic="NROW">511</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">1</tcArgument>
+        <tcArgument mnemonic="NCOL">2047</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>5396</relativeTime>
+      <comment>Mode120 starting date: 2023/2/13 07:29:20, {'pointing_altitude': 90000, 'pointing_altitude_end': 230000, 'V_offset': [0], 'H_offset': [0], 'TimeToConsider': {'hours': 2, 'seconds': 0, 'TimeToConsider': 7200}, 'Vmag': 2, 'Priority': 'mag', 'timestep': 10, 'log_timestep': 3600, 'automatic': True, 'start_date': '0', 'freeze_start': 60, 'freeze_duration': 300, 'freeze_stabilization': 30, 'SnapshotTime': 5, 'SnapshotSpacing': 20, 'CCDSELs': [1, 2, 4, 8, 16, 32]}, Snapshot_Inertial_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">1</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">7</tcArgument>
+        <tcArgument mnemonic="JPEGQ">100</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">62800</tcArgument>
+        <tcArgument mnemonic="TEXPMS">1000</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">1</tcArgument>
+        <tcArgument mnemonic="NROW">511</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">1</tcArgument>
+        <tcArgument mnemonic="NCOL">2047</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>5398</relativeTime>
+      <comment>Mode120 starting date: 2023/2/13 07:29:20, {'pointing_altitude': 90000, 'pointing_altitude_end': 230000, 'V_offset': [0], 'H_offset': [0], 'TimeToConsider': {'hours': 2, 'seconds': 0, 'TimeToConsider': 7200}, 'Vmag': 2, 'Priority': 'mag', 'timestep': 10, 'log_timestep': 3600, 'automatic': True, 'start_date': '0', 'freeze_start': 60, 'freeze_duration': 300, 'freeze_stabilization': 30, 'SnapshotTime': 5, 'SnapshotSpacing': 20, 'CCDSELs': [1, 2, 4, 8, 16, 32]}, Snapshot_Inertial_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">8</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">7</tcArgument>
+        <tcArgument mnemonic="JPEGQ">100</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">62800</tcArgument>
+        <tcArgument mnemonic="TEXPMS">1000</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">1</tcArgument>
+        <tcArgument mnemonic="NROW">511</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">1</tcArgument>
+        <tcArgument mnemonic="NCOL">2047</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>5400</relativeTime>
+      <comment>Mode120 starting date: 2023/2/13 07:29:20, {'pointing_altitude': 90000, 'pointing_altitude_end': 230000, 'V_offset': [0], 'H_offset': [0], 'TimeToConsider': {'hours': 2, 'seconds': 0, 'TimeToConsider': 7200}, 'Vmag': 2, 'Priority': 'mag', 'timestep': 10, 'log_timestep': 3600, 'automatic': True, 'start_date': '0', 'freeze_start': 60, 'freeze_duration': 300, 'freeze_stabilization': 30, 'SnapshotTime': 5, 'SnapshotSpacing': 20, 'CCDSELs': [1, 2, 4, 8, 16, 32]}, Snapshot_Inertial_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">2</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">7</tcArgument>
+        <tcArgument mnemonic="JPEGQ">100</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">62800</tcArgument>
+        <tcArgument mnemonic="TEXPMS">1000</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">1</tcArgument>
+        <tcArgument mnemonic="NROW">511</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">1</tcArgument>
+        <tcArgument mnemonic="NCOL">2047</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>5402</relativeTime>
+      <comment>Mode120 starting date: 2023/2/13 07:29:20, {'pointing_altitude': 90000, 'pointing_altitude_end': 230000, 'V_offset': [0], 'H_offset': [0], 'TimeToConsider': {'hours': 2, 'seconds': 0, 'TimeToConsider': 7200}, 'Vmag': 2, 'Priority': 'mag', 'timestep': 10, 'log_timestep': 3600, 'automatic': True, 'start_date': '0', 'freeze_start': 60, 'freeze_duration': 300, 'freeze_stabilization': 30, 'SnapshotTime': 5, 'SnapshotSpacing': 20, 'CCDSELs': [1, 2, 4, 8, 16, 32]}, Snapshot_Inertial_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">4</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">7</tcArgument>
+        <tcArgument mnemonic="JPEGQ">100</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">62800</tcArgument>
+        <tcArgument mnemonic="TEXPMS">1000</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">1</tcArgument>
+        <tcArgument mnemonic="NROW">511</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">1</tcArgument>
+        <tcArgument mnemonic="NCOL">2047</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>5404</relativeTime>
+      <comment>Mode120 starting date: 2023/2/13 07:29:20, {'pointing_altitude': 90000, 'pointing_altitude_end': 230000, 'V_offset': [0], 'H_offset': [0], 'TimeToConsider': {'hours': 2, 'seconds': 0, 'TimeToConsider': 7200}, 'Vmag': 2, 'Priority': 'mag', 'timestep': 10, 'log_timestep': 3600, 'automatic': True, 'start_date': '0', 'freeze_start': 60, 'freeze_duration': 300, 'freeze_stabilization': 30, 'SnapshotTime': 5, 'SnapshotSpacing': 20, 'CCDSELs': [1, 2, 4, 8, 16, 32]}, Snapshot_Inertial_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">7</tcArgument>
+        <tcArgument mnemonic="JPEGQ">100</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">62800</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">1</tcArgument>
+        <tcArgument mnemonic="NROW">511</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">1</tcArgument>
+        <tcArgument mnemonic="NCOL">2047</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <procedure id="FCP-ACS-0022_Payload_Attitude_Freeze">
+      <relativeTime>5420</relativeTime>
+      <comment>Mode120 starting date: 2023/2/13 07:29:20, {'pointing_altitude': 90000, 'pointing_altitude_end': 230000, 'V_offset': [0], 'H_offset': [0], 'TimeToConsider': {'hours': 2, 'seconds': 0, 'TimeToConsider': 7200}, 'Vmag': 2, 'Priority': 'mag', 'timestep': 10, 'log_timestep': 3600, 'automatic': True, 'start_date': '0', 'freeze_start': 60, 'freeze_duration': 300, 'freeze_stabilization': 30, 'SnapshotTime': 5, 'SnapshotSpacing': 20, 'CCDSELs': [1, 2, 4, 8, 16, 32]}, Snapshot_Inertial_macro</comment>
+      <parameters>
+        <parameter name="duration">300</parameter>
+      </parameters>
+    </procedure>
+    <command mnemonic="TC_pafCCDSNAPSHOT">
+      <relativeTime>5452</relativeTime>
+      <comment>Mode120 starting date: 2023/2/13 07:29:20, {'pointing_altitude': 90000, 'pointing_altitude_end': 230000, 'V_offset': [0], 'H_offset': [0], 'TimeToConsider': {'hours': 2, 'seconds': 0, 'TimeToConsider': 7200}, 'Vmag': 2, 'Priority': 'mag', 'timestep': 10, 'log_timestep': 3600, 'automatic': True, 'start_date': '0', 'freeze_start': 60, 'freeze_duration': 300, 'freeze_stabilization': 30, 'SnapshotTime': 5, 'SnapshotSpacing': 20, 'CCDSELs': [1, 2, 4, 8, 16, 32]}, Snapshot_Inertial_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCDSNAPSHOT">
+      <relativeTime>5474</relativeTime>
+      <comment>Mode120 starting date: 2023/2/13 07:29:20, {'pointing_altitude': 90000, 'pointing_altitude_end': 230000, 'V_offset': [0], 'H_offset': [0], 'TimeToConsider': {'hours': 2, 'seconds': 0, 'TimeToConsider': 7200}, 'Vmag': 2, 'Priority': 'mag', 'timestep': 10, 'log_timestep': 3600, 'automatic': True, 'start_date': '0', 'freeze_start': 60, 'freeze_duration': 300, 'freeze_stabilization': 30, 'SnapshotTime': 5, 'SnapshotSpacing': 20, 'CCDSELs': [1, 2, 4, 8, 16, 32]}, Snapshot_Inertial_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">8</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCDSNAPSHOT">
+      <relativeTime>5496</relativeTime>
+      <comment>Mode120 starting date: 2023/2/13 07:29:20, {'pointing_altitude': 90000, 'pointing_altitude_end': 230000, 'V_offset': [0], 'H_offset': [0], 'TimeToConsider': {'hours': 2, 'seconds': 0, 'TimeToConsider': 7200}, 'Vmag': 2, 'Priority': 'mag', 'timestep': 10, 'log_timestep': 3600, 'automatic': True, 'start_date': '0', 'freeze_start': 60, 'freeze_duration': 300, 'freeze_stabilization': 30, 'SnapshotTime': 5, 'SnapshotSpacing': 20, 'CCDSELs': [1, 2, 4, 8, 16, 32]}, Snapshot_Inertial_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCDSNAPSHOT">
+      <relativeTime>5518</relativeTime>
+      <comment>Mode120 starting date: 2023/2/13 07:29:20, {'pointing_altitude': 90000, 'pointing_altitude_end': 230000, 'V_offset': [0], 'H_offset': [0], 'TimeToConsider': {'hours': 2, 'seconds': 0, 'TimeToConsider': 7200}, 'Vmag': 2, 'Priority': 'mag', 'timestep': 10, 'log_timestep': 3600, 'automatic': True, 'start_date': '0', 'freeze_start': 60, 'freeze_duration': 300, 'freeze_stabilization': 30, 'SnapshotTime': 5, 'SnapshotSpacing': 20, 'CCDSELs': [1, 2, 4, 8, 16, 32]}, Snapshot_Inertial_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">4</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCDSNAPSHOT">
+      <relativeTime>5540</relativeTime>
+      <comment>Mode120 starting date: 2023/2/13 07:29:20, {'pointing_altitude': 90000, 'pointing_altitude_end': 230000, 'V_offset': [0], 'H_offset': [0], 'TimeToConsider': {'hours': 2, 'seconds': 0, 'TimeToConsider': 7200}, 'Vmag': 2, 'Priority': 'mag', 'timestep': 10, 'log_timestep': 3600, 'automatic': True, 'start_date': '0', 'freeze_start': 60, 'freeze_duration': 300, 'freeze_stabilization': 30, 'SnapshotTime': 5, 'SnapshotSpacing': 20, 'CCDSELs': [1, 2, 4, 8, 16, 32]}, Snapshot_Inertial_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">16</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCDSNAPSHOT">
+      <relativeTime>5562</relativeTime>
+      <comment>Mode120 starting date: 2023/2/13 07:29:20, {'pointing_altitude': 90000, 'pointing_altitude_end': 230000, 'V_offset': [0], 'H_offset': [0], 'TimeToConsider': {'hours': 2, 'seconds': 0, 'TimeToConsider': 7200}, 'Vmag': 2, 'Priority': 'mag', 'timestep': 10, 'log_timestep': 3600, 'automatic': True, 'start_date': '0', 'freeze_start': 60, 'freeze_duration': 300, 'freeze_stabilization': 30, 'SnapshotTime': 5, 'SnapshotSpacing': 20, 'CCDSELs': [1, 2, 4, 8, 16, 32]}, Snapshot_Inertial_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">32</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>7198</relativeTime>
+      <comment>MODE, 2023/2/13 07:59:58</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+  </listOfCommands>
+</InnoSatTimeline>

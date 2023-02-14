@@ -161,3 +161,11 @@ def generate_fullframe_snapshot(startdate,mode='3200',name='FFEXP',altitude=9250
 # generate_operational_mode(DT.datetime(2023,2,13,18,00),23,'1105',name='CROPD')
 # generate_operational_mode(DT.datetime(2023,2,14,18,00),23,'1105',name='CROPD')
 # generate_operational_mode(DT.datetime(2023,2,15,18,00),12,'1105',name='CROPD')
+
+generate_operational_mode(DT.datetime(2023,2,16,18,00),12,'1106',name='CROPD')
+generate_operational_mode(DT.datetime(2023,2,17,18,00),23,'1107',name='CROPD')
+generate_operational_mode(DT.datetime(2023,2,18,18,00),23,'1107',name='CROPD')
+generate_operational_mode(DT.datetime(2023,2,19,18,00),23,'1107',name='CROPD')
+generate_operational_mode(DT.datetime(2023,2,20,18,00),23,'1107',name='CROPD')
+generate_operational_mode(DT.datetime(2023,2,21,18,00),23,'1107',name='CROPD')
+generate_operational_mode(DT.datetime(2023,2,22,18,00),12,'1107',name='CROPD')
