@@ -140,8 +140,6 @@ def Mode1(
 
     return relativeTime
 
-
-
 def Operational_Limb_Pointing_macro(
     root,
     relativeTime,

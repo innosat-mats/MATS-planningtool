@@ -567,7 +567,7 @@ def CheckConfigFile(configFile):
         and type(Mode124_settings["freeze_start"]) == int
     ):
         Logger.error("Mode124_settings")
-        raise TypeError
+        raise TypeError('not enought time to stabilize for moon measuremnt, check default altitudes')
     elif (Mode124_settings["pointing_altitude"] == Timeline_settings["StandardPointingAltitude"]) and not (
         Mode124_settings["freeze_start"] >= 12 * Timeline_settings["CMD_separation"] + 5
         and type(Mode124_settings["freeze_start"]) == int):
