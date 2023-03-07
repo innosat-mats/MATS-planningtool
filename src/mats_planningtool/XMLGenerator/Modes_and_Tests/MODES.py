@@ -38,7 +38,7 @@ import pylab
 import importlib
 import skyfield.api
 import copy
-
+from enum import Enum
 # Timeline_settings = configFile.Timeline_settings()
 Logger = logging.getLogger("OPT_logger")
 
@@ -297,7 +297,8 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
     current_time = ephem.Date(date)
 
     sattelite_state = {"UV_on": True, "Nadir_on": True}
-
+    changetime = []
+    all_states = []
     # for t in range(int(duration/timestep)):
     "Simulation begins here"
     while current_time < ephem.second * duration + ephem.Date(date):
@@ -361,7 +362,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                         Timeline_settings=Timeline_settings, configFile=configFile,
                         comment=comment,
                     )
-
+                
                 elif check_lat(lat_LP[t],lat):
                     current_state = "Mode1_night_UV_on"
                     comment = (
@@ -419,158 +420,63 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
             Logger.debug(current_state)
             Logger.debug("")
 
+            all_states.append(current_state)
+
         ############# End of Initial Mode setup ###################################
 
+        
         if t != 0:
             ####################### SCI-mode Operation planner ################
 
-            # Check if night or day
-            if sun_angle[t] > MATS_nadir_eclipse_angle:
+            #Check status
+            nadir_on = sun_angle[t] > MATS_nadir_eclipse_angle
+            uv_on = check_lat(lat_LP[t],lat)
+            #print('correct state: nadir %s uv %s : current state: nadir %s uv %s' % (nadir_on, uv_on, sattelite_state["Nadir_on"], sattelite_state["UV_on"]))
+            correct_state = (sattelite_state["UV_on"] == uv_on) and (sattelite_state["Nadir_on"] == nadir_on)
+            #print('change state %s ' % (not correct_state))
 
-                # Check latitude
-                if ~check_lat(lat_LP[t],lat) and current_state != "Mode1_night_UV_off":
+            if (not correct_state):
+                print('Changing state')
+                changetime.append(t)
 
-                    # Check dusk/dawn and latitude boundaries
-                    if (
-                        sun_angle[t] > MATS_nadir_eclipse_angle
-                        and sun_angle[t - 1] < MATS_nadir_eclipse_angle
-                    ) or (~check_lat(lat_LP[t],lat) and check_lat(lat_LP[t-1],lat)):
+                Logger.debug("")
+                if nadir_on and uv_on:
+                    current_state = "Mode1_night_UV_on"
+                elif ~nadir_on and uv_on:
+                    current_state = "Mode1_day_UV_on"
+                elif nadir_on and ~uv_on:
+                    current_state = "Mode1_night_UV_off"
+                elif ~nadir_on and ~uv_on: 
+                    current_state = "Mode1_day_UV_off"
+                else:
+                    raise Exception
+                comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
 
-                        if (new_relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
+                new_relativeTime = Macros.Mode1(
+                    root,
+                    relativeTime,
+                    CCD_settings,
+                    TEXPIMS,
+                    sattelite_state,
+                    UV_on = uv_on, Nadir_on = nadir_on,
+                    Timeline_settings=Timeline_settings, configFile=configFile,
+                    comment=comment,
+                )
 
-                            Logger.debug("")
-                            current_state = "Mode1_night_UV_off"
-                            comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
-
-                            # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude, UV_on = False, nadir_on = True, Timeline_settings = Timeline_settings, comment = comment)
-
-                            new_relativeTime = Macros.Mode1(
-                                root,
-                                relativeTime,
-                                CCD_settings,
-                                TEXPIMS,
-                                sattelite_state,
-                                UV_on = False, Nadir_on = True,
-                                Timeline_settings=Timeline_settings, configFile=configFile,
-                                comment=comment,
-                            )
-
-                            Logger.debug(current_state)
-                            Logger.debug("current_time: " + str(current_time))
-                            Logger.debug("lat_MATS [degrees]: " + str(lat_MATS[t]))
-                            Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
-                            Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
-                            Logger.debug("")
-
-                # Check latitude
-                if check_lat(lat_LP[t],lat) and current_state != "Mode1_night_UV_on":
-
-                    # Check dusk/dawn and latitude boundaries
-                    if (
-                        sun_angle[t] > MATS_nadir_eclipse_angle
-                        and sun_angle[t - 1] < MATS_nadir_eclipse_angle
-                    ) or (check_lat(lat_LP[t],lat) and ~check_lat(lat_LP[t-1],lat)):
-
-                        if (new_relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
-
-                            Logger.debug("")
-                            current_state = "Mode1_night_UV_on"
-                            comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
-
-
-                            new_relativeTime = Macros.Mode1(
-                                root,
-                                relativeTime,
-                                CCD_settings,
-                                TEXPIMS,
-                                sattelite_state,
-                                UV_on = True, Nadir_on = True,
-                                Timeline_settings=Timeline_settings, configFile=configFile,
-                                comment=comment,
-                            )
-
-
-                            Logger.debug(current_state)
-                            Logger.debug("current_time: " + str(current_time))
-                            Logger.debug("lat_MATS [degrees]: " + str(lat_MATS[t]))
-                            Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
-                            Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
-                            Logger.debug("")
-                            # Mode1_macro(root,str(t+relativeTime),pointing_altitude, Timeline_settings = Timeline_settings, comment = comment)
-
-            # Check if night or day#
-            if sun_angle[t] < MATS_nadir_eclipse_angle:
-
-                # Check latitude
-                if ~check_lat(lat_LP[t],lat) and current_state != "Mode1_day_UV_off":
-
-                    # Check dusk/dawn and latitude boundaries
-                    if (
-                        sun_angle[t] < MATS_nadir_eclipse_angle
-                        and sun_angle[t - 1] > MATS_nadir_eclipse_angle
-                    ) or (~check_lat(lat_LP[t],lat) and check_lat(lat_LP[t-1],lat)):
-
-                        if (new_relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
-
-                            Logger.debug("")
-                            current_state = "Mode1_day_UV_off"
-                            comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
-
-                            # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude=pointing_altitude, UV_on = False, nadir_on = False, Timeline_settings = Timeline_settings, comment = comment)
-                            new_relativeTime = Macros.Mode1(
-                                root,
-                                relativeTime,
-                                CCD_settings,
-                                TEXPIMS,
-                                sattelite_state,
-                                UV_on = False, Nadir_on = False,
-                                Timeline_settings=Timeline_settings, configFile=configFile,
-                                comment=comment,
-                            )
-
-                            Logger.debug(current_state)
-                            Logger.debug("current_time: " + str(current_time))
-                            Logger.debug("lat_MATS [degrees]: " + str(lat_MATS[t]))
-                            Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
-                            Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
-                            Logger.debug("")
-
-                # Check latitude
-                if check_lat(lat_LP[t],lat) and current_state != "Mode1_day_UV_on":
-
-                    # Check dusk/dawn and latitude boundaries
-                    if (
-                        sun_angle[t] > MATS_nadir_eclipse_angle
-                        and sun_angle[t - 1] < MATS_nadir_eclipse_angle
-                    ) or (check_lat(lat_LP[t],lat) and ~check_lat(lat_LP[t-1],lat)):
-
-                        if (new_relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
-                            Logger.debug("")
-                            current_state = "Mode1_day_UV_on"
-                            comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
-
-                            # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude=pointing_altitude, UV_on = True, nadir_on = False, Timeline_settings = Timeline_settings, comment = comment)
-                            new_relativeTime = Macros.Mode1(
-                                root,
-                                relativeTime,
-                                CCD_settings,
-                                TEXPIMS,
-                                sattelite_state,
-                                UV_on = True, Nadir_on = False,
-                                Timeline_settings=Timeline_settings, configFile=configFile,
-                                comment=comment,
-                            )
-
-                            Logger.debug(current_state)
-                            Logger.debug("current_time: " + str(current_time))
-                            Logger.debug("lat_MATS [degrees]: " + str(lat_MATS[t]))
-                            Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
-                            Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
-                            Logger.debug("")
-                        # Mode1_macro(root,str(t+relativeTime),pointing_altitude, Timeline_settings = Timeline_settings, comment = comment)
-
+                Logger.debug(current_state)
+                Logger.debug("current_time: " + str(current_time))
+                Logger.debug("lat_MATS [degrees]: " + str(lat_MATS[t]))
+                Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
+                Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
+                Logger.debug("")
+            
+            all_states.append(current_state)
             ############### End of SCI-mode operation planner #################
 
+       
+    
+    color_dict = { 'Mode1_night_UV_on':'red', 'Mode1_day_UV_on':'blue', 'Mode1_night_UV_off':'black', 'Mode1_day_UV_off':'green'}    
+    print('test')
 
 #######################################################################################
 
@@ -634,7 +540,7 @@ def Mode2(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
 
     ########################## Global setup ################
 
-    comment = "Mode 1 setup"
+    comment = "Mode 2 setup"
     
     CCDSEL, NCCD, TEXPIOFS, TEXPIMS = SyncArgCalculator(
         CCD_settings,
@@ -780,74 +686,69 @@ def Mode2(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
         if t != 0:
             ####################### SCI-mode Operation planner ################
 
-            # Check if night or day
-            if sun_angle[t] > MATS_nadir_eclipse_angle:
+            # Check dusk
+            if (
+                sun_angle[t] >= MATS_nadir_eclipse_angle
+                and sun_angle[t - 1] < MATS_nadir_eclipse_angle
+            ):
 
-                # Check dusk/dawn
-                if (
-                    sun_angle[t] > MATS_nadir_eclipse_angle
-                    and sun_angle[t - 1] < MATS_nadir_eclipse_angle
-                ):
+                if (new_relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
 
-                    if (new_relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
+                    Logger.debug("")
+                    current_state = "Mode2_night"
+                    comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
 
-                        Logger.debug("")
-                        current_state = "Mode2_night"
-                        comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
+                    # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude, UV_on = False, nadir_on = True, Timeline_settings = Timeline_settings, comment = comment)
 
-                        # new_relativeTime = Macros.Mode1_macro(root, relativeTime, pointing_altitude, UV_on = False, nadir_on = True, Timeline_settings = Timeline_settings, comment = comment)
+                    new_relativeTime = Macros.Mode1(
+                        root,
+                        relativeTime,
+                        CCD_settings,
+                        TEXPIMS,
+                        sattelite_state,
+                        UV_on = False, Nadir_on = True,
+                        Timeline_settings=Timeline_settings, configFile=configFile,
+                        comment=comment,
+                    )
 
-                        new_relativeTime = Macros.Mode1(
-                            root,
-                            relativeTime,
-                            CCD_settings,
-                            TEXPIMS,
-                            sattelite_state,
-                            UV_on = False, Nadir_on = True,
-                            Timeline_settings=Timeline_settings, configFile=configFile,
-                            comment=comment,
-                        )
+                    Logger.debug(current_state)
+                    Logger.debug("current_time: " + str(current_time))
+                    Logger.debug("lat_MATS [degrees]: " + str(lat_MATS[t]))
+                    Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
+                    Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
+                    Logger.debug("")
 
-                        Logger.debug(current_state)
-                        Logger.debug("current_time: " + str(current_time))
-                        Logger.debug("lat_MATS [degrees]: " + str(lat_MATS[t]))
-                        Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
-                        Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
-                        Logger.debug("")
 
- 
-            # Check if night or day#
-            if sun_angle[t] < MATS_nadir_eclipse_angle:
 
-                # Check dusk/dawn
-                if (
-                    sun_angle[t] < MATS_nadir_eclipse_angle
-                    and sun_angle[t - 1] > MATS_nadir_eclipse_angle
-                ):
+            # Check dawn
+            if (
+                sun_angle[t] <= MATS_nadir_eclipse_angle
+                and sun_angle[t - 1] > MATS_nadir_eclipse_angle
+            ):
 
-                    if (new_relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
+                if (new_relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
 
-                        Logger.debug("")
-                        current_state = "Mode2_day"
-                        comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
+                    Logger.debug("")
+                    current_state = "Mode2_day"
+                    comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
 
-                        new_relativeTime = Macros.Mode1(
-                            root,
-                            relativeTime,
-                            CCD_settings,
-                            TEXPIMS,
-                            sattelite_state,
-                            UV_on = False, Nadir_on = False,
-                            Timeline_settings=Timeline_settings, configFile=configFile,
-                            comment=comment,
-                        )
+                    new_relativeTime = Macros.Mode1(
+                        root,
+                        relativeTime,
+                        CCD_settings,
+                        TEXPIMS,
+                        sattelite_state,
+                        UV_on = False, Nadir_on = False,
+                        Timeline_settings=Timeline_settings, configFile=configFile,
+                        comment=comment,
+                    )
 
-                        Logger.debug(current_state)
-                        Logger.debug("current_time: " + str(current_time))
-                        Logger.debug("lat_MATS [degrees]: " + str(lat_MATS[t]))
-                        Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
-                        Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
-                        Logger.debug("")
+                    Logger.debug(current_state)
+                    Logger.debug("current_time: " + str(current_time))
+                    Logger.debug("lat_MATS [degrees]: " + str(lat_MATS[t]))
+                    Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
+                    Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
+                    Logger.debug("")
 
 
             ############### End of SCI-mode operation planner #################

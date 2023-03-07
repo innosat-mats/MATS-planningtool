@@ -103,7 +103,7 @@ def Mode1(
     elif (not Nadir_on) and (not sattelite_state["Nadir_on"]):
         pass
     elif (not Nadir_on) and (sattelite_state["Nadir_on"]):
-        #Turn off UV
+        #Turn off Nadir
         sattelite_state["Nadir_on"] = False
 
         CCD_settings[64]["TEXPMS"] = 0
@@ -119,7 +119,7 @@ def Mode1(
         )
 
     elif Nadir_on and (not sattelite_state["Nadir_on"]):
-        #Turn on UV
+        #Turn on Nadir
         sattelite_state["Nadir_on"] = True
         
         CCD_settings[64]["TEXPMS"] = configFile.CCD_macro_settings("HighResUV")[64]["TEXPMS"]

@@ -279,7 +279,7 @@ def generate_overview(folder: str):
 # generate_operational_mode(DT.datetime(2023,3,5,12,00),72,'1107',name='CROPD')
 # generate_operational_mode(DT.datetime(2023,3,8,12,00),12,'1107',name='CROPD')
 
-#generate_operational_mode(DT.datetime(2023,3,9,6,0),12,'1207',name='CROPD')
+generate_operational_mode(DT.datetime(2023,3,9,6,0),3,'1107',name='CROPD')
 #generate_operational_mode(DT.datetime(2023,3,10,0,00),12,'1207',name='CROPD')
 #generate_operational_mode(DT.datetime(2023,3,11,0,00),24,'1207',name='CROPD')
 #generate_operational_mode(DT.datetime(2023,3,12,0,00),24,'1207',name='CROPD')
