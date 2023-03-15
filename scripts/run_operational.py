@@ -290,7 +290,8 @@ def generate_overview(folder: str):
 
 
 generate_star_staring_mode(DT.datetime(2023,3,16,0,0,0),3,mode='3040',name='STRCRP')
-generate_operational_mode(DT.datetime(2023,3,16,3,00),21,'1207',name='CROPD')
-generate_operational_mode(DT.datetime(2023,3,17,0,00),72,'1207',name='CROPD')
-generate_operational_mode(DT.datetime(2023,3,20,0,00),72,'1207',name='CROPD')
-generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+# generate_operational_mode(DT.datetime(2023,3,16,3,00),21,'1207',name='CROPD')
+# generate_operational_mode(DT.datetime(2023,3,17,0,00),72,'1207',name='CROPD')
+# generate_operational_mode(DT.datetime(2023,3,20,0,00),72,'1207',name='CROPD')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+

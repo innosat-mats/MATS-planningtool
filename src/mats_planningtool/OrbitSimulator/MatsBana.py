@@ -176,13 +176,14 @@ def Satellite_Simulator(
     normal_orbit=np.cross(mrunit,vunit)
     ascending_node = np.cross(celestial_pole, -normal_orbit)
 
-    "Argument of latitude" #FIXME: check sign
+    "Argument of latitude"
     arg_of_lat = (
         np.arccos(
             np.dot(ascending_node, -mrunit) / norm(mrunit) / norm(ascending_node)
         )
         / np.pi
         * 180
+        * np.sign(-mrunit[2])
     ) #argument of latitude in degrees
 
     rotmatrix=np.array([vunit,normal_orbit,mrunit]).T 
@@ -225,10 +226,13 @@ def Satellite_Simulator(
     SolarScatteringAngle = (np.rad2deg(np.arccos(np.dot(FOV_sky,sundir.position.m/norm(sundir.position.m)))))
     SolarZenithAngleNadir = 90-(earth+wgs84.subpoint(Satellite_geo)).at(current_time_skyfield).observe(sun).apparent().altaz()[0].degrees
 
-    r_dash=np.cross(FOV_sky,normal_orbit)
+    y_dash =-np.cross(FOV_sky,mrunit)
+    y_dash = y_dash/norm(y_dash)
+    r_dash = np.cross(FOV_sky,y_dash)
+    r_dash = r_dash/norm(r_dash)
 
     #get transform from ECI to CCD coordinates
-    invrotmatrix=np.linalg.inv(np.array([FOV_sky,normal_orbit,r_dash]).T) 
+    invrotmatrix=np.linalg.inv(np.array([FOV_sky,y_dash,r_dash]).T) 
 
 
     if LogFlag == True and Logger != None:
