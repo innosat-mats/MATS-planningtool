@@ -35,7 +35,7 @@ def generate_operational_mode(startdate,duration,mode='1100',name='MODE1y'):
 
 def generate_star_staring_mode(startdate,duration,mode='3040',name='STAR'):
 
-    tle = get_MATS_tle()
+    tle = get_MATS_tle()    
 
     configfile = configFile.configFile(
         "data/Operational/configfile_" + mode + "_" + name + ".json",
@@ -289,9 +289,12 @@ def generate_overview(folder: str):
 #generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
 
 
-generate_star_staring_mode(DT.datetime(2023,3,16,0,0,0),3,mode='3040',name='STRCRP')
+#generate_star_staring_mode(DT.datetime(2023,3,16,0,0,0),3,mode='3040',name='STRCRP')
 # generate_operational_mode(DT.datetime(2023,3,16,3,00),21,'1207',name='CROPD')
 # generate_operational_mode(DT.datetime(2023,3,17,0,00),72,'1207',name='CROPD')
 # generate_operational_mode(DT.datetime(2023,3,20,0,00),72,'1207',name='CROPD')
 # generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
 
+# generate_star_staring_mode(DT.datetime(2023,3,28,5,0,0),2,mode='3045',name='MNCRP') 
+# generate_star_staring_mode(DT.datetime(2023,3,28,0,0,0),2,mode='3046',name='MNCRP') 
+# generate_star_staring_mode(DT.datetime(2023,3,28,8,0,0),2,mode='3047',name='MNCRP') 

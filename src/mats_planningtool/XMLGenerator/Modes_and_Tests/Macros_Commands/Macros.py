@@ -396,6 +396,7 @@ def Snapshot_Inertial_macro(
     SnapshotSpacing,
     Snapshot_relativeTime,
     Timeline_settings, configFile,
+    CCDSELs,
     comment,
 ):
     """ Macro that corresponds to pointing towards an Inertial direction and take a Snapshot with all the CCDs (except Nadir) which do not have TEXPMS set to 0.
@@ -443,7 +444,7 @@ def Snapshot_Inertial_macro(
     )
 
     "CCDSEL arguments in order of increasing TEXPMS"
-    CCDSELs = Library.OrderingOfCCDSnapshots(CCD_settings)
+    #CCDSELs = Library.OrderingOfCCDSnapshots(CCD_settings)
 
     relativeTime = Commands.TC_pafMode(
         root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment

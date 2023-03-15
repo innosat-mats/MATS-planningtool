@@ -246,7 +246,7 @@ def Mode120_date_calculator(configFile):
         crosstime = []
         for i in range(len(star_found)-1):
             timerange=possible[star_found[i]:star_found[i+1]]
-            crosstime.append(DT.datetime.utcfromtimestamp(np.interp(V_offset,stars_vert_offset[posstar,timerange[:,1]][::-1],timestamps[timerange[:,1],0][::-1])))
+            crosstime.append(DT.datetime.utcfromtimestamp(np.interp(-V_offset,stars_vert_offset[posstar,timerange[:,1]][::-1],timestamps[timerange[:,1],0][::-1])))
             xvalue[i]=np.interp(crosstime[i].timestamp(),timestamps[timerange[:,1],0],stars_hori_offset[posstar,timerange[:,1]])
 
         if posstar == nstar: #last star is moon

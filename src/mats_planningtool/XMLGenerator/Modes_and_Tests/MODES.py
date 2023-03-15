@@ -970,6 +970,7 @@ def Mode12X(
         Snapshot_relativeTime=Snapshot_relativeTime,
         Timeline_settings=Timeline_settings,
         configFile=configFile,
+        CCDSELs=Mode_settings["CCDSELs"],
         comment=comment,
     )
 
@@ -992,12 +993,12 @@ def Mode120(root, date, duration, relativeTime, Timeline_settings, configFile, M
     Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
 
     CCD_settings = configFile.CCD_macro_settings("FullReadout")
-    "Set TEXPMS to 0 for CCDs that are not going to take snapshots"
-    for CCDSEL in [1, 2, 4, 8, 16, 32, 64]:
-        if CCDSEL in Mode_settings["CCDSELs"]:
-            continue
-        else:
-            CCD_settings[CCDSEL]["TEXPMS"] = 0
+    # "Set TEXPMS to 0 for CCDs that are not going to take snapshots"
+    # for CCDSEL in [1, 2, 4, 8, 16, 32, 64]:
+    #     if CCDSEL in Mode_settings["CCDSELs"]:
+    #         continue
+    #     else:
+    #         CCD_settings[CCDSEL]["TEXPMS"] = 0
 
     Mode12X(
         root,

@@ -186,7 +186,7 @@ def TC_acsPayloadAttitudeFreeze(
         )
         raise ValueError
     
-    if not (0 < FreezeDuration <= 300):
+    if not (0 < FreezeDuration <= 360):
         Logger.error("Invalid argument: negative FreezeDuration or too long.")
         raise ValueError
 
