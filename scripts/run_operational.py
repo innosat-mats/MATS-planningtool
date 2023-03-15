@@ -119,11 +119,16 @@ def generate_overview(folder: str):
         metadata["standard_altitude"] = standard_altitude
         metadata["yaw_correction"] = timeline[0][5]["yaw_correction"]
         pointing_altitudes = []
+        description_long = []
         for i in range(1,len(timeline)):
             if "pointing_altitude" in timeline[i][3].keys():
                 pointing_altitudes.append(timeline[i][3]['pointing_altitude'])
             if "Altitude" in timeline[i][3].keys():
                 pointing_altitudes.append(timeline[i][3]['Altitude'])
+
+            if timeline[i][0] == 'Mode120':
+                description_long.append(timeline[i][4].split("Star name:")[1].split(",")[0])                
+
 
         metadata["pointing_altitudes"] = pointing_altitudes
 
@@ -155,7 +160,7 @@ def generate_overview(folder: str):
             all_timelines.append(metadata) 
     
             metadata["description_short"] = ''
-            metadata["description_long"] = ''
+            metadata["description_long"] = description_long
         else:
             print('No xml found for ' + str(XML_name))
 
@@ -298,3 +303,4 @@ def generate_overview(folder: str):
 # generate_star_staring_mode(DT.datetime(2023,3,28,5,0,0),2,mode='3045',name='MNCRP') 
 # generate_star_staring_mode(DT.datetime(2023,3,28,0,0,0),2,mode='3046',name='MNCRP') 
 # generate_star_staring_mode(DT.datetime(2023,3,28,8,0,0),2,mode='3047',name='MNCRP') 
+generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
