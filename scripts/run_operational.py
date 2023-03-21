@@ -300,7 +300,12 @@ def generate_overview(folder: str):
 # generate_operational_mode(DT.datetime(2023,3,20,0,00),72,'1207',name='CROPD')
 # generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
 
-# generate_star_staring_mode(DT.datetime(2023,3,28,5,0,0),2,mode='3045',name='MNCRP') 
-# generate_star_staring_mode(DT.datetime(2023,3,28,0,0,0),2,mode='3046',name='MNCRP') 
-# generate_star_staring_mode(DT.datetime(2023,3,28,8,0,0),2,mode='3047',name='MNCRP') 
+
+generate_operational_mode(DT.datetime(2023,3,23,0,0),72,'1207',name='CROPD')
+generate_operational_mode(DT.datetime(2023,3,26,0,0),48,'1207',name='CROPD')
+generate_operational_mode(DT.datetime(2023,3,28,12,0),36,'1207',name='CROPD')
 generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+# generate_star_staring_mode(DT.datetime(2023,3,28,0,0,0),2,mode='3046',name='MNCRP') 
+# generate_star_staring_mode(DT.datetime(2023,3,28,5,0,0),2,mode='3045',name='MNCRP') 
+# generate_star_staring_mode(DT.datetime(2023,3,28,8,0,0),2,mode='3047',name='MNCRP') 
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
