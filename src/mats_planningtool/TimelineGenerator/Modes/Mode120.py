@@ -131,8 +131,9 @@ def Mode120_date_calculator(configFile):
 
     planets = api.load('de421.bsp')
     earth=planets['Earth']
+    mars=planets['Mars']
     moon=planets['Moon']
-
+    
     "Get relevant stars"
     st_vec=[]
 
@@ -145,6 +146,7 @@ def Mode120_date_calculator(configFile):
     
     for st in range(nstars): 
         st_vec.append(earth.at(ts_initial).observe(bright_stars)[st].position.km)
+    st_vec.append(earth.at(ts_initial).observe(mars).position.km)
     st_vec.append(earth.at(ts_initial).observe(moon).position.km)
 
  
@@ -166,9 +168,9 @@ def Mode120_date_calculator(configFile):
     lat_MATS = zeros((timesteps, 1))
     long_MATS = zeros((timesteps, 1))
     optical_axis = zeros((timesteps, 3))
-    stars_vert_offset = zeros((nstars+1,timesteps))
-    stars_hori_offset = zeros((nstars+1,timesteps))
-    stars_tot_offset = zeros((nstars+1,timesteps))
+    stars_vert_offset = zeros((nstars+2,timesteps))
+    stars_hori_offset = zeros((nstars+2,timesteps))
+    stars_tot_offset = zeros((nstars+2,timesteps))
     star_counter = 0
     spotted_star_name = []
     spotted_star_timestamp = []
@@ -210,9 +212,12 @@ def Mode120_date_calculator(configFile):
 
         #### Caluclate star positions on CCD #########
         st_vec.pop(-1) #remove moon
+        st_vec.pop(-1) #remove mars
+
+        st_vec.append((earth+wgs84.subpoint(MATS_skyfield.at(ts.from_datetime(current_time_datetime)))).at(ts.from_datetime(current_time_datetime)).observe(mars).position.km) #add mars at new time
         st_vec.append((earth+wgs84.subpoint(MATS_skyfield.at(ts.from_datetime(current_time_datetime)))).at(ts.from_datetime(current_time_datetime)).observe(moon).position.km) #add moon at new time
 
-        for nstar in range(nstars+1): 
+        for nstar in range(nstars+2): 
             inst_xyz=np.matmul(Satellite_dict['InvRotMatrix'],st_vec[nstar])
             [xang,yang]=xyz2radec(inst_xyz,positivera=False,deg=True)
             stars_hori_offset[nstar,t] = xang
@@ -229,7 +234,7 @@ def Mode120_date_calculator(configFile):
     horisontal_filter=3 #look for stars horizontally +- total degrees (Horistontal FOV is 6.06)
     vert_filter= 10 #look at stars vertically at +- this filter in degrees (Vertical FOV is 1.52)
 
-    possibles=np.array([(istar,itime) for istar in range(nstars+1) for itime in range(len(timestamps))  
+    possibles=np.array([(istar,itime) for istar in range(nstars+2) for itime in range(len(timestamps))  
                     if ((abs(stars_hori_offset[istar,itime])< horisontal_filter) and (abs(stars_vert_offset[istar,itime])<vert_filter))])
 
     if(len(possibles) == 0):
@@ -254,6 +259,12 @@ def Mode120_date_calculator(configFile):
             star.magnitude = -12.60
             star.dec_degrees = xyz2radec(st_vec[nstar],positivera=False,deg=True)[0]
             star.ra_degrees = xyz2radec(st_vec[nstar],positivera=False,deg=True)[1]
+
+        elif posstar == nstar-1: #second to last star is mars
+            star.name = 'mars'
+            star.magnitude =  0.86 #mars
+            star.dec_degrees = xyz2radec(st_vec[nstar-1],positivera=False,deg=True)[0]
+            star.ra_degrees = xyz2radec(st_vec[nstar-1],positivera=False,deg=True)[1]
 
         else:
             star = df.loc[df.index[posstar]]
@@ -366,6 +377,11 @@ def Mode120_date_select(Occupied_Timeline, SpottedStarList, configFile):
     H_offset = Mode120_settings['H_offset'][Offset_Index]
 
     Logger.info('Start of filtering function')
+
+    namelist = [] 
+    if Mode120_settings['star'] != "0":
+        for i in SpottedStarList: namelist.append(i['Name']==Mode120_settings['star'])
+        SpottedStarList = [x for i, x in enumerate(SpottedStarList) if namelist[i]]
 
     if(len(SpottedStarList) == 0):
         Mode120_comment = 'Stars not visible (Empty SpottedStarList)'
