@@ -53,26 +53,20 @@ def Payload_Power_Toggle(
         comment="Payload_Power_Toggle, " + str(date),
     )
 
-def Point_at_Sun(
-    root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
-):
-    Commands.Point_at_Sun(
-        root,
-        round(relativeTime, 2),
-        Timeline_settings=Timeline_settings,
-        configFile=configFile,
-        comment="Point_at_Sun, " + str(date),
-    )
 
-def Point_at_Orbit(
+def Point_at_Standard(
     root, date, duration, relativeTime, Timeline_settings, configFile, CMD_settings={}
 ):
-    Commands.Point_at_Orbit(
-        root,
-        round(relativeTime, 2),
-        Timeline_settings=Timeline_settings,
-        configFile=configFile,
-        comment="Point_at_Orbit, " + str(date),
+
+    Commands.TC_acfLimbPointingAltitudeOffset(
+        root, 
+        round(relativeTime, 2), 
+        Timeline_settings["StandardPointingAltitude"], 
+        Timeline_settings["StandardPointingAltitude"], 
+        0,
+        Timeline_settings, 
+        configFile, 
+        comment="Set pointing to Standard pointing: , " + str(Timeline_settings["StandardPointingAltitude"]),
     )
 
 "################# PAYLOAD COMMANDS ############################"

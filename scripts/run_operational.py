@@ -320,3 +320,5 @@ def generate_overview(folder: str):
 # generate_operational_mode(DT.datetime(2023,4,4,0,0),24,'1207',name='CROPD')
 # generate_operational_mode(DT.datetime(2023,4,5,0,0),24,'1207',name='CROPD')
 #generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+
+generate_star_staring_mode(DT.datetime(2023,4,1,1,0),1,'3040',name='MARS')

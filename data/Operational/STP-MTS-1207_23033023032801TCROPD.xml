@@ -1,0 +1,1483 @@
+<InnoSatTimeline originator="OHB" sdbVersion="9.5.99.2">
+  <description>
+    <timelineID procedureIdentifier="STP-MTS-1207" descriptiveName="202303302023032801CROPD" version="01"/>
+    <changeLog>
+      <changeLogItem version="01" date="2023-03-28" author="OMC">The file was created using OPT</changeLogItem>
+    </changeLog>
+    <validity>
+      <startingDate>2023-03-30T00:00:00</startingDate>
+      <scenarioDuration>86401</scenarioDuration>
+    </validity>
+    <comment>This command sequence is an Innosat timeline for MATS created with OPT. Science Mode Timeline used to generate: data/Operational_dump/Science_Mode_Timeline_1207_23033023032801CROPD.json, Configuration File used: data/Operational/configfile_1207_CROPD.json</comment>
+  </description>
+  <listOfCommands>
+    <procedure id="FCP-MTS-0035_Payload_Power_Toggle">
+      <relativeTime>0</relativeTime>
+      <comment>Payload_Power_Toggle, 2023/3/30 00:00:00</comment>
+      <parameters/>
+    </procedure>
+    <command mnemonic="TC_acfArgEnableYawComp">
+      <relativeTime>45</relativeTime>
+      <comment>2023/3/30 00:00:45</comment>
+      <tcArguments>
+        <tcArgument mnemonic="EnableYawComp">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCDFlushBadColumns">
+      <relativeTime>90</relativeTime>
+      <comment>2023/3/30 00:01:30</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">127</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCDBadColumn">
+      <relativeTime>135</relativeTime>
+      <comment>2023/3/30 00:02:15</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">1</tcArgument>
+        <tcArgument mnemonic="NBC">0</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCDBIAS">
+      <relativeTime>180</relativeTime>
+      <comment>2023/3/30 00:03:00</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">127</tcArgument>
+        <tcArgument mnemonic="VGATE">0</tcArgument>
+        <tcArgument mnemonic="VSUBST">128</tcArgument>
+        <tcArgument mnemonic="VRD">126</tcArgument>
+        <tcArgument mnemonic="VOD">100</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafPM">
+      <relativeTime>225</relativeTime>
+      <comment>2023/3/30 00:03:45</comment>
+      <tcArguments>
+        <tcArgument mnemonic="TEXPMS">3000</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">4000</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>270</relativeTime>
+      <comment>TurnONCCDs, 2023/3/30 00:04:30</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">127</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">7</tcArgument>
+        <tcArgument mnemonic="JPEGQ">100</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">6000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">1</tcArgument>
+        <tcArgument mnemonic="NROW">1</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">1</tcArgument>
+        <tcArgument mnemonic="NCOL">1</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>315</relativeTime>
+      <comment>Mode 2 setup</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_acfLimbPointingAltitudeOffset">
+      <relativeTime>317</relativeTime>
+      <comment>Mode 2 setup</comment>
+      <tcArguments>
+        <tcArgument mnemonic="Initial">87500</tcArgument>
+        <tcArgument mnemonic="Final">87500</tcArgument>
+        <tcArgument mnemonic="Rate">0</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafPM">
+      <relativeTime>327</relativeTime>
+      <comment>Mode 2 setup</comment>
+      <tcArguments>
+        <tcArgument mnemonic="TEXPMS">3000</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">4000</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>329</relativeTime>
+      <comment>Mode 2 setup</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">16</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">6000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">5000</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">65</tcArgument>
+        <tcArgument mnemonic="NRBIN">2</tcArgument>
+        <tcArgument mnemonic="NROW">132</tcArgument>
+        <tcArgument mnemonic="NCSKIP">201</tcArgument>
+        <tcArgument mnemonic="NCBIN">40</tcArgument>
+        <tcArgument mnemonic="NCOL">43</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>331</relativeTime>
+      <comment>Mode 2 setup</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">32</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">6000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">5000</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">247</tcArgument>
+        <tcArgument mnemonic="NRBIN">2</tcArgument>
+        <tcArgument mnemonic="NROW">132</tcArgument>
+        <tcArgument mnemonic="NCSKIP">271</tcArgument>
+        <tcArgument mnemonic="NCBIN">40</tcArgument>
+        <tcArgument mnemonic="NCOL">43</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>333</relativeTime>
+      <comment>Mode 2 setup</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">1</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">6000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">5000</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">109</tcArgument>
+        <tcArgument mnemonic="NRBIN">2</tcArgument>
+        <tcArgument mnemonic="NROW">187</tcArgument>
+        <tcArgument mnemonic="NCSKIP">27</tcArgument>
+        <tcArgument mnemonic="NCBIN">40</tcArgument>
+        <tcArgument mnemonic="NCOL">43</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>335</relativeTime>
+      <comment>Mode 2 setup</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">8</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">6000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">3000</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">136</tcArgument>
+        <tcArgument mnemonic="NRBIN">2</tcArgument>
+        <tcArgument mnemonic="NROW">187</tcArgument>
+        <tcArgument mnemonic="NCSKIP">75</tcArgument>
+        <tcArgument mnemonic="NCBIN">40</tcArgument>
+        <tcArgument mnemonic="NCOL">43</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>337</relativeTime>
+      <comment>Mode 2 setup</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">2</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">6000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">1500</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">60</tcArgument>
+        <tcArgument mnemonic="NRBIN">6</tcArgument>
+        <tcArgument mnemonic="NROW">63</tcArgument>
+        <tcArgument mnemonic="NCSKIP">216</tcArgument>
+        <tcArgument mnemonic="NCBIN">200</tcArgument>
+        <tcArgument mnemonic="NCOL">8</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>339</relativeTime>
+      <comment>Mode 2 setup</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">4</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">6000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">1500</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">127</tcArgument>
+        <tcArgument mnemonic="NRBIN">6</tcArgument>
+        <tcArgument mnemonic="NROW">63</tcArgument>
+        <tcArgument mnemonic="NCSKIP">156</tcArgument>
+        <tcArgument mnemonic="NCBIN">200</tcArgument>
+        <tcArgument mnemonic="NCOL">8</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>341</relativeTime>
+      <comment>Mode 2 setup</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">500</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCDSYNCHRONIZE">
+      <relativeTime>343</relativeTime>
+      <comment>Mode 2 setup</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">63</tcArgument>
+        <tcArgument mnemonic="NCCD">6</tcArgument>
+        <tcArgument mnemonic="TEXPIOFS">1250</tcArgument>
+        <tcArgument mnemonic="TEXPIOFS">0</tcArgument>
+        <tcArgument mnemonic="TEXPIOFS">360</tcArgument>
+        <tcArgument mnemonic="TEXPIOFS">0</tcArgument>
+        <tcArgument mnemonic="TEXPIOFS">0</tcArgument>
+        <tcArgument mnemonic="TEXPIOFS">480</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>365</relativeTime>
+      <comment>Mode 2 setup, Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>367</relativeTime>
+      <comment>Mode 2 setup, Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">16</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">6000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">65</tcArgument>
+        <tcArgument mnemonic="NRBIN">2</tcArgument>
+        <tcArgument mnemonic="NROW">132</tcArgument>
+        <tcArgument mnemonic="NCSKIP">201</tcArgument>
+        <tcArgument mnemonic="NCBIN">40</tcArgument>
+        <tcArgument mnemonic="NCOL">43</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>369</relativeTime>
+      <comment>Mode 2 setup, Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">32</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">6000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">247</tcArgument>
+        <tcArgument mnemonic="NRBIN">2</tcArgument>
+        <tcArgument mnemonic="NROW">132</tcArgument>
+        <tcArgument mnemonic="NCSKIP">271</tcArgument>
+        <tcArgument mnemonic="NCBIN">40</tcArgument>
+        <tcArgument mnemonic="NCOL">43</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>371</relativeTime>
+      <comment>Mode 2 setup, Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>373</relativeTime>
+      <comment>Mode 2 setup, Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>1983</relativeTime>
+      <comment>Mode2_night: 2023/3/30 00:32:13, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.06286996] sun angle[96.00046847], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>1985</relativeTime>
+      <comment>Mode2_night: 2023/3/30 00:32:13, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.06286996] sun angle[96.00046847], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">500</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>1987</relativeTime>
+      <comment>Mode2_night: 2023/3/30 00:32:13, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.06286996] sun angle[96.00046847], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>3957</relativeTime>
+      <comment>Mode2_day: 2023/3/30 01:05:07, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-32.28244619] sun angle[95.9529393], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>3959</relativeTime>
+      <comment>Mode2_day: 2023/3/30 01:05:07, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-32.28244619] sun angle[95.9529393], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>3961</relativeTime>
+      <comment>Mode2_day: 2023/3/30 01:05:07, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-32.28244619] sun angle[95.9529393], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>7771</relativeTime>
+      <comment>Mode2_night: 2023/3/30 02:08:41, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.03782178] sun angle[95.99237557], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>7773</relativeTime>
+      <comment>Mode2_night: 2023/3/30 02:08:41, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.03782178] sun angle[95.99237557], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">500</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>7775</relativeTime>
+      <comment>Mode2_night: 2023/3/30 02:08:41, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.03782178] sun angle[95.99237557], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>9745</relativeTime>
+      <comment>Mode2_day: 2023/3/30 02:41:35, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-32.30741492] sun angle[95.98150557], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>9747</relativeTime>
+      <comment>Mode2_day: 2023/3/30 02:41:35, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-32.30741492] sun angle[95.98150557], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>9749</relativeTime>
+      <comment>Mode2_day: 2023/3/30 02:41:35, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-32.30741492] sun angle[95.98150557], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>13567</relativeTime>
+      <comment>Mode2_night: 2023/3/30 03:45:17, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.51106597] sun angle[96.08007051], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>13569</relativeTime>
+      <comment>Mode2_night: 2023/3/30 03:45:17, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.51106597] sun angle[96.08007051], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">500</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>13571</relativeTime>
+      <comment>Mode2_night: 2023/3/30 03:45:17, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.51106597] sun angle[96.08007051], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>15541</relativeTime>
+      <comment>Mode2_day: 2023/3/30 04:18:11, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.84513776] sun angle[95.915265], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>15543</relativeTime>
+      <comment>Mode2_day: 2023/3/30 04:18:11, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.84513776] sun angle[95.915265], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>15545</relativeTime>
+      <comment>Mode2_day: 2023/3/30 04:18:11, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.84513776] sun angle[95.915265], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>19355</relativeTime>
+      <comment>Mode2_night: 2023/3/30 05:21:45, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.48624595] sun angle[96.07222035], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>19357</relativeTime>
+      <comment>Mode2_night: 2023/3/30 05:21:45, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.48624595] sun angle[96.07222035], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">500</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>19359</relativeTime>
+      <comment>Mode2_night: 2023/3/30 05:21:45, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.48624595] sun angle[96.07222035], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>21329</relativeTime>
+      <comment>Mode2_day: 2023/3/30 05:54:39, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.86990742] sun angle[95.94372058], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>21331</relativeTime>
+      <comment>Mode2_day: 2023/3/30 05:54:39, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.86990742] sun angle[95.94372058], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>21333</relativeTime>
+      <comment>Mode2_day: 2023/3/30 05:54:39, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.86990742] sun angle[95.94372058], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>25143</relativeTime>
+      <comment>Mode2_night: 2023/3/30 06:58:13, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.46153958] sun angle[96.06436718], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>25145</relativeTime>
+      <comment>Mode2_night: 2023/3/30 06:58:13, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.46153958] sun angle[96.06436718], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">500</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>25147</relativeTime>
+      <comment>Mode2_night: 2023/3/30 06:58:13, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.46153958] sun angle[96.06436718], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>27117</relativeTime>
+      <comment>Mode2_day: 2023/3/30 07:31:07, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.89457409] sun angle[95.97215957], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>27119</relativeTime>
+      <comment>Mode2_day: 2023/3/30 07:31:07, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.89457409] sun angle[95.97215957], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>27121</relativeTime>
+      <comment>Mode2_day: 2023/3/30 07:31:07, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.89457409] sun angle[95.97215957], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>30931</relativeTime>
+      <comment>Mode2_night: 2023/3/30 08:34:41, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.43694382] sun angle[96.0565112], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>30933</relativeTime>
+      <comment>Mode2_night: 2023/3/30 08:34:41, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.43694382] sun angle[96.0565112], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">500</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>30935</relativeTime>
+      <comment>Mode2_night: 2023/3/30 08:34:41, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.43694382] sun angle[96.0565112], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>32913</relativeTime>
+      <comment>Mode2_day: 2023/3/30 09:07:43, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.43195147] sun angle[95.9051173], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>32915</relativeTime>
+      <comment>Mode2_day: 2023/3/30 09:07:43, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.43195147] sun angle[95.9051173], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>32917</relativeTime>
+      <comment>Mode2_day: 2023/3/30 09:07:43, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.43195147] sun angle[95.9051173], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>36719</relativeTime>
+      <comment>Mode2_night: 2023/3/30 10:11:09, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.4124613] sun angle[96.0486526], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>36721</relativeTime>
+      <comment>Mode2_night: 2023/3/30 10:11:09, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.4124613] sun angle[96.0486526], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">500</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>36723</relativeTime>
+      <comment>Mode2_night: 2023/3/30 10:11:09, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.4124613] sun angle[96.0486526], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>38701</relativeTime>
+      <comment>Mode2_day: 2023/3/30 10:44:11, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.45641843] sun angle[95.93344346], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>38703</relativeTime>
+      <comment>Mode2_day: 2023/3/30 10:44:11, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.45641843] sun angle[95.93344346], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>38705</relativeTime>
+      <comment>Mode2_day: 2023/3/30 10:44:11, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.45641843] sun angle[95.93344346], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>42507</relativeTime>
+      <comment>Mode2_night: 2023/3/30 11:47:37, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.38808947] sun angle[96.04079161], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>42509</relativeTime>
+      <comment>Mode2_night: 2023/3/30 11:47:37, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.38808947] sun angle[96.04079161], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">500</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>42511</relativeTime>
+      <comment>Mode2_night: 2023/3/30 11:47:37, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.38808947] sun angle[96.04079161], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>44489</relativeTime>
+      <comment>Mode2_day: 2023/3/30 12:20:39, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.48077969] sun angle[95.96175283], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>44491</relativeTime>
+      <comment>Mode2_day: 2023/3/30 12:20:39, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.48077969] sun angle[95.96175283], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>44493</relativeTime>
+      <comment>Mode2_day: 2023/3/30 12:20:39, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.48077969] sun angle[95.96175283], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>48295</relativeTime>
+      <comment>Mode2_night: 2023/3/30 13:24:05, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.36383015] sun angle[96.03292843], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>48297</relativeTime>
+      <comment>Mode2_night: 2023/3/30 13:24:05, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.36383015] sun angle[96.03292843], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">500</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>48299</relativeTime>
+      <comment>Mode2_night: 2023/3/30 13:24:05, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.36383015] sun angle[96.03292843], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>50277</relativeTime>
+      <comment>Mode2_day: 2023/3/30 13:57:07, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.50503723] sun angle[95.99004526], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>50279</relativeTime>
+      <comment>Mode2_day: 2023/3/30 13:57:07, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.50503723] sun angle[95.99004526], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>50281</relativeTime>
+      <comment>Mode2_day: 2023/3/30 13:57:07, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.50503723] sun angle[95.99004526], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>54083</relativeTime>
+      <comment>Mode2_night: 2023/3/30 15:00:33, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.33968299] sun angle[96.02506326], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>54085</relativeTime>
+      <comment>Mode2_night: 2023/3/30 15:00:33, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.33968299] sun angle[96.02506326], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">500</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>54087</relativeTime>
+      <comment>Mode2_night: 2023/3/30 15:00:33, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.33968299] sun angle[96.02506326], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>56073</relativeTime>
+      <comment>Mode2_day: 2023/3/30 15:33:43, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.04197608] sun angle[95.92209652], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>56075</relativeTime>
+      <comment>Mode2_day: 2023/3/30 15:33:43, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.04197608] sun angle[95.92209652], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>56077</relativeTime>
+      <comment>Mode2_day: 2023/3/30 15:33:43, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.04197608] sun angle[95.92209652], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>59871</relativeTime>
+      <comment>Mode2_night: 2023/3/30 16:37:01, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.31564868] sun angle[96.0171963], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>59873</relativeTime>
+      <comment>Mode2_night: 2023/3/30 16:37:01, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.31564868] sun angle[96.0171963], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">500</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>59875</relativeTime>
+      <comment>Mode2_night: 2023/3/30 16:37:01, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.31564868] sun angle[96.0171963], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>61861</relativeTime>
+      <comment>Mode2_day: 2023/3/30 17:10:11, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.06603386] sun angle[95.95027386], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>61863</relativeTime>
+      <comment>Mode2_day: 2023/3/30 17:10:11, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.06603386] sun angle[95.95027386], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>61865</relativeTime>
+      <comment>Mode2_day: 2023/3/30 17:10:11, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.06603386] sun angle[95.95027386], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>65659</relativeTime>
+      <comment>Mode2_night: 2023/3/30 18:13:29, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.29172432] sun angle[96.00932776], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>65661</relativeTime>
+      <comment>Mode2_night: 2023/3/30 18:13:29, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.29172432] sun angle[96.00932776], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">500</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>65663</relativeTime>
+      <comment>Mode2_night: 2023/3/30 18:13:29, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.29172432] sun angle[96.00932776], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>67649</relativeTime>
+      <comment>Mode2_day: 2023/3/30 18:46:39, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.08998694] sun angle[95.97843405], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>67651</relativeTime>
+      <comment>Mode2_day: 2023/3/30 18:46:39, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.08998694] sun angle[95.97843405], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>67653</relativeTime>
+      <comment>Mode2_day: 2023/3/30 18:46:39, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-31.08998694] sun angle[95.97843405], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>71447</relativeTime>
+      <comment>Mode2_night: 2023/3/30 19:49:57, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.26791324] sun angle[96.00145783], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>71449</relativeTime>
+      <comment>Mode2_night: 2023/3/30 19:49:57, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.26791324] sun angle[96.00145783], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">500</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>71451</relativeTime>
+      <comment>Mode2_night: 2023/3/30 19:49:57, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.26791324] sun angle[96.00145783], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>73445</relativeTime>
+      <comment>Mode2_day: 2023/3/30 20:23:15, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-30.6265814] sun angle[95.90966834], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>73447</relativeTime>
+      <comment>Mode2_day: 2023/3/30 20:23:15, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-30.6265814] sun angle[95.90966834], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>73449</relativeTime>
+      <comment>Mode2_day: 2023/3/30 20:23:15, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-30.6265814] sun angle[95.90966834], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>77235</relativeTime>
+      <comment>Mode2_night: 2023/3/30 21:26:25, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.24421371] sun angle[95.99358671], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>77237</relativeTime>
+      <comment>Mode2_night: 2023/3/30 21:26:25, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.24421371] sun angle[95.99358671], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">500</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>77239</relativeTime>
+      <comment>Mode2_night: 2023/3/30 21:26:25, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.24421371] sun angle[95.99358671], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>79233</relativeTime>
+      <comment>Mode2_day: 2023/3/30 21:59:43, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-30.65033573] sun angle[95.93771127], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>79235</relativeTime>
+      <comment>Mode2_day: 2023/3/30 21:59:43, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-30.65033573] sun angle[95.93771127], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>79237</relativeTime>
+      <comment>Mode2_day: 2023/3/30 21:59:43, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-30.65033573] sun angle[95.93771127], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>83031</relativeTime>
+      <comment>Mode2_night: 2023/3/30 23:03:01, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.71887171] sun angle[96.08403257], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>83033</relativeTime>
+      <comment>Mode2_night: 2023/3/30 23:03:01, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.71887171] sun angle[96.08403257], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">500</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>83035</relativeTime>
+      <comment>Mode2_night: 2023/3/30 23:03:01, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-24.71887171] sun angle[96.08403257], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>85021</relativeTime>
+      <comment>Mode2_day: 2023/3/30 23:36:11, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-30.67398577] sun angle[95.96573684], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafCCD">
+      <relativeTime>85023</relativeTime>
+      <comment>Mode2_day: 2023/3/30 23:36:11, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-30.67398577] sun angle[95.96573684], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="CCDSEL">64</tcArgument>
+        <tcArgument mnemonic="PWR">1</tcArgument>
+        <tcArgument mnemonic="WDW">128</tcArgument>
+        <tcArgument mnemonic="JPEGQ">90</tcArgument>
+        <tcArgument mnemonic="SYNC">0</tcArgument>
+        <tcArgument mnemonic="TEXPIMS">2000</tcArgument>
+        <tcArgument mnemonic="TEXPMS">0</tcArgument>
+        <tcArgument mnemonic="GAIN">0</tcArgument>
+        <tcArgument mnemonic="NFLUSH">1023</tcArgument>
+        <tcArgument mnemonic="NRSKIP">0</tcArgument>
+        <tcArgument mnemonic="NRBIN">36</tcArgument>
+        <tcArgument mnemonic="NROW">14</tcArgument>
+        <tcArgument mnemonic="NCSKIP">0</tcArgument>
+        <tcArgument mnemonic="NCBIN">36</tcArgument>
+        <tcArgument mnemonic="NCOL">55</tcArgument>
+        <tcArgument mnemonic="NCBINFPGA">0</tcArgument>
+        <tcArgument mnemonic="SIGMODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>85025</relativeTime>
+      <comment>Mode2_day: 2023/3/30 23:36:11, parameters: {'lat': -45, 'log_timestep': 800, 'timestep': 8, 'Choose_Mode5CCDMacro': 'HighResUV', 'TEXPIMS': 0} position: [-30.67398577] sun angle[95.96573684], Operational_Limb_Pointing_macro</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">1</tcArgument>
+      </tcArguments>
+    </command>
+    <command mnemonic="TC_pafMODE">
+      <relativeTime>86397</relativeTime>
+      <comment>MODE, 2023/3/30 23:59:57</comment>
+      <tcArguments>
+        <tcArgument mnemonic="MODE">2</tcArgument>
+      </tcArguments>
+    </command>
+  </listOfCommands>
+</InnoSatTimeline>

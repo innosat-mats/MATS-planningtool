@@ -95,18 +95,13 @@ def Payload_Power_Toggle(Occupied_Timeline, configFile):
 
     return Occupied_Timeline, comment
 
-def Point_at_Sun(Occupied_Timeline, configFile):
+def Point_at_Standard(Occupied_Timeline, configFile):
 
     Occupied_Timeline, comment = CMD_scheduler(Occupied_Timeline, configFile)
 
     return Occupied_Timeline, comment
 
-def Point_at_Orbit(Occupied_Timeline, configFile):
 
-    Occupied_Timeline, comment = CMD_scheduler(Occupied_Timeline, configFile)
-
-    return Occupied_Timeline, comment
-########################################################
 
 
 def CMD_scheduler(Occupied_Timeline, configFile):
