@@ -263,7 +263,7 @@ def Timeline_generator(configFile,test=False):
 
     
     if Timeline_settings["idle_at_end"]:
-        turn_off_time = Timeline_start_date+DT.timedelta(seconds=Timeline_settings['duration']['duration'])-DT.timedelta(seconds=Timeline_settings["CMD_separation"])
+        turn_off_time = Timeline_start_date+DT.timedelta(seconds=Timeline_settings['duration']['duration'])-DT.timedelta(seconds=Timeline_settings["CMD_separation"])*2
         turn_off_time_end = turn_off_time + DT.timedelta(seconds=Timeline_settings["CMD_separation"]) 
         SCIMOD_Timeline.append(['MODE', turn_off_time.strftime("%Y/%-m/%d %H:%M:%S"), turn_off_time_end.strftime("%Y/%-m/%d %H:%M:%S"), {'MODE': int(
                     2)}])
