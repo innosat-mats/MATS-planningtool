@@ -24,7 +24,14 @@ def generate_operational_mode(startdate,duration,mode='1100',name='MODE1y'):
         TLE1=tle[0],
         TLE2=tle[1],
     )
-    configfile.Timeline_settings()["duration"]["hours"] = duration
+
+
+    hours = int(duration)
+    minutes = (duration*60) % 60
+    seconds_tot = int(((duration*3600) % 60) + minutes*60) 
+    
+    configfile.Timeline_settings()["duration"]["hours"] = hours
+    configfile.Timeline_settings()["duration"]["seconds"] = seconds_tot
     configfile.set_duration()
     configfile.output_dir = "data/Operational_dump/"
     configfile.CheckConfigFile()    
@@ -43,9 +50,19 @@ def generate_star_staring_mode(startdate,duration,mode='3040',name='STAR'):
         TLE1=tle[0],
         TLE2=tle[1],
     )
-    configfile.Timeline_settings()["duration"]["hours"] = duration
-    configfile.Mode120_settings()['TimeToConsider']['hours'] = duration
-    configfile.Mode120_settings()['TimeToConsider']['TimeToConsider'] = duration*3600
+    hours = int(duration)
+    minutes = (duration*60) % 60
+    seconds_tot = int(((duration*3600) % 60) + minutes*60) 
+    
+    configfile.Timeline_settings()["duration"]["hours"] = hours
+    configfile.Timeline_settings()["duration"]["seconds"] = seconds_tot
+    configfile.set_duration()
+
+
+    configfile.Mode120_settings()['TimeToConsider']['hours'] = hours
+    configfile.Mode120_settings()['TimeToConsider']['seconds'] = seconds_tot
+    configfile.Mode120_settings()['TimeToConsider']['TimeToConsider'] = hours*3600 + seconds_tot
+
     configfile.set_duration()
     configfile.output_dir = "data/Operational_dump/"
     configfile.CheckConfigFile()    
@@ -178,7 +195,6 @@ def generate_overview(folder: str):
 # generate_operational_mode(DT.datetime(2022,12,27,18,00),9)
 # generate_operational_mode(DT.datetime(2022,12,28,18,00),9)
 # generate_operational_mode(DT.datetime(2022,12,29,18,00),9)
-
 # generate_operational_mode(DT.datetime(2022,12,30,18,00),6)
 # generate_star_staring_mode(DT.datetime(2022,12,30,6,00),6)
 # generate_operational_mode(DT.datetime(2022,12,31,18,00),12)
@@ -314,11 +330,24 @@ def generate_overview(folder: str):
 # generate_operational_mode(DT.datetime(2023,3,30,0,0),24,'1207',name='CROPD')
 # generate_operational_mode(DT.datetime(2023,3,31,0,0),24,'1207',name='CROPD')
 # generate_star_staring_mode(DT.datetime(2023,4,1,1,0),1,'3040',name='MARS')
-# generate_operational_mode(DT.datetime(2023,4,1,3,0),21,'1207',name='CROPD')
+# generate_operational_mode(DT.datetime(2023,4,1,3,0),21,'1207',name='CROPD') 
 # generate_operational_mode(DT.datetime(2023,4,2,0,0),24,'1207',name='CROPD')
 # generate_operational_mode(DT.datetime(2023,4,3,0,0),24,'1207',name='CROPD')
 # generate_operational_mode(DT.datetime(2023,4,4,0,0),24,'1207',name='CROPD')
 # generate_operational_mode(DT.datetime(2023,4,5,0,0),24,'1207',name='CROPD')
 #generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
 
-generate_star_staring_mode(DT.datetime(2023,4,1,1,0),1,'3040',name='MARS')
+
+#generate_operational_mode(DT.datetime(2023,4,6,0,0),1.25,'1207',name='CROPD1')
+#generate_star_staring_mode(DT.datetime(2023,4,6,1,30),0.5,'3040',name='MRSCRP1')
+#generate_operational_mode(DT.datetime(2023,4,6,2,0),0.5,'3065',name='DRKBN1')
+#generate_operational_mode(DT.datetime(2023,4,6,2,30),0.5,'3065',name='DRKBN2')
+#generate_operational_mode(DT.datetime(2023,4,6,3,0),21,'1207',name='CROPD')
+#generate_operational_mode(DT.datetime(2023,4,7,0,0),24,'1207',name='CROPD')
+#generate_operational_mode(DT.datetime(2023,4,8,0,0),22.25,'1207',name='CROPD1')
+#generate_star_staring_mode(DT.datetime(2023,4,8,22,40),0.5,'3040',name='MRSCRP2') 
+#generate_operational_mode(DT.datetime(2023,4,8,23,15),24.75,'1207',name='CROPD')
+#generate_operational_mode(DT.datetime(2023,4,10,0,0),24,'1207',name='CROPD')
+#generate_operational_mode(DT.datetime(2023,4,11,0,0),24,'1207',name='CROPD')
+#generate_operational_mode(DT.datetime(2023,4,12,0,0),24,'1207',name='CROPD')
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
