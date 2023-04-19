@@ -379,7 +379,7 @@ def Mode120_date_select(Occupied_Timeline, SpottedStarList, configFile):
     Logger.info('Start of filtering function')
 
     namelist = [] 
-    if Mode120_settings['star'] != "0":
+    if str(Mode120_settings['star']) != "0":
         for i in SpottedStarList: namelist.append(i['Name']==Mode120_settings['star'])
         SpottedStarList = [x for i, x in enumerate(SpottedStarList) if namelist[i]]
 
