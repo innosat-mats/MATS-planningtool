@@ -112,7 +112,9 @@ def generate_overview(folder: str):
         end_date = start_date + DT.timedelta(seconds = timeline[0][5]['duration']['duration'])
         metadata["start_date"] = start_date
         if start_date_initial == None:
-            start_date_initial = start_date.strftime('%Y%m%d')
+            start_date_initial = start_date
+        if start_date<start_date_initial:
+            start_date_initial = start_date
 
         metadata["end_date"] = end_date
         id = filename.split('/')[-1].split('_')[3]
@@ -183,7 +185,7 @@ def generate_overview(folder: str):
 
     all_timelines = sorted(all_timelines, key=lambda t: t["start_date"])
     df = pd.DataFrame(all_timelines)
-    df.to_csv(folder + start_date_initial + '_timeline_schedule.csv',index=False)
+    df.to_csv(folder + start_date_initial.strftime('%Y%m%d') + '_timeline_schedule.csv',index=False)
 
 
 # generate_operational_mode(DT.datetime(2022,12,21,18,00),6)
@@ -351,3 +353,24 @@ def generate_overview(folder: str):
 #generate_operational_mode(DT.datetime(2023,4,11,0,0),24,'1207',name='CROPD')
 #generate_operational_mode(DT.datetime(2023,4,12,0,0),24,'1207',name='CROPD')
 #generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+
+
+# generate_operational_mode(DT.datetime(2023,4,13,0,0),24,'1207',name='CROPD')
+# generate_operational_mode(DT.datetime(2023,4,14,0,0),24,'1207',name='CROPD')
+# generate_operational_mode(DT.datetime(2023,4,15,0,0),24,'1207',name='CROPD')
+# generate_operational_mode(DT.datetime(2023,4,16,0,0),24,'1207',name='CROPD')
+# generate_operational_mode(DT.datetime(2023,4,17,0,0),24,'1207',name='CROPD')
+# generate_operational_mode(DT.datetime(2023,4,18,0,0),24,'1207',name='CROPD')
+# generate_operational_mode(DT.datetime(2023,4,19,0,0),24,'1207',name='CROPD')
+
+
+generate_star_staring_mode(DT.datetime(2023,4,20,0,0),6,'3040',name='STAR')
+#generate_operational_mode(DT.datetime(2023,4,20,12,0),12,'1207',name='CROPD')
+#generate_operational_mode(DT.datetime(2023,4,21,0,0),24,'1207',name='CROPD')
+#generate_operational_mode(DT.datetime(2023,4,22,0,0),24,'1207',name='CROPD')
+#generate_operational_mode(DT.datetime(2023,4,23,0,0),24,'1207',name='CROPD')
+#generate_operational_mode(DT.datetime(2023,4,24,0,0),24,'1207',name='CROPD')
+#generate_operational_mode(DT.datetime(2023,4,25,0,0),24,'1207',name='CROPD')
+#generate_operational_mode(DT.datetime(2023,4,26,0,0),24,'1207',name='CROPD')
+generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+
