@@ -548,89 +548,89 @@ def CheckConfigFile(configFile):
     #     Logger.error("Mode123_settings['automatic']")
     #     raise TypeError
 
-    if not (
-        -60000 <= Mode124_settings["pointing_altitude"] <= 230000
-        and type(Mode124_settings["pointing_altitude"]) == int
-    ):
-        Logger.error("Mode124_settings['pointing_altitude']")
-        raise ValueError
-    if not (
-        0 < Mode124_settings["timestep"] <= 10
-        and type(Mode124_settings["timestep"]) == int
-    ):
-        Logger.error("Mode124_settings['timestep']")
-        raise ValueError
-    if (Mode124_settings["pointing_altitude"] != Timeline_settings["StandardPointingAltitude"]) and not (
-        Mode124_settings["freeze_start"]
-        >= Timeline_settings["pointing_stabilization"]
-        + 12 * Timeline_settings["CMD_separation"]
-        and type(Mode124_settings["freeze_start"]) == int
-    ):
-        Logger.error("Mode124_settings")
-        raise TypeError('not enought time to stabilize for moon measuremnt, check default altitudes')
-    elif (Mode124_settings["pointing_altitude"] == Timeline_settings["StandardPointingAltitude"]) and not (
-        Mode124_settings["freeze_start"] >= 12 * Timeline_settings["CMD_separation"] + 5
-        and type(Mode124_settings["freeze_start"]) == int):
-        Logger.error("Mode124_settings")
-        raise TypeError
-    if not (type(Mode124_settings["V_offset"]) == list):
-        Logger.error("Mode124_settings['V_offset'] != list")
-    if not (type(Mode124_settings["H_offset"]) == list):
-        Logger.error("Mode124_settings['H_offset'] != list")
-    for x in range(len(Mode124_settings["V_offset"])):
-        for y in range(len(Mode124_settings["H_offset"])):
-            if not (
-                abs(Mode124_settings["V_offset"][x]) <= 10
-                and 0 <= abs(Mode124_settings["H_offset"][y]) <= 10
-            ):
-                Logger.error("Mode124_settings['V_offset'] or Mode124_settings['H_offset']")
-                raise ValueError
-    if not (type(Mode124_settings["start_date"]) == str):
-        Logger.error("Mode124_settings['start_date']")
-        raise TypeError
-    if not (type(Mode124_settings["automatic"]) == bool):
-        Logger.error("Mode124_settings['automatic']")
-        raise TypeError
-    if not (
-        0 < Mode124_settings["SnapshotTime"] < Mode124_settings["freeze_duration"] - 10
-        and type(Mode124_settings["SnapshotTime"]) == int
-    ):
-        Logger.error("Mode124_settings['SnapshotTime']")
-        raise ValueError
-    if not (
-        type(Mode124_settings["pointing_altitude_end"])
-        and type(Mode124_settings["pointing_altitude"]) == int
-    ):
-        Logger.error("Mode124_settings['pointing_altitude']")
-        raise ValueError
-    if not (
-        0 <= Mode124_settings["SnapshotSpacing"]
-        and type(Mode124_settings["SnapshotSpacing"]) == int
-    ):
-        Logger.error("Mode124_settings['SnapshotSpacing']")
-        raise ValueError
-    if not (type(Mode124_settings["CCDSELs"]) == list):
-        Logger.error("Mode124_settings['CCDSELs'] != list")
-        raise TypeError
-    if not (
-        Mode124_settings["SnapshotSpacing"] * (len(Mode124_settings["CCDSELs"]) - 1)
-        + Mode124_settings["SnapshotTime"]
-        < Mode124_settings["freeze_duration"]
-        <= 3600
-    ):
-        Logger.error(
-            "Mode124_settings['SnapshotSpacing'] * (len(Mode124_settings['CCDSELs'])-1) + Mode124_settings['SnapshotTime'] > Mode124_settings['freeze_duration'] or Mode124_settings['freeze_duration'] > 3600"
-        )
-        raise ValueError
-    for CCDSEL in Mode124_settings["CCDSELs"]:
-        if not (CCDSEL in [1, 2, 4, 8, 16, 32]):
-            Logger.error("Mode124_settings['CCDSELs'] element != [1,2,4,8,16,32]")
-            raise ValueError
-    if not (Mode124_settings["TimeToConsider"]["TimeToConsider"] <= Timeline_settings["duration"]["duration"]):
-        Logger.error(
-            "Mode124_settings['TimeToConsider'] > Timeline_settings['duration']"
-        )
-        raise ValueError
+    # if not (
+    #     -60000 <= Mode124_settings["pointing_altitude"] <= 230000
+    #     and type(Mode124_settings["pointing_altitude"]) == int
+    # ):
+    #     Logger.error("Mode124_settings['pointing_altitude']")
+    #     raise ValueError
+    # if not (
+    #     0 < Mode124_settings["timestep"] <= 10
+    #     and type(Mode124_settings["timestep"]) == int
+    # ):
+    #     Logger.error("Mode124_settings['timestep']")
+    #     raise ValueError
+    # if (Mode124_settings["pointing_altitude"] != Timeline_settings["StandardPointingAltitude"]) and not (
+    #     Mode124_settings["freeze_start"]
+    #     >= Timeline_settings["pointing_stabilization"]
+    #     + 12 * Timeline_settings["CMD_separation"]
+    #     and type(Mode124_settings["freeze_start"]) == int
+    # ):
+    #     Logger.error("Mode124_settings")
+    #     raise TypeError('not enought time to stabilize for moon measuremnt, check default altitudes')
+    # elif (Mode124_settings["pointing_altitude"] == Timeline_settings["StandardPointingAltitude"]) and not (
+    #     Mode124_settings["freeze_start"] >= 12 * Timeline_settings["CMD_separation"] + 5
+    #     and type(Mode124_settings["freeze_start"]) == int):
+    #     Logger.error("Mode124_settings")
+    #     raise TypeError
+    # if not (type(Mode124_settings["V_offset"]) == list):
+    #     Logger.error("Mode124_settings['V_offset'] != list")
+    # if not (type(Mode124_settings["H_offset"]) == list):
+    #     Logger.error("Mode124_settings['H_offset'] != list")
+    # for x in range(len(Mode124_settings["V_offset"])):
+    #     for y in range(len(Mode124_settings["H_offset"])):
+    #         if not (
+    #             abs(Mode124_settings["V_offset"][x]) <= 10
+    #             and 0 <= abs(Mode124_settings["H_offset"][y]) <= 10
+    #         ):
+    #             Logger.error("Mode124_settings['V_offset'] or Mode124_settings['H_offset']")
+    #             raise ValueError
+    # if not (type(Mode124_settings["start_date"]) == str):
+    #     Logger.error("Mode124_settings['start_date']")
+    #     raise TypeError
+    # if not (type(Mode124_settings["automatic"]) == bool):
+    #     Logger.error("Mode124_settings['automatic']")
+    #     raise TypeError
+    # if not (
+    #     0 < Mode124_settings["SnapshotTime"] < Mode124_settings["freeze_duration"] - 10
+    #     and type(Mode124_settings["SnapshotTime"]) == int
+    # ):
+    #     Logger.error("Mode124_settings['SnapshotTime']")
+    #     raise ValueError
+    # if not (
+    #     type(Mode124_settings["pointing_altitude_end"])
+    #     and type(Mode124_settings["pointing_altitude"]) == int
+    # ):
+    #     Logger.error("Mode124_settings['pointing_altitude']")
+    #     raise ValueError
+    # if not (
+    #     0 <= Mode124_settings["SnapshotSpacing"]
+    #     and type(Mode124_settings["SnapshotSpacing"]) == int
+    # ):
+    #     Logger.error("Mode124_settings['SnapshotSpacing']")
+    #     raise ValueError
+    # if not (type(Mode124_settings["CCDSELs"]) == list):
+    #     Logger.error("Mode124_settings['CCDSELs'] != list")
+    #     raise TypeError
+    # if not (
+    #     Mode124_settings["SnapshotSpacing"] * (len(Mode124_settings["CCDSELs"]) - 1)
+    #     + Mode124_settings["SnapshotTime"]
+    #     < Mode124_settings["freeze_duration"]
+    #     <= 3600
+    # ):
+    #     Logger.error(
+    #         "Mode124_settings['SnapshotSpacing'] * (len(Mode124_settings['CCDSELs'])-1) + Mode124_settings['SnapshotTime'] > Mode124_settings['freeze_duration'] or Mode124_settings['freeze_duration'] > 3600"
+    #     )
+    #     raise ValueError
+    # for CCDSEL in Mode124_settings["CCDSELs"]:
+    #     if not (CCDSEL in [1, 2, 4, 8, 16, 32]):
+    #         Logger.error("Mode124_settings['CCDSELs'] element != [1,2,4,8,16,32]")
+    #         raise ValueError
+    # if not (Mode124_settings["TimeToConsider"]["TimeToConsider"] <= Timeline_settings["duration"]["duration"]):
+    #     Logger.error(
+    #         "Mode124_settings['TimeToConsider'] > Timeline_settings['duration']"
+    #     )
+    #     raise ValueError
 
     MaximumNumberOfCMDsInMacro = 12
 
