@@ -361,6 +361,6 @@ def get_timeline_name(configFile,Timeline_settings):
 
     XML_TIMELINE = os.path.join(configFile.output_dir, 'STP-MTS-' + configFile.ID() + '_' + 
             datetime.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S').strftime('%y%m%d') +
-            datetime.datetime.now().strftime('%y%m%d') + configFile.Version() +  'T' + configFile.Name() +'.xml')
+            datetime.datetime.now().strftime('%y%m%d') + configFile.Version() + configFile.Name() +'.xml')
 
     return XML_TIMELINE

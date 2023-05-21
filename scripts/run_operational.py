@@ -14,9 +14,10 @@ def get_MATS_tle():
     print('using Mats tle \n',tle)
     return tle
 
-def generate_operational_mode(startdate,duration,mode='1100',name='MODE1y'):
+def generate_operational_mode(startdate,duration,mode='1100',name='MODE1y',iterate=None,tle=None):
 
-    tle = get_MATS_tle()
+    if tle == None:
+        tle = get_MATS_tle()
 
     configfile = configFile.configFile(
         "data/Operational/configfile_" + mode +"_" + name + ".json",
@@ -34,13 +35,17 @@ def generate_operational_mode(startdate,duration,mode='1100',name='MODE1y'):
     configfile.Timeline_settings()["duration"]["seconds"] = seconds_tot
     configfile.set_duration()
     configfile.output_dir = "data/Operational_dump/"
+
+    if iterate != None:
+        configfile.OPT_Config_File["name"] = configfile.OPT_Config_File["name"] + iterate
+
     configfile.CheckConfigFile()    
     configfile.Timeline_gen()
     configfile.XML_gen()
 
     return
 
-def generate_star_staring_mode(startdate,duration,mode='3040',name='STAR'):
+def generate_star_staring_mode(startdate,duration,mode='3040',name='STAR',iterate=None):
 
     tle = get_MATS_tle()    
 
@@ -65,6 +70,10 @@ def generate_star_staring_mode(startdate,duration,mode='3040',name='STAR'):
 
     configfile.set_duration()
     configfile.output_dir = "data/Operational_dump/"
+
+    if iterate != None:
+        configfile.OPT_Config_File["name"] = configfile.OPT_Config_File["name"] + iterate
+
     configfile.CheckConfigFile()    
     configfile.Timeline_gen()
     configfile.XML_gen()
@@ -396,7 +405,49 @@ def generate_overview(folder: str):
 # generate_operational_mode(DT.datetime(2023,5,9,0,0),24,'1107',name='CROPDN')
 # generate_operational_mode(DT.datetime(2023,5,10,0,0),24,'1107',name='CROPDN')
 #generate_operational_mode(DT.datetime(2023,5,9,16,0),8,'1107',name='CROPDN')
-generate_operational_mode(DT.datetime(2023,5,9,0,0),6,'1107',name='CROPDN1')
-generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+#generate_operational_mode(DT.datetime(2023,5,9,0,0),6,'1107',name='CROPDN1')
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
 
 
+# generate_operational_mode(DT.datetime(2023,5,11,0,0),11.1,'1109',name='CROPFN')
+# generate_star_staring_mode(DT.datetime(2023,5,11,11,10,0),0.5,mode='3045',name="MOON")
+# generate_operational_mode(DT.datetime(2023,5,11,11,40),2.6,'1109',name='CROPFN',iterate="1")
+# generate_star_staring_mode(DT.datetime(2023,5,11,14,23,0),0.5,mode='3045',name="MOON",iterate="1")
+# generate_operational_mode(DT.datetime(2023,5,11,14,53),1,'1109',name='CROPFN',iterate="2")
+# generate_star_staring_mode(DT.datetime(2023,5,11,16,00,0),0.5,mode='3045',name="MOON",iterate="2")
+# generate_operational_mode(DT.datetime(2023,5,11,16,30),7.5,'1109',name='CROPFN',iterate="3")
+# generate_operational_mode(DT.datetime(2023,5,12,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2023,5,13,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2023,5,14,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2023,5,15,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2023,5,16,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2023,5,17,0,0),24,'1109',name='CROPFN')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+
+# generate_operational_mode(DT.datetime(2023,5,16,0,0),6,'1109',name='CROPFN',iterate="1")
+# generate_operational_mode(DT.datetime(2023,5,16,6,0),6,'1109',name='CROPFN',iterate="2")
+# generate_operational_mode(DT.datetime(2023,5,16,12,0),6,'1109',name='CROPFN',iterate="3")
+# generate_operational_mode(DT.datetime(2023,5,16,18,0),6,'1109',name='CROPFN',iterate="4")
+
+# generate_operational_mode(DT.datetime(2023,5,17,0,0),6,'1109',name='CROPFN',iterate="1")
+# generate_operational_mode(DT.datetime(2023,5,17,6,0),6,'1109',name='CROPFN',iterate="2")
+# generate_operational_mode(DT.datetime(2023,5,17,12,0),6,'1109',name='CROPFN',iterate="3")
+# generate_operational_mode(DT.datetime(2023,5,17,18,0),6,'1109',name='CROPFN',iterate="4")
+
+# tle = get_MATS_tle()
+# generate_operational_mode(DT.datetime(2023,5,18,0,0),6,'1109',name='CROPFN',iterate="1",tle=tle)
+# generate_operational_mode(DT.datetime(2023,5,18,6,0),6,'1109',name='CROPFN',iterate="2",tle=tle)
+# generate_operational_mode(DT.datetime(2023,5,18,12,0),6,'1109',name='CROPFN',iterate="3",tle=tle)
+# generate_operational_mode(DT.datetime(2023,5,18,18,0),6,'1109',name='CROPFN',iterate="4",tle=tle)
+
+# generate_operational_mode(DT.datetime(2023,5,19,0,0),5.95,'1109',name='CROPFN',iterate="1",tle=tle)
+#generate_operational_mode(DT.datetime(2023,5,19,6,0),6,'1109',name='CROPFN',iterate="2",tle=tle)
+#generate_operational_mode(DT.datetime(2023,5,19,12,0),6,'1109',name='CROPFN',iterate="3",tle=tle)
+# generate_operational_mode(DT.datetime(2023,5,19,18,0),5.95,'1109',name='CROPFN',iterate="4",tle=tle)
+
+# generate_operational_mode(DT.datetime(2023,5,20,0,0),24,'1109',name='CROPFN',tle=tle)
+# generate_operational_mode(DT.datetime(2023,5,21,0,0),24,'1109',name='CROPFN',tle=tle)
+# generate_operational_mode(DT.datetime(2023,5,22,0,0),24,'1109',name='CROPFN',tle=tle)
+
+
+generate_operational_mode(DT.datetime(2023,5,30,0,0),2,'1109',name='CROPFN')
