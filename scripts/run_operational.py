@@ -450,4 +450,4 @@ def generate_overview(folder: str):
 # generate_operational_mode(DT.datetime(2023,5,22,0,0),24,'1109',name='CROPFN',tle=tle)
 
 
-generate_operational_mode(DT.datetime(2023,5,30,0,0),2,'1109',name='CROPFN')
+#generate_operational_mode(DT.datetime(2023,5,30,0,0),2,'1109',name='CROPFN')
