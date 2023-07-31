@@ -451,3 +451,35 @@ def generate_overview(folder: str):
 
 
 #generate_operational_mode(DT.datetime(2023,5,30,0,0),2,'1109',name='CROPFN')
+
+
+
+# generate_operational_mode(DT.datetime(2023,7,17,0,0),48,'1109',name='CROPFN')
+#generate_operational_mode(DT.datetime(2023,7,19,0,0),15.5,'1109',name='CROPFN')
+#generate_star_staring_mode(DT.datetime(2023,7,19,15,45),1,'3040',name='STAR')
+#generate_operational_mode(DT.datetime(2023,7,19,17,0),7,'1109',name='CROPFN',iterate="1")
+# generate_operational_mode(DT.datetime(2023,7,21,0,0),48,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2023,7,23,0,0),48,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2023,7,25,0,0),48,'1109',name='CROPFN')
+
+# generate_operational_mode(DT.datetime(2023,7,27,0,0),48,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2023,7,29,0,0),48,'1109',name='CROPFN')
+#generate_operational_mode(DT.datetime(2023,7,31,0,0),47.9,'1109',name='CROPFN')
+#generate_operational_mode(DT.datetime(2023,8,2,0,0),48,'1109',name='CROPFN')
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+
+# generate_operational_mode(DT.datetime(2023,7,27,0,0),0.5,'1109',name='CROPFN')
+# generate_star_staring_mode(DT.datetime(2023,7,27,0,30),1,'3040',name='STAR')
+# generate_operational_mode(DT.datetime(2023,7,27,1,30),46.5,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2023,7,29,0,0),48,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2023,7,31,0,0),47.9,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2023,8,2,0,0),48,'1109',name='CROPFN')
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+
+#generate_operational_mode(DT.datetime(2023,8,4,0,0),48,'1109',name='CROPFN')
+#generate_operational_mode(DT.datetime(2023,8,6,0,0),48,'1109',name='CROPFN')
+generate_star_staring_mode(DT.datetime(2023,8,6,12,0),2,'3040',name='JUPITER')
+#generate_operational_mode(DT.datetime(2023,8,6,0,0),48,'1109',name='CROPFN')
+#generate_operational_mode(DT.datetime(2023,8,8,0,0),48,'1109',name='CROPFN')
+generate_star_staring_mode(DT.datetime(2023,8,8,3,0),2,'3040',name='JUPITER')
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")

@@ -131,6 +131,7 @@ def Mode120_date_calculator(configFile):
 
     planets = api.load('de421.bsp')
     earth=planets['Earth']
+    jupiter=planets['JUPITER BARYCENTER']
     mars=planets['Mars']
     moon=planets['Moon']
     
@@ -146,6 +147,7 @@ def Mode120_date_calculator(configFile):
     
     for st in range(nstars): 
         st_vec.append(earth.at(ts_initial).observe(bright_stars)[st].position.km)
+    st_vec.append(earth.at(ts_initial).observe(jupiter).position.km)
     st_vec.append(earth.at(ts_initial).observe(mars).position.km)
     st_vec.append(earth.at(ts_initial).observe(moon).position.km)
 
@@ -168,9 +170,9 @@ def Mode120_date_calculator(configFile):
     lat_MATS = zeros((timesteps, 1))
     long_MATS = zeros((timesteps, 1))
     optical_axis = zeros((timesteps, 3))
-    stars_vert_offset = zeros((nstars+2,timesteps))
-    stars_hori_offset = zeros((nstars+2,timesteps))
-    stars_tot_offset = zeros((nstars+2,timesteps))
+    stars_vert_offset = zeros((nstars+3,timesteps))
+    stars_hori_offset = zeros((nstars+3,timesteps))
+    stars_tot_offset = zeros((nstars+3,timesteps))
     star_counter = 0
     spotted_star_name = []
     spotted_star_timestamp = []
@@ -213,11 +215,13 @@ def Mode120_date_calculator(configFile):
         #### Caluclate star positions on CCD #########
         st_vec.pop(-1) #remove moon
         st_vec.pop(-1) #remove mars
+        st_vec.pop(-1) #remove jupiter
 
+        st_vec.append((earth+wgs84.subpoint(MATS_skyfield.at(ts.from_datetime(current_time_datetime)))).at(ts.from_datetime(current_time_datetime)).observe(jupiter).position.km) #add mars at new time
         st_vec.append((earth+wgs84.subpoint(MATS_skyfield.at(ts.from_datetime(current_time_datetime)))).at(ts.from_datetime(current_time_datetime)).observe(mars).position.km) #add mars at new time
         st_vec.append((earth+wgs84.subpoint(MATS_skyfield.at(ts.from_datetime(current_time_datetime)))).at(ts.from_datetime(current_time_datetime)).observe(moon).position.km) #add moon at new time
 
-        for nstar in range(nstars+2): 
+        for nstar in range(nstars+3): 
             inst_xyz=np.matmul(Satellite_dict['InvRotMatrix'],st_vec[nstar])
             [xang,yang]=xyz2radec(inst_xyz,positivera=False,deg=True)
             stars_hori_offset[nstar,t] = xang
@@ -265,6 +269,12 @@ def Mode120_date_calculator(configFile):
             star.magnitude =  0.86 #mars
             star.dec_degrees = xyz2radec(st_vec[nstar-1],positivera=False,deg=True)[0]
             star.ra_degrees = xyz2radec(st_vec[nstar-1],positivera=False,deg=True)[1]
+
+        elif posstar == nstar-2: #third to last star is jupiter
+            star.name = 'jupiter'
+            star.magnitude =  -2.7 #jupiter
+            star.dec_degrees = xyz2radec(st_vec[nstar-2],positivera=False,deg=True)[0]
+            star.ra_degrees = xyz2radec(st_vec[nstar-2],positivera=False,deg=True)[1]
 
         else:
             star = df.loc[df.index[posstar]]
