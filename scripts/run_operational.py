@@ -489,6 +489,6 @@ def generate_overview(folder: str):
 
 #generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
 
-generate_operational_mode(DT.datetime(2023,8,4,12,0),36,'1109',name='CROPFN')
-generate_operational_mode(DT.datetime(2023,8,4,18,0),30,'1109',name='CROPFN',iterate="1")
-generate_operational_mode(DT.datetime(2023,8,5,0,0),24,'1109',name='CROPFN',iterate="2")
+# generate_operational_mode(DT.datetime(2023,8,4,12,0),36,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2023,8,4,18,0),30,'1109',name='CROPFN',iterate="1")
+# generate_operational_mode(DT.datetime(2023,8,5,0,0),24,'1109',name='CROPFN',iterate="2")

@@ -921,7 +921,8 @@ def Mode110(root, date, duration, relativeTime, Timeline_settings, configFile, M
 
 
 def Mode12X(
-    root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings, CCD_settings
+    root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings, CCD_settings,
+        dark_settings=None,
 ):
     """Subfunction of Mode12X, where X is 0,1,2,3....
 
@@ -936,8 +937,12 @@ def Mode12X(
 
     Mode_name = sys._getframe(1).f_code.co_name.replace("", "")
     comment = Mode_name + " starting date: " + str(date) + ", " + str(Mode_settings)
+    star_name = ""
+    comment = comment + ", " + star_name
 
     freeze_start_utc = ephem.Date(date + ephem.second * Mode_settings["freeze_start"])
+
+    comment = comment + ", freeze at" + str(freeze_start_utc)
 
     Snapshot_relativeTime = (
         relativeTime + Mode_settings["freeze_start"] + Mode_settings["SnapshotTime"]
@@ -972,6 +977,8 @@ def Mode12X(
         configFile=configFile,
         CCDSELs=Mode_settings["CCDSELs"],
         comment=comment,
+        dark_channels = Mode_settings["dark_channels"],
+        dark_settings=dark_settings,
     )
 
 
@@ -993,6 +1000,9 @@ def Mode120(root, date, duration, relativeTime, Timeline_settings, configFile, M
     Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
 
     CCD_settings = configFile.CCD_macro_settings("FullReadout")
+    dark_settings = None
+    if len(Mode_settings["dark_channels"])>0:
+        dark_settings = configFile.CCD_macro_settings(Mode_settings["dark_settings"])
     # "Set TEXPMS to 0 for CCDs that are not going to take snapshots"
     # for CCDSEL in [1, 2, 4, 8, 16, 32, 64]:
     #     if CCDSEL in Mode_settings["CCDSELs"]:
@@ -1009,6 +1019,7 @@ def Mode120(root, date, duration, relativeTime, Timeline_settings, configFile, M
         configFile=configFile,
         Mode_settings=Mode_settings,
         CCD_settings=CCD_settings,
+        dark_settings=dark_settings
     )
 
 

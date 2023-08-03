@@ -14,7 +14,7 @@ import datetime as DT
 
 
 from mats_planningtool import Library
-
+from numpy import round
 # from .Commands import Commands
 
 from . import Commands
@@ -398,6 +398,8 @@ def Snapshot_Inertial_macro(
     Timeline_settings, configFile,
     CCDSELs,
     comment,
+    dark_channels = None,
+    dark_settings = None,
 ):
     """ Macro that corresponds to pointing towards an Inertial direction and take a Snapshot with all the CCDs (except Nadir) which do not have TEXPMS set to 0.
 
@@ -405,26 +407,29 @@ def Snapshot_Inertial_macro(
 
     1. Set Payload to idle mode
     2. Point the satellite to *pointing_altitude*.
-    3. Run CCD Commands with given settings.
+    3. Run CCD Commands with given CCD_settings (or dark settings if applicable).
     4. Run ArgFreezeStart Command with *FreezeTime*.
     5. Run ArgFreezeDuration Command with *FreezeDuration*.
+    5b. If dark channels are set take one image with dark setting settings and then return to CCD_settings 
     6. Take a Snapshot with each CCD (except Nadir and CCDs with TEXPMS=0) starting at *Snapshot_relativeTime* with a spacing of *SnapshotSpacing*.
-    7. Point the satellite to *StandardPointingAltitude*.
+    7. If applicable take images with dark setting on the way back to nominal pointing.  
 
     Arguments:
         root (lxml.etree._Element):  XML tree structure. Main container object for the ElementTree API.
         relativeTime (float): The relative starting time of the macro with regard to the start of the timeline [s]
-        CCD_settings (dict of dict of int): Settings for the CCDs.. Defined in the *Configuration File*.
+        CCD_settings (dict of dict of int): Settings for the CCDs. Defined in the *Configuration File*.
         FreezeTime (float): Start time of attitude freeze command in on-board time [s].
         FreezeDuration (int): Duration of freeze [s].
         FreezeStabilization (int) : Time to wait after freeze has started before scheduling next command.
         pointing_altitude (int): The altitude of the tangential point [m].
         pointing_altitude (int): The altitude of the final tangential point [m].
-        StandardPointingAltitude (int): The standard altitude of the LP  [m].
+        StandardPointingAltitude (int): The standard altitude of the LP  [m]. (Not used)
         SnapshotSpacing (int): The time in seconds inbetween snapshots of individual CCDs.
-        Snapshot_relativeTime (float): The relativeTime (time from start of timeline) at which the first Snapshot is taken.
+        Snapshot_relativeTime (float): The relativeTime (time from start of timeline) at which the first Snapshot is taken. (Not used)
         Timeline_settings (dict): Dictionary containing the settings of the Timeline given in either the *Science_Mode_Timeline* or the *Configuration File*.
         comment (str): A comment for the macro. Will be printed in the genereated XML-file.
+        dark_channels (list): Which channels to take dark images with (default: [])
+        dark_settings (dict of dict of int): Settings for dark images. Defined in the *Configuration File*.
 
     Returns:
         relativeTime (float): Time in seconds equal to the input "relativeTime" with added delay from the scheduling of commands.
@@ -434,7 +439,7 @@ def Snapshot_Inertial_macro(
     
     #FIXME: This is a bit ugly, probably FreezeTime_rel should be used as input argument
     startdate = DT.datetime.strptime(Timeline_settings["start_date"],'%Y/%m/%d %H:%M:%S')
-    FreezeTime_rel = int((FreezeTime.datetime()-startdate).total_seconds())
+    FreezeTime_rel = round((FreezeTime.datetime()-startdate).total_seconds())
 
     "TEXPIMS is unused but still need to be set to a plausible value to not get errors"
     Disregarded, Disregarded, Disregarded, TEXPIMS = Library.SyncArgCalculator(
@@ -461,14 +466,24 @@ def Snapshot_Inertial_macro(
         comment=comment,
     )
 
-    relativeTime = SetCCDs_macro(
-        root,
-        relativeTime,
-        CCD_settings,
-        TEXPIMS,
-        Timeline_settings=Timeline_settings, configFile=configFile,
-        comment=comment,
-    )
+    if len(dark_channels) == 0:
+        relativeTime = SetCCDs_macro(
+            root,
+            relativeTime,
+            CCD_settings,
+            TEXPIMS,
+            Timeline_settings=Timeline_settings, configFile=configFile,
+            comment=comment,
+        )
+    else:
+        relativeTime = SetCCDs_macro(
+            root,
+            relativeTime,
+            dark_settings,
+            TEXPIMS,
+            Timeline_settings=Timeline_settings, configFile=configFile,
+            comment=comment,
+        )
 
     relativeTime = Commands.TC_acsPayloadAttitudeFreeze(
         root,
@@ -478,8 +493,47 @@ def Snapshot_Inertial_macro(
         comment=comment,
     )
 
-    relativeTime = relativeTime + FreezeStabilization
+    start_star_images = relativeTime - Timeline_settings["CMD_separation"]  + FreezeStabilization
 
+    if len(dark_channels)>0:
+
+        #time dark image wait
+        setCCD_macro_time = Timeline_settings["CMD_separation"]*7
+        tot_exp_time = 0
+        for i in dark_channels: tot_exp_time += dark_settings[i]["TEXPMS"]/1000 + Timeline_settings["CMD_separation"]
+        tot_dark_time = setCCD_macro_time + tot_exp_time
+
+        if (tot_dark_time + Timeline_settings["CMD_separation"]) > FreezeStabilization:
+            raise ValueError("not enough time to take dark images")
+        
+        relativeTime = start_star_images - (tot_dark_time + Timeline_settings["CMD_separation"])   
+
+        for CCDSEL in dark_channels:
+            relativeTime = Commands.TC_pafCCDSnapshot(
+                root,
+                relativeTime,
+                CCDSEL=CCDSEL,
+                Timeline_settings=Timeline_settings, configFile=configFile,
+                comment=comment,
+            )
+            relativeTime += dark_settings[CCDSEL]["TEXPMS"]/1000
+        
+        relativeTime = SetCCDs_macro(
+            root,
+            relativeTime,
+            CCD_settings,
+            TEXPIMS,
+            Timeline_settings=Timeline_settings, configFile=configFile,
+            comment=comment,
+        )
+
+
+
+    if relativeTime > start_star_images:
+        raise ValueError('Too long time used to take dark images')
+    else:
+        relativeTime = start_star_images
+    
     for CCDSEL in CCDSELs:
         relativeTime = Commands.TC_pafCCDSnapshot(
             root,
@@ -488,6 +542,7 @@ def Snapshot_Inertial_macro(
             Timeline_settings=Timeline_settings, configFile=configFile,
             comment=comment,
         )
+        relativeTime += CCD_settings[CCDSEL]["TEXPMS"]/1000
         relativeTime += SnapshotSpacing
 
     configFile.current_pointing = pointing_altitude_end
@@ -495,16 +550,27 @@ def Snapshot_Inertial_macro(
     if relativeTime > FreezeTime_rel + FreezeDuration - configFile.LargestSetTEXPMS/1000:
         raise ValueError("Snapshot exposure occuring after Freeze duration ended")
 
-    # relativeTime = Commands.TC_acfLimbPointingAltitudeOffset(
-    #     root,
-    #     relativeTime,
-    #     Initial=StandardPointingAltitude,
-    #     Final=StandardPointingAltitude,
-    #     Rate=0,
-    #     Timeline_settings=Timeline_settings, configFile=configFile,
-    #     comment=comment,
-    # )
-    # relativeTime = Commands.TC_pafMode(root, relativeTime, MODE = 1, Timeline_settings = Timeline_settings, configFile=configFile, comment = comment)
+    if len(dark_channels)>0:
+
+        relativeTime = SetCCDs_macro(
+        root,
+        relativeTime,
+        dark_settings,
+        TEXPIMS,
+        Timeline_settings=Timeline_settings, configFile=configFile,
+        comment=comment,
+        )
+
+        for CCDSEL in dark_channels:
+            relativeTime = Commands.TC_pafCCDSnapshot(
+                root,
+                relativeTime,
+                CCDSEL=CCDSEL,
+                Timeline_settings=Timeline_settings, configFile=configFile,
+                comment=comment,
+            )
+            relativeTime += dark_settings[CCDSEL]["TEXPMS"]/1000
+        
 
     return relativeTime
 
