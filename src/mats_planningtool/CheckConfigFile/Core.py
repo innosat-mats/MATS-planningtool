@@ -34,19 +34,19 @@ def CheckConfigFile(configFile):
         configFile.Operational_Science_Mode_settings()
     )
     # Mode5_settings = configFile.Mode5_settings()
-    Mode100_settings = configFile.Mode100_settings()
-    Mode110_settings = configFile.Mode110_settings()
+    #Mode100_settings = configFile.Mode100_settings()
+    #Mode110_settings = configFile.Mode110_settings()
     Mode120_settings = configFile.Mode120_settings()
     #Mode121_settings = configFile.Mode121_settings()
     #Mode122_settings = configFile.Mode122_settings()
     #Mode123_settings = configFile.Mode123_settings()
     #Mode121_122_123_settings = configFile.Mode121_122_123_settings()
-    Mode124_settings = configFile.Mode124_settings()
-    Mode130_settings = configFile.Mode130_settings()
-    Mode131_settings = configFile.Mode131_settings()
-    Mode132_settings = configFile.Mode132_settings()
-    Mode133_settings = configFile.Mode133_settings()
-    Mode134_settings = configFile.Mode134_settings()
+    # Mode124_settings = configFile.Mode124_settings()
+    # Mode130_settings = configFile.Mode130_settings()
+    # Mode131_settings = configFile.Mode131_settings()
+    # Mode132_settings = configFile.Mode132_settings()
+    # Mode133_settings = configFile.Mode133_settings()
+    # Mode134_settings = configFile.Mode134_settings()
 
     try:
         Logger.info("Currently used Configuration File: " + configFile.config_file_name)
@@ -126,8 +126,11 @@ def CheckConfigFile(configFile):
         10000 <= Timeline_settings["StandardPointingAltitude"] <= 300000
         and type(Timeline_settings["StandardPointingAltitude"]) == int
     ):
-        Logger.error("Timeline_settings['StandardPointingAltitude']")
-        raise ValueError
+        if Timeline_settings["StandardPointingAltitude"] == -1:
+            pass
+        else:
+            Logger.error("Timeline_settings['StandardPointingAltitude']")
+            raise ValueError
     if not (
         Timeline_settings["pointing_stabilization"] * 2
         < Timeline_settings["Mode1_2_5_minDuration"]
@@ -186,9 +189,7 @@ def CheckConfigFile(configFile):
                     "CustomBinning",
                     "HighResUV",
                     "HighResIR",
-                    "LowPixel",
                     "FullReadout",
-                    "BinnedCalibration",
                     "CCDOFF",
                 ]
             ):
@@ -221,105 +222,103 @@ def CheckConfigFile(configFile):
     #    Logger.error("Mode5_settings['pointing_altitude']")
     #    raise ValueError
 
-    if not (
-        32 < Mode100_settings["pointing_duration"]
-        and type(Mode100_settings["pointing_duration"]) == int
-    ):
-        Logger.error("Mode100_settings['pointing_duration']")
-        raise ValueError
-    if not (
-        type(Mode100_settings["pointing_altitude_interval"]) == int
-        and type(Mode100_settings["pointing_altitude_to"]) == int
-        and type(Mode100_settings["pointing_altitude_from"]) == int
-    ):
-        Logger.error("Mode100_settings")
-        raise TypeError
-    if not (
-        abs(Mode100_settings["pointing_altitude_interval"])
-        <= abs(
-            Mode100_settings["pointing_altitude_to"]
-            - Mode100_settings["pointing_altitude_from"]
-        )
-    ):
-        Logger.error("Mode100_settings['pointing_altitude_interval']")
-        raise ValueError
-    if not (
-        0
-        < Mode100_settings["pointing_altitude_interval"]
-        * (
-            Mode100_settings["pointing_altitude_to"]
-            - Mode100_settings["pointing_altitude_from"]
-        )
-    ):
-        Logger.error("Mode100_settings")
-        raise ValueError
-    if not (type(Mode100_settings["start_date"]) == str):
-        Logger.error("Mode100_settings['start_date']")
-        raise TypeError
-    if not (
-        type(Mode100_settings["Exp_Time_IR"]) == int
-        and type(Mode100_settings["Exp_Time_UV"]) == int
-    ):
-        Logger.error(
-            "Mode100_settings['Exp_Time_IR'] or Mode100_settings['Exp_Time_UV']"
-        )
-        raise TypeError
-    numberOfAltitudes = int(
-        abs(
-            Mode100_settings["pointing_altitude_to"]
-            - Mode100_settings["pointing_altitude_from"]
-        )
-        / abs(Mode100_settings["pointing_altitude_interval"])
-        + 1
-    )
-    if not (
-        Mode100_settings["Exp_Time_IR"]
-        + numberOfAltitudes * Mode100_settings["ExpTime_step"]
-        < Mode100_settings["pointing_duration"] * 1000
-    ):
-        Logger.error("Mode100_settings['pointing_duration']")
-        raise ValueError
-    if not (
-        Mode100_settings["Exp_Time_UV"]
-        + numberOfAltitudes * Mode100_settings["ExpTime_step"]
-        < Mode100_settings["pointing_duration"] * 1000
-    ):
-        Logger.error("Mode100_settings['pointing_duration']")
-        raise ValueError
+    # if not (
+    #     32 < Mode100_settings["pointing_duration"]
+    #     and type(Mode100_settings["pointing_duration"]) == int
+    # ):
+    #     Logger.error("Mode100_settings['pointing_duration']")
+    #     raise ValueError
+    # if not (
+    #     type(Mode100_settings["pointing_altitude_interval"]) == int
+    #     and type(Mode100_settings["pointing_altitude_to"]) == int
+    #     and type(Mode100_settings["pointing_altitude_from"]) == int
+    # ):
+    #     Logger.error("Mode100_settings")
+    #     raise TypeError
+    # if not (
+    #     abs(Mode100_settings["pointing_altitude_interval"])
+    #     <= abs(
+    #         Mode100_settings["pointing_altitude_to"]
+    #         - Mode100_settings["pointing_altitude_from"]
+    #     )
+    # ):
+    #     Logger.error("Mode100_settings['pointing_altitude_interval']")
+    #     raise ValueError
+    # if not (
+    #     0
+    #     < Mode100_settings["pointing_altitude_interval"]
+    #     * (
+    #         Mode100_settings["pointing_altitude_to"]
+    #         - Mode100_settings["pointing_altitude_from"]
+    #     )
+    # ):
+    #     Logger.error("Mode100_settings")
+    #     raise ValueError
+    # if not (type(Mode100_settings["start_date"]) == str):
+    #     Logger.error("Mode100_settings['start_date']")
+    #     raise TypeError
+    # if not (
+    #     type(Mode100_settings["Exp_Time_IR"]) == int
+    #     and type(Mode100_settings["Exp_Time_UV"]) == int
+    # ):
+    #     Logger.error(
+    #         "Mode100_settings['Exp_Time_IR'] or Mode100_settings['Exp_Time_UV']"
+    #     )
+    #     raise TypeError
+    # numberOfAltitudes = int(
+    #     abs(
+    #         Mode100_settings["pointing_altitude_to"]
+    #         - Mode100_settings["pointing_altitude_from"]
+    #     )
+    #     / abs(Mode100_settings["pointing_altitude_interval"])
+    #     + 1
+    # )
+    # if not (
+    #     Mode100_settings["Exp_Time_IR"]
+    #     + numberOfAltitudes * Mode100_settings["ExpTime_step"]
+    #     < Mode100_settings["pointing_duration"] * 1000
+    # ):
+    #     Logger.error("Mode100_settings['pointing_duration']")
+    #     raise ValueError
+    # if not (
+    #     Mode100_settings["Exp_Time_UV"]
+    #     + numberOfAltitudes * Mode100_settings["ExpTime_step"]
+    #     < Mode100_settings["pointing_duration"] * 1000
+    # ):
+    #     Logger.error("Mode100_settings['pointing_duration']")
+    #     raise ValueError
 
-    for key in Mode110_settings.keys():
+    # for key in Mode110_settings.keys():
 
-        if key == "start_date":
-            if not (type(Mode110_settings[key]) == str):
-                Logger.error("Mode110_settings")
-                raise ValueError
-        elif key == "pointing_altitude_from" or key == "pointing_altitude_to":
-            if not (-60000 <= Mode110_settings[key] <= 230000):
-                Logger.error("Mode110_settings")
-                raise ValueError
-        elif key == "sweep_rate":
-            if not (
-                -5000 <= Mode110_settings[key] <= 5000 and Mode110_settings[key] != 0
-            ):
-                Logger.error("Mode110_settings")
-                raise ValueError
-        else:
-            if not (Mode110_settings[key] > 0 and type(Mode110_settings[key]) == int):
-                Logger.error("Mode110_settings")
-                raise ValueError
+    #     if key == "start_date":
+    #         if not (type(Mode110_settings[key]) == str):
+    #             Logger.error("Mode110_settings")
+    #             raise ValueError
+    #     elif key == "pointing_altitude_from" or key == "pointing_altitude_to":
+    #         if not (-60000 <= Mode110_settings[key] <= 230000):
+    #             Logger.error("Mode110_settings")
+    #             raise ValueError
+    #     elif key == "sweep_rate":
+    #         if not (
+    #             -5000 <= Mode110_settings[key] <= 5000 and Mode110_settings[key] != 0
+    #         ):
+    #             Logger.error("Mode110_settings")
+    #             raise ValueError
+    #     else:
+    #         if not (Mode110_settings[key] > 0 and type(Mode110_settings[key]) == int):
+    #             Logger.error("Mode110_settings")
+    #             raise ValueError
 
-    if sign(
-        Mode110_settings["pointing_altitude_to"]
-        - Mode110_settings["pointing_altitude_from"]
-    ) != sign(Mode110_settings["sweep_rate"]):
-        Logger.error("Mode110_settings")
-        raise ValueError
+    # if sign(
+    #     Mode110_settings["pointing_altitude_to"]
+    #     - Mode110_settings["pointing_altitude_from"]
+    # ) != sign(Mode110_settings["sweep_rate"]):
+    #     Logger.error("Mode110_settings")
+    #     raise ValueError
 
     if not (
         -60000 <= Mode120_settings["pointing_altitude"] <= 230000
         and type(Mode120_settings["pointing_altitude"]) == int
-        and type(Mode124_settings["pointing_altitude_end"])
-        and type(-60000 <= Mode124_settings["pointing_altitude_end"] <= 230000)
     ):
         Logger.error("Mode120_settings['pointing_altitude']")
         raise ValueError
@@ -634,109 +633,109 @@ def CheckConfigFile(configFile):
 
     MaximumNumberOfCMDsInMacro = 12
 
-    if not (
-        Timeline_settings["CMD_separation"] <= Mode130_settings["SnapshotSpacing"]
-        and type(Mode130_settings["SnapshotSpacing"]) == int
-    ):
-        Logger.error("Mode130_settings['SnapshotSpacing']")
-        raise TypeError
-    if not (
-        Timeline_settings["pointing_stabilization"]
-        + Timeline_settings["CMD_separation"] * MaximumNumberOfCMDsInMacro
-        + Timeline_settings["mode_separation"]
-        < Mode131_settings["mode_duration"]
-        and type(Mode131_settings["mode_duration"]) == int
-    ):
-        Logger.error("Mode131_settings['mode_duration'] is too short")
-        raise TypeError
-    if not (
-        Timeline_settings["pointing_stabilization"]
-        + Timeline_settings["CMD_separation"] * MaximumNumberOfCMDsInMacro
-        + Timeline_settings["mode_separation"]
-        < Mode134_settings["mode_duration"]
-        and type(Mode134_settings["mode_duration"]) == int
-    ):
-        Logger.error("Mode134_settings['mode_duration'] is too short")
-        raise TypeError
+    # if not (
+    #     Timeline_settings["CMD_separation"] <= Mode130_settings["SnapshotSpacing"]
+    #     and type(Mode130_settings["SnapshotSpacing"]) == int
+    # ):
+    #     Logger.error("Mode130_settings['SnapshotSpacing']")
+    #     raise TypeError
+    # if not (
+    #     Timeline_settings["pointing_stabilization"]
+    #     + Timeline_settings["CMD_separation"] * MaximumNumberOfCMDsInMacro
+    #     + Timeline_settings["mode_separation"]
+    #     < Mode131_settings["mode_duration"]
+    #     and type(Mode131_settings["mode_duration"]) == int
+    # ):
+    #     Logger.error("Mode131_settings['mode_duration'] is too short")
+    #     raise TypeError
+    # if not (
+    #     Timeline_settings["pointing_stabilization"]
+    #     + Timeline_settings["CMD_separation"] * MaximumNumberOfCMDsInMacro
+    #     + Timeline_settings["mode_separation"]
+    #     < Mode134_settings["mode_duration"]
+    #     and type(Mode134_settings["mode_duration"]) == int
+    # ):
+    #     Logger.error("Mode134_settings['mode_duration'] is too short")
+    #     raise TypeError
 
-    if not (
-        -60000 <= Mode130_settings["pointing_altitude"] <= 230000
-        and type(Mode130_settings["pointing_altitude"]) == int
-    ):
-        Logger.error("Mode130_settings['pointing_altitude']")
-        raise ValueError
-    if not (
-        -60000 <= Mode131_settings["pointing_altitude"] <= 230000
-        and type(Mode131_settings["pointing_altitude"]) == int
-    ):
-        Logger.error("Mode131_settings['pointing_altitude']")
-        raise ValueError
-    if not (
-        -60000 <= Mode132_settings["pointing_altitude"] <= 230000
-        and type(Mode132_settings["pointing_altitude"]) == int
-    ):
-        Logger.error("Mode132_settings['pointing_altitude']")
-        raise ValueError
-    if not (
-        -60000 <= Mode133_settings["pointing_altitude"] <= 230000
-        and type(Mode133_settings["pointing_altitude"]) == int
-    ):
-        Logger.error("Mode133_settings['pointing_altitude']")
-        raise ValueError
-    if not (
-        -60000 <= Mode134_settings["pointing_altitude"] <= 230000
-        and type(Mode134_settings["pointing_altitude"]) == int
-    ):
-        Logger.error("Mode134_settings['pointing_altitude']")
-        raise ValueError
+    # if not (
+    #     -60000 <= Mode130_settings["pointing_altitude"] <= 230000
+    #     and type(Mode130_settings["pointing_altitude"]) == int
+    # ):
+    #     Logger.error("Mode130_settings['pointing_altitude']")
+    #     raise ValueError
+    # if not (
+    #     -60000 <= Mode131_settings["pointing_altitude"] <= 230000
+    #     and type(Mode131_settings["pointing_altitude"]) == int
+    # ):
+    #     Logger.error("Mode131_settings['pointing_altitude']")
+    #     raise ValueError
+    # if not (
+    #     -60000 <= Mode132_settings["pointing_altitude"] <= 230000
+    #     and type(Mode132_settings["pointing_altitude"]) == int
+    # ):
+    #     Logger.error("Mode132_settings['pointing_altitude']")
+    #     raise ValueError
+    # if not (
+    #     -60000 <= Mode133_settings["pointing_altitude"] <= 230000
+    #     and type(Mode133_settings["pointing_altitude"]) == int
+    # ):
+    #     Logger.error("Mode133_settings['pointing_altitude']")
+    #     raise ValueError
+    # if not (
+    #     -60000 <= Mode134_settings["pointing_altitude"] <= 230000
+    #     and type(Mode134_settings["pointing_altitude"]) == int
+    # ):
+    #     Logger.error("Mode134_settings['pointing_altitude']")
+    #     raise ValueError
 
-    if not (type(Mode130_settings["start_date"]) == str):
-        Logger.error("Mode130_settings['start_date']")
-        raise TypeError
-    if not (type(Mode131_settings["start_date"]) == str):
-        Logger.error("Mode131_settings['start_date']")
-        raise TypeError
-    if not (type(Mode132_settings["start_date"]) == str):
-        Logger.error("Mode132_settings['start_date']")
-        raise TypeError
-    if not (type(Mode133_settings["start_date"]) == str):
-        Logger.error("Mode133_settings['start_date']")
-        raise TypeError
-    if not (type(Mode134_settings["start_date"]) == str):
-        Logger.error("Mode134_settings['start_date']")
-        raise TypeError
+    # if not (type(Mode130_settings["start_date"]) == str):
+    #     Logger.error("Mode130_settings['start_date']")
+    #     raise TypeError
+    # if not (type(Mode131_settings["start_date"]) == str):
+    #     Logger.error("Mode131_settings['start_date']")
+    #     raise TypeError
+    # if not (type(Mode132_settings["start_date"]) == str):
+    #     Logger.error("Mode132_settings['start_date']")
+    #     raise TypeError
+    # if not (type(Mode133_settings["start_date"]) == str):
+    #     Logger.error("Mode133_settings['start_date']")
+    #     raise TypeError
+    # if not (type(Mode134_settings["start_date"]) == str):
+    #     Logger.error("Mode134_settings['start_date']")
+    #     raise TypeError
 
-    if not (
-        type(Mode132_settings["Exp_Times_IR"]) == list
-        and type(Mode132_settings["Exp_Times_UV"]) == list
-    ):
-        Logger.error(
-            "Mode132_settings['Exp_Times_IR'] or Mode132_settings['Exp_Times_UV']"
-        )
-        raise TypeError
-    if not (
-        type(Mode133_settings["Exp_Times_IR"]) == list
-        and type(Mode133_settings["Exp_Times_UV"]) == list
-    ):
-        Logger.error(
-            "Mode133_settings['Exp_Times_IR'] or Mode133_settings['Exp_Times_UV']"
-        )
-        raise TypeError
+    # if not (
+    #     type(Mode132_settings["Exp_Times_IR"]) == list
+    #     and type(Mode132_settings["Exp_Times_UV"]) == list
+    # ):
+    #     Logger.error(
+    #         "Mode132_settings['Exp_Times_IR'] or Mode132_settings['Exp_Times_UV']"
+    #     )
+    #     raise TypeError
+    # if not (
+    #     type(Mode133_settings["Exp_Times_IR"]) == list
+    #     and type(Mode133_settings["Exp_Times_UV"]) == list
+    # ):
+    #     Logger.error(
+    #         "Mode133_settings['Exp_Times_IR'] or Mode133_settings['Exp_Times_UV']"
+    #     )
+    #     raise TypeError
 
-    if not (
-        len(Mode132_settings["Exp_Times_IR"]) == len(Mode132_settings["Exp_Times_UV"])
-    ):
-        Logger.error(
-            "len(Mode132_settings['Exp_Times_IR']) != len(Mode132_settings['Exp_Times_UV'])"
-        )
-        raise TypeError
-    if not (
-        len(Mode133_settings["Exp_Times_IR"]) == len(Mode133_settings["Exp_Times_UV"])
-    ):
-        Logger.error(
-            "len(Mode133_settings['Exp_Times_IR']) != len(Mode133_settings['Exp_Times_UV'])"
-        )
-        raise TypeError
+    # if not (
+    #     len(Mode132_settings["Exp_Times_IR"]) == len(Mode132_settings["Exp_Times_UV"])
+    # ):
+    #     Logger.error(
+    #         "len(Mode132_settings['Exp_Times_IR']) != len(Mode132_settings['Exp_Times_UV'])"
+    #     )
+    #     raise TypeError
+    # if not (
+    #     len(Mode133_settings["Exp_Times_IR"]) == len(Mode133_settings["Exp_Times_UV"])
+    # ):
+    #     Logger.error(
+    #         "len(Mode133_settings['Exp_Times_IR']) != len(Mode133_settings['Exp_Times_UV'])"
+    #     )
+    #     raise TypeError
 
     # Check that CCDsync waits for long enough time for full CCD readout (standard)
 
@@ -763,11 +762,11 @@ def CheckConfigFile(configFile):
         Timeline_settings["CCDSYNC_ExtraIntervalTime"],
     )
 
-    _, _, BinnedCalibration, _ = Library.SyncArgCalculator(
-        configFile.CCD_macro_settings("BinnedCalibration"),
-        Timeline_settings["CCDSYNC_ExtraOffset"],
-        Timeline_settings["CCDSYNC_ExtraIntervalTime"],
-    )
+    # _, _, BinnedCalibration, _ = Library.SyncArgCalculator(
+    #     configFile.CCD_macro_settings("BinnedCalibration"),
+    #     Timeline_settings["CCDSYNC_ExtraOffset"],
+    #     Timeline_settings["CCDSYNC_ExtraIntervalTime"],
+    # )
 
     max_normal_synctime = (
         max(
@@ -775,7 +774,6 @@ def CheckConfigFile(configFile):
             max(CustomBinning_synctime),
             max(HighResUV_synctime),
             max(HighResIR_syctime),
-            max(BinnedCalibration),
         )
         / 1000
     )

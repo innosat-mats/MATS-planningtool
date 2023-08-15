@@ -22,7 +22,7 @@ When creating new Mode functions it is crucial that the function name is
 """
 
 
-from .Macros_Commands import Macros, Commands
+from mats_planningtool.XMLGenerator.Modes_and_Tests.Macros_Commands import Macros, Commands
 from mats_planningtool.Library import (
     dict_comparator,
     utc_to_onboardTime,
@@ -39,6 +39,9 @@ import importlib
 import skyfield.api
 import copy
 from enum import Enum
+import datetime as DT
+from mats_planningtool import Library
+
 # Timeline_settings = configFile.Timeline_settings()
 Logger = logging.getLogger("OPT_logger")
 
@@ -1025,434 +1028,546 @@ def Mode120(root, date, duration, relativeTime, Timeline_settings, configFile, M
 
 ################################################################################################
 
+def SNAPSHOT(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
+    """SNAPSHOT. 
 
-##############################################################################################
-
-
-def Mode121(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
-    """Mode121
-
-    **Macro**: Snapshot_Inertial_macro. \n
-    **CCD_Macro**: FullReadout \n
-
-    Stare at a point in inertial reference frame and take one Snapshot with each CCDSEL argument defined by the 'CCDSELs' settings and also do not have TEXPMS set to 0.
-
+    Schedules SNAPSHOT with defined parameters.
     """
 
-    Mode_settings_ConfigFile = configFile.Mode121_settings()
-    Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
+    Logger.info('')
+    Logger.info('Start of SNAPSHOT')
 
-    CCD_settings = configFile.CCD_macro_settings("FullReadout")
-    "Set TEXPMS to 0 for CCDs that are not going to take snapshots"
-    for CCDSEL in [1, 2, 4, 8, 16, 32, 64]:
-        if CCDSEL in Mode_settings["CCDSELs"]:
-            continue
-        else:
-            CCD_settings[CCDSEL]["TEXPMS"] = 0
+    Logger.debug('Test_settings from Science Mode List: '+str(Mode_settings))
 
-    Mode12X(
-        root,
-        date,
-        duration,
-        relativeTime,
-        Timeline_settings=Timeline_settings,
-        configFile=configFile,
-        Mode_settings=Mode_settings,
-        CCD_settings=CCD_settings,
-    )
+    CCD_settings = configFile.CCD_macro_settings('FullReadout')
 
-
-############################################################################################
-
-
-def Mode122(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
-    """Mode122
-
-    **Macro**: Snapshot_Inertial_macro. \n
-    **CCD_Macro**: BinnedCalibration with configurable exposure time of UV and IR CCDs. \n
-
-    Stare at a point in inertial reference frame and take a Snapshot with each CCD except nadir and also do not have TEXPMS set to 0.
-
-    """
-
-    Mode_settings_ConfigFile = configFile.Mode122_settings()
-    Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
-
-    CCD_settings = configFile.CCD_macro_settings("BinnedCalibration")
-    ExpTimeUV = Mode_settings["Exp_Time_UV"]
-    ExpTimeIR = Mode_settings["Exp_Time_IR"]
-    CCD_settings[16]["TEXPMS"] = ExpTimeUV
-    CCD_settings[32]["TEXPMS"] = ExpTimeUV
-    CCD_settings[1]["TEXPMS"] = ExpTimeIR
-    CCD_settings[8]["TEXPMS"] = ExpTimeIR
-    CCD_settings[2]["TEXPMS"] = ExpTimeIR
-    CCD_settings[4]["TEXPMS"] = ExpTimeIR
-
-    Mode12X(
-        root,
-        date,
-        duration,
-        relativeTime,
-        Timeline_settings=Timeline_settings,
-        configFile=configFile,
-        Mode_settings=Mode_settings,
-        CCD_settings=CCD_settings,
-    )
-
-
-################################################################################################
-
-############################################################################################
-
-
-def Mode123(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
-    """Mode123
-
-
-    **Macro**: Snapshot_Inertial_macro. \n
-    **CCD_Macro**: LowPixel with configurable exposure time of UV and IR CCDs. \n
-
-    Stare at a point in inertial reference frame and take a Snapshot with each CCD except nadir and also do not have TEXPMS set to 0.
-
-
-    """
-
-    Mode_settings_ConfigFile = configFile.Mode123_settings()
-    Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
-
-    CCD_settings = configFile.CCD_macro_settings("LowPixel")
-    ExpTimeUV = Mode_settings["Exp_Time_UV"]
-    ExpTimeIR = Mode_settings["Exp_Time_IR"]
-    CCD_settings[16]["TEXPMS"] = ExpTimeUV
-    CCD_settings[32]["TEXPMS"] = ExpTimeUV
-    CCD_settings[1]["TEXPMS"] = ExpTimeIR
-    CCD_settings[8]["TEXPMS"] = ExpTimeIR
-    CCD_settings[2]["TEXPMS"] = ExpTimeIR
-    CCD_settings[4]["TEXPMS"] = ExpTimeIR
-
-    Mode12X(
-        root,
-        date,
-        duration,
-        relativeTime,
-        Timeline_settings=Timeline_settings,
-        configFile=configFile,
-        Mode_settings=Mode_settings,
-        CCD_settings=CCD_settings,
-    )
-
-
-##############################################################################################
-
-
-def Mode124(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
-    """Mode124
-
-    **Macro**: Snapshot_Inertial_macro. \n
-    **CCD_Macro**: FullReadout. \n
-
-    Stare at a point in inertial reference frame and take one Snapshot with each CCDSEL argument defined by the 'CCDSELs' settings and also do not have TEXPMS set to 0. 
-    Used for moon calibration.
-    """
-
-    Mode_settings_ConfigFile = configFile.Mode124_settings()
-    Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
-
-    CCD_settings = configFile.CCD_macro_settings("FullReadout")
-
-    "Set TEXPMS to 0 for CCDs that are not going to take snapshots"
-    for CCDSEL in [1, 2, 4, 8, 16, 32]:
-        if CCDSEL in Mode_settings["CCDSELs"]:
-            continue
-        else:
-            CCD_settings[CCDSEL]["TEXPMS"] = 0
-
-    Mode12X(
-        root,
-        date,
-        duration,
-        relativeTime,
-        Timeline_settings=Timeline_settings,
-        configFile=configFile,
-        Mode_settings=Mode_settings,
-        CCD_settings=CCD_settings,
-    )
-
-
-##############################################################################################
-
-
-################################################################################################
-
-
-def Mode130(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
-    """Mode130
-
-    **Macro**: Snapshot_Limb_Pointing_macro. \n
-    **CCD_Macro**: FullReadout. \n
-
-    Look at fixed limb altitude and take Snapshots with all CCD except nadir  and also do not have TEXPMS set to 0.
-    """
-
-    CCD_settings = configFile.CCD_macro_settings("FullReadout")
-    Mode_settings_ConfigFile = configFile.Mode130_settings()
-
-    Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
+    ExpTimes = Mode_settings['ExpTimes']
+    SnapshotTimes = Mode_settings['SnapshotTimes']
+    pointing_altitude = Mode_settings['pointing_altitude']
+    SnapshotSpacing = Mode_settings['SnapshotSpacing']
+    CCDSELs = Mode_settings['CCDSELs']
 
     Mode_name = sys._getframe(0).f_code.co_name
-    comment = Mode_name + " starting date: " + str(date) + ", " + str(Mode_settings)
 
-    pointing_altitude = Mode_settings["pointing_altitude"]
-    SnapshotSpacing = Mode_settings["SnapshotSpacing"]
+    t = 0
 
-    # Mode_macro = getattr(Macros,Mode_name+'_macro')
-
-    Macros.Snapshot_Limb_Pointing_macro(
-        root,
-        round(relativeTime, 2),
-        CCD_settings,
-        pointing_altitude=pointing_altitude,
-        SnapshotSpacing=SnapshotSpacing,
-        Timeline_settings=Timeline_settings, configFile=configFile,
-        comment=comment,
+    initial_relativeTime = relativeTime
+    starttime = DT.datetime.strptime(Timeline_settings['start_date'],'%Y/%m/%d %H:%M:%S')
+    
+    Disregarded, Disregarded, Disregarded, TEXPIMS = Library.SyncArgCalculator(
+    CCD_settings,
+    Timeline_settings["CCDSYNC_ExtraOffset"],
+    Timeline_settings["CCDSYNC_ExtraIntervalTime"],
     )
 
-
-#####################################################################################################
-
-##############################################################################################
-
-
-def Mode131(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
-    """Mode131
-
-    **Macro**: Operational_Limb_Pointing_macro. \n
-    **CCD_Macro**: FullReadout. \n
-
-    Look at fixed limb altitude in operational mode.
-    """
-
-    CCD_settings = configFile.CCD_macro_settings("FullReadout")
-    PM_settings = configFile.PM_settings()
-    Mode_settings_ConfigFile = configFile.Mode131_settings()
-
-    Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
-
-    Mode_name = sys._getframe(0).f_code.co_name
-    comment = Mode_name + " starting date: " + str(date) + ", " + str(Mode_settings)
-
-    pointing_altitude = Mode_settings["pointing_altitude"]
-    relativeTimeEndOfMode = (
-        relativeTime + duration - 2*Timeline_settings["mode_separation"] - Timeline_settings["pointing_stabilization"]
-    )  # go to idle mode separation (s) before endDate
-
-    "CMDs and Macros"
-    Macros.Operational_Limb_Pointing_macro(
-        root,
-        round(relativeTime, 2),
-        CCD_settings,
-        PM_settings=PM_settings,
-        pointing_altitude=pointing_altitude,
-        Timeline_settings=Timeline_settings, configFile=configFile,
-        comment=comment,
+    relativeTime = Commands.TC_pafMode(
+        root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=""
     )
 
-    Commands.TC_pafMode(
-        root,
-        relativeTimeEndOfMode-Timeline_settings["mode_separation"],
-        MODE=2,
-        Timeline_settings=Timeline_settings, configFile=configFile,
-        comment=comment,
-    )
-
-    Commands.TC_acfLimbPointingAltitudeOffset(
-        root,
-        relativeTimeEndOfMode,
-        Initial=Timeline_settings["StandardPointingAltitude"],
-        Final=Timeline_settings["StandardPointingAltitude"],
-        Rate=0,
-        Timeline_settings=Timeline_settings, configFile=configFile,
-        comment=comment,
-    )
-
-
-################################################################################################
-
-##############################################################################################
-
-
-def Mode132_133(
-        root, date, duration, relativeTime, Timeline_settings, Mode_settings, configFile, CCD_settings):
-    """Subfunction of Mode132 and Mode133
-
-    **Macro**: Operational_Limb_Pointing_macro. \n
-
-    Arguments:
-        CCD_settings (:obj:`dict` of :obj:`dict` of int): Settings for the CCDs. Defined in the *Configuration File*.
-
-    Look at fixed limb altitude in operational mode with a set of exposure times for UV and IR CCDs.
-    """
-
-    Mode_name = sys._getframe(1).f_code.co_name.replace("", "")
-    comment = Mode_name + " starting date: " + str(date) + ", " + str(Mode_settings)
-
-    PM_settings = configFile.PM_settings()
-    pointing_altitude = Mode_settings["pointing_altitude"]
-    relativeTimeEndOfMode = (
-        relativeTime + duration - Timeline_settings["mode_separation"]
-    )  # go to idle mode separation (s) before endDate
-
-    for ExpTimeUV, ExpTimeIR in zip(
-        Mode_settings["Exp_Times_UV"], Mode_settings["Exp_Times_IR"]
-    ):
-
-        CCD_settings[16]["TEXPMS"] = ExpTimeUV
-        CCD_settings[32]["TEXPMS"] = ExpTimeUV
-        CCD_settings[1]["TEXPMS"] = ExpTimeIR
-        CCD_settings[8]["TEXPMS"] = ExpTimeIR
-        CCD_settings[2]["TEXPMS"] = ExpTimeIR
-        CCD_settings[4]["TEXPMS"] = ExpTimeIR
-        relativeTime = Macros.Operational_Limb_Pointing_macro(
+    if pointing_altitude != -1:
+        relativeTime = Commands.TC_acfLimbPointingAltitudeOffset(
             root,
-            round(relativeTime, 2),
-            CCD_settings,
-            PM_settings=PM_settings,
-            pointing_altitude=pointing_altitude,
-            Timeline_settings=Timeline_settings,
-            configFile=configFile,
+            relativeTime,
+            Initial=pointing_altitude,
+            Final=pointing_altitude,
+            Rate=0,
+            Timeline_settings=Timeline_settings, configFile=configFile,
             comment=comment,
         )
-
-        relativeTime = relativeTime + Mode_settings["session_duration"]
-
-    Commands.TC_pafMode(
+    
+    relativeTime = Macros.SetCCDs_macro(
         root,
-        relativeTimeEndOfMode,
-        MODE=2,
-        Timeline_settings=Timeline_settings, configFile=configFile,
-        comment=comment,
-    )
-
-
-################################################################################################
-
-################################################################################################
-
-
-def Mode132(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
-    """Mode132
-
-    **Macro**: Operational_Limb_Pointing_macro. \n
-    **CCD_Macro**: BinnedCalibration with changing exposure times for UV and IR CCDs. \n
-
-    Look at fixed limb altitude in operational mode for a set duration with each exposure time.
-    """
-
-    CCD_settings = configFile.CCD_macro_settings("BinnedCalibration")
-    Mode_settings_ConfigFile = configFile.Mode132_settings()
-
-    Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
-
-    Mode132_133(
-        root,
-        date,
-        duration,
         relativeTime,
-        Timeline_settings=Timeline_settings,
-        Mode_settings=Mode_settings,
-        configFile=configFile,
-        CCD_settings=CCD_settings,
-    )
-
-
-##############################################################################################
-
-################################################################################################
-
-
-def Mode133(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
-    """Mode133,
-
-    **Macro**: Operational_Limb_Pointing_macro. \n
-    **CCD_Macro**: LowPixel with changing exposure times for UV and IR CCDs. \n
-
-    Look at fixed limb altitude in operational mode for a set duration with each exposure time.
-    """
-
-    CCD_settings = configFile.CCD_macro_settings("LowPixel")
-    Mode_settings_ConfigFile = configFile.Mode133_settings()
-
-    Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
-
-    Mode132_133(
-        root,
-        date,
-        duration,
-        relativeTime,
-        Timeline_settings=Timeline_settings,
-        Mode_settings=Mode_settings,
-        configFile=configFile,
-        CCD_settings=CCD_settings,
-    )
-
-
-##############################################################################################
-
-##############################################################################################
-
-
-def Mode134(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
-    """Mode134, Operational_Limb_Pointing_macro.
-
-    **Macro**: Operational_Limb_Pointing_macro. \n
-    **CCD_Macro**: CustomBinning \n
-
-    Look at fixed limb altitude in Operational Mode.
-    """
-
-    CCD_settings = configFile.CCD_macro_settings("CustomBinning")
-    PM_settings = configFile.PM_settings()
-    Mode_settings_ConfigFile = configFile.Mode134_settings()
-
-    Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
-
-    Mode_name = sys._getframe(0).f_code.co_name
-    comment = Mode_name + " starting date: " + str(date) + ", " + str(Mode_settings)
-
-    pointing_altitude = Mode_settings["pointing_altitude"]
-    relativeTimeEndOfMode = (
-        relativeTime + duration - Timeline_settings["mode_separation"]
-    )  # go to idle mode separation (s) before endDate
-
-    "CMDs and Macros"
-    Macros.Operational_Limb_Pointing_macro(
-        root,
-        round(relativeTime, 2),
         CCD_settings,
-        PM_settings=PM_settings,
-        pointing_altitude=pointing_altitude,
+        TEXPIMS=TEXPIMS,
         Timeline_settings=Timeline_settings, configFile=configFile,
-        comment=comment,
+        comment="",
     )
 
+    change = False
 
-    Commands.TC_pafMode(
-        root,
-        relativeTimeEndOfMode-Timeline_settings["pointing_stabilization"]-Timeline_settings["CMD_separation"],
-        MODE=2,
-        Timeline_settings=Timeline_settings, configFile=configFile,
-        comment=comment,
-    )
 
-    Commands.TC_acfLimbPointingAltitudeOffset(
-        root,
-        relativeTimeEndOfMode-Timeline_settings["pointing_stabilization"],
-        Initial=Timeline_settings["StandardPointingAltitude"],
-        Final=Timeline_settings["StandardPointingAltitude"],
-        Rate=0,
-        Timeline_settings=Timeline_settings, configFile=configFile,
-        comment=comment,
-    )
+    "Start looping the CCD settings and call for macros"
+    for SnapshotTime in SnapshotTimes:
+        snaptime =  DT.datetime.strptime(SnapshotTime,'%Y/%m/%d %H:%M:%S')
+        relativeTime = (snaptime-starttime).seconds
+        
+        for CCD in CCDSELs:
+
+            for ExpTime in ExpTimes:
+
+                if CCD_settings[CCD]['TEXPMS'] != ExpTime:
+                    CCD_settings[CCD]['TEXPMS'] = ExpTime
+                    change = True
+
+                if change:
+                    relativeTime = Macros.SetCCDs_macro(
+                        root,
+                        relativeTime,
+                        CCD_settings,
+                        TEXPIMS=TEXPIMS,
+                        Timeline_settings=Timeline_settings, configFile=configFile,
+                        CCDList = [CCD],
+                        comment="",
+                    )
+
+                    change = False
+                
+                snaptime_real = (DT.timedelta(seconds=relativeTime) + starttime)
+
+                comment = (Mode_name+', '+str(snaptime_real)+', '+', pointing_altitude = '+str(pointing_altitude) +
+                            ', ExpTime = '+str(ExpTime))
+                
+                Logger.debug(comment)
+
+                relativeTime = Commands.TC_pafCCDSnapshot(
+                    root,
+                    relativeTime,
+                    CCDSEL=CCD,
+                    Timeline_settings=Timeline_settings, configFile=configFile,
+                    comment=comment,
+                )
+                
+                relativeTime = relativeTime + SnapshotSpacing + ExpTime/1000
+
+
+
+
+    mode_relativeTime = relativeTime - initial_relativeTime
+    current_time = ephem.Date(date+ephem.second*mode_relativeTime)
+
+    Logger.info('End of SNAPSHOT')
+
+    return relativeTime, current_time
+
+
+# ##############################################################################################
+
+
+# def Mode121(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
+#     """Mode121
+
+#     **Macro**: Snapshot_Inertial_macro. \n
+#     **CCD_Macro**: FullReadout \n
+
+#     Stare at a point in inertial reference frame and take one Snapshot with each CCDSEL argument defined by the 'CCDSELs' settings and also do not have TEXPMS set to 0.
+
+#     """
+
+#     Mode_settings_ConfigFile = configFile.Mode121_settings()
+#     Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
+
+#     CCD_settings = configFile.CCD_macro_settings("FullReadout")
+#     "Set TEXPMS to 0 for CCDs that are not going to take snapshots"
+#     for CCDSEL in [1, 2, 4, 8, 16, 32, 64]:
+#         if CCDSEL in Mode_settings["CCDSELs"]:
+#             continue
+#         else:
+#             CCD_settings[CCDSEL]["TEXPMS"] = 0
+
+#     Mode12X(
+#         root,
+#         date,
+#         duration,
+#         relativeTime,
+#         Timeline_settings=Timeline_settings,
+#         configFile=configFile,
+#         Mode_settings=Mode_settings,
+#         CCD_settings=CCD_settings,
+#     )
+
+
+# ############################################################################################
+
+
+# def Mode122(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
+#     """Mode122
+
+#     **Macro**: Snapshot_Inertial_macro. \n
+#     **CCD_Macro**: BinnedCalibration with configurable exposure time of UV and IR CCDs. \n
+
+#     Stare at a point in inertial reference frame and take a Snapshot with each CCD except nadir and also do not have TEXPMS set to 0.
+
+#     """
+
+#     Mode_settings_ConfigFile = configFile.Mode122_settings()
+#     Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
+
+#     CCD_settings = configFile.CCD_macro_settings("BinnedCalibration")
+#     ExpTimeUV = Mode_settings["Exp_Time_UV"]
+#     ExpTimeIR = Mode_settings["Exp_Time_IR"]
+#     CCD_settings[16]["TEXPMS"] = ExpTimeUV
+#     CCD_settings[32]["TEXPMS"] = ExpTimeUV
+#     CCD_settings[1]["TEXPMS"] = ExpTimeIR
+#     CCD_settings[8]["TEXPMS"] = ExpTimeIR
+#     CCD_settings[2]["TEXPMS"] = ExpTimeIR
+#     CCD_settings[4]["TEXPMS"] = ExpTimeIR
+
+#     Mode12X(
+#         root,
+#         date,
+#         duration,
+#         relativeTime,
+#         Timeline_settings=Timeline_settings,
+#         configFile=configFile,
+#         Mode_settings=Mode_settings,
+#         CCD_settings=CCD_settings,
+#     )
+
+
+# ################################################################################################
+
+# ############################################################################################
+
+
+# def Mode123(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
+#     """Mode123
+
+
+#     **Macro**: Snapshot_Inertial_macro. \n
+#     **CCD_Macro**: LowPixel with configurable exposure time of UV and IR CCDs. \n
+
+#     Stare at a point in inertial reference frame and take a Snapshot with each CCD except nadir and also do not have TEXPMS set to 0.
+
+
+#     """
+
+#     Mode_settings_ConfigFile = configFile.Mode123_settings()
+#     Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
+
+#     CCD_settings = configFile.CCD_macro_settings("LowPixel")
+#     ExpTimeUV = Mode_settings["Exp_Time_UV"]
+#     ExpTimeIR = Mode_settings["Exp_Time_IR"]
+#     CCD_settings[16]["TEXPMS"] = ExpTimeUV
+#     CCD_settings[32]["TEXPMS"] = ExpTimeUV
+#     CCD_settings[1]["TEXPMS"] = ExpTimeIR
+#     CCD_settings[8]["TEXPMS"] = ExpTimeIR
+#     CCD_settings[2]["TEXPMS"] = ExpTimeIR
+#     CCD_settings[4]["TEXPMS"] = ExpTimeIR
+
+#     Mode12X(
+#         root,
+#         date,
+#         duration,
+#         relativeTime,
+#         Timeline_settings=Timeline_settings,
+#         configFile=configFile,
+#         Mode_settings=Mode_settings,
+#         CCD_settings=CCD_settings,
+#     )
+
+
+# ##############################################################################################
+
+
+# def Mode124(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
+#     """Mode124
+
+#     **Macro**: Snapshot_Inertial_macro. \n
+#     **CCD_Macro**: FullReadout. \n
+
+#     Stare at a point in inertial reference frame and take one Snapshot with each CCDSEL argument defined by the 'CCDSELs' settings and also do not have TEXPMS set to 0. 
+#     Used for moon calibration.
+#     """
+
+#     Mode_settings_ConfigFile = configFile.Mode124_settings()
+#     Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
+
+#     CCD_settings = configFile.CCD_macro_settings("FullReadout")
+
+#     "Set TEXPMS to 0 for CCDs that are not going to take snapshots"
+#     for CCDSEL in [1, 2, 4, 8, 16, 32]:
+#         if CCDSEL in Mode_settings["CCDSELs"]:
+#             continue
+#         else:
+#             CCD_settings[CCDSEL]["TEXPMS"] = 0
+
+#     Mode12X(
+#         root,
+#         date,
+#         duration,
+#         relativeTime,
+#         Timeline_settings=Timeline_settings,
+#         configFile=configFile,
+#         Mode_settings=Mode_settings,
+#         CCD_settings=CCD_settings,
+#     )
+
+
+# ##############################################################################################
+
+
+# ################################################################################################
+
+
+# def Mode130(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
+#     """Mode130
+
+#     **Macro**: Snapshot_Limb_Pointing_macro. \n
+#     **CCD_Macro**: FullReadout. \n
+
+#     Look at fixed limb altitude and take Snapshots with all CCD except nadir  and also do not have TEXPMS set to 0.
+#     """
+
+#     CCD_settings = configFile.CCD_macro_settings("FullReadout")
+#     Mode_settings_ConfigFile = configFile.Mode130_settings()
+
+#     Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
+
+#     Mode_name = sys._getframe(0).f_code.co_name
+#     comment = Mode_name + " starting date: " + str(date) + ", " + str(Mode_settings)
+
+#     pointing_altitude = Mode_settings["pointing_altitude"]
+#     SnapshotSpacing = Mode_settings["SnapshotSpacing"]
+
+#     # Mode_macro = getattr(Macros,Mode_name+'_macro')
+
+#     Macros.Snapshot_Limb_Pointing_macro(
+#         root,
+#         round(relativeTime, 2),
+#         CCD_settings,
+#         pointing_altitude=pointing_altitude,
+#         SnapshotSpacing=SnapshotSpacing,
+#         Timeline_settings=Timeline_settings, configFile=configFile,
+#         comment=comment,
+#     )
+
+
+# #####################################################################################################
+
+# ##############################################################################################
+
+
+# def Mode131(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
+#     """Mode131
+
+#     **Macro**: Operational_Limb_Pointing_macro. \n
+#     **CCD_Macro**: FullReadout. \n
+
+#     Look at fixed limb altitude in operational mode.
+#     """
+
+#     CCD_settings = configFile.CCD_macro_settings("FullReadout")
+#     PM_settings = configFile.PM_settings()
+#     Mode_settings_ConfigFile = configFile.Mode131_settings()
+
+#     Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
+
+#     Mode_name = sys._getframe(0).f_code.co_name
+#     comment = Mode_name + " starting date: " + str(date) + ", " + str(Mode_settings)
+
+#     pointing_altitude = Mode_settings["pointing_altitude"]
+#     relativeTimeEndOfMode = (
+#         relativeTime + duration - 2*Timeline_settings["mode_separation"] - Timeline_settings["pointing_stabilization"]
+#     )  # go to idle mode separation (s) before endDate
+
+#     "CMDs and Macros"
+#     Macros.Operational_Limb_Pointing_macro(
+#         root,
+#         round(relativeTime, 2),
+#         CCD_settings,
+#         PM_settings=PM_settings,
+#         pointing_altitude=pointing_altitude,
+#         Timeline_settings=Timeline_settings, configFile=configFile,
+#         comment=comment,
+#     )
+
+#     Commands.TC_pafMode(
+#         root,
+#         relativeTimeEndOfMode-Timeline_settings["mode_separation"],
+#         MODE=2,
+#         Timeline_settings=Timeline_settings, configFile=configFile,
+#         comment=comment,
+#     )
+
+#     Commands.TC_acfLimbPointingAltitudeOffset(
+#         root,
+#         relativeTimeEndOfMode,
+#         Initial=Timeline_settings["StandardPointingAltitude"],
+#         Final=Timeline_settings["StandardPointingAltitude"],
+#         Rate=0,
+#         Timeline_settings=Timeline_settings, configFile=configFile,
+#         comment=comment,
+#     )
+
+
+# ################################################################################################
+
+# ##############################################################################################
+
+
+# def Mode132_133(
+#         root, date, duration, relativeTime, Timeline_settings, Mode_settings, configFile, CCD_settings):
+#     """Subfunction of Mode132 and Mode133
+
+#     **Macro**: Operational_Limb_Pointing_macro. \n
+
+#     Arguments:
+#         CCD_settings (:obj:`dict` of :obj:`dict` of int): Settings for the CCDs. Defined in the *Configuration File*.
+
+#     Look at fixed limb altitude in operational mode with a set of exposure times for UV and IR CCDs.
+#     """
+
+#     Mode_name = sys._getframe(1).f_code.co_name.replace("", "")
+#     comment = Mode_name + " starting date: " + str(date) + ", " + str(Mode_settings)
+
+#     PM_settings = configFile.PM_settings()
+#     pointing_altitude = Mode_settings["pointing_altitude"]
+#     relativeTimeEndOfMode = (
+#         relativeTime + duration - Timeline_settings["mode_separation"]
+#     )  # go to idle mode separation (s) before endDate
+
+#     for ExpTimeUV, ExpTimeIR in zip(
+#         Mode_settings["Exp_Times_UV"], Mode_settings["Exp_Times_IR"]
+#     ):
+
+#         CCD_settings[16]["TEXPMS"] = ExpTimeUV
+#         CCD_settings[32]["TEXPMS"] = ExpTimeUV
+#         CCD_settings[1]["TEXPMS"] = ExpTimeIR
+#         CCD_settings[8]["TEXPMS"] = ExpTimeIR
+#         CCD_settings[2]["TEXPMS"] = ExpTimeIR
+#         CCD_settings[4]["TEXPMS"] = ExpTimeIR
+#         relativeTime = Macros.Operational_Limb_Pointing_macro(
+#             root,
+#             round(relativeTime, 2),
+#             CCD_settings,
+#             PM_settings=PM_settings,
+#             pointing_altitude=pointing_altitude,
+#             Timeline_settings=Timeline_settings,
+#             configFile=configFile,
+#             comment=comment,
+#         )
+
+#         relativeTime = relativeTime + Mode_settings["session_duration"]
+
+#     Commands.TC_pafMode(
+#         root,
+#         relativeTimeEndOfMode,
+#         MODE=2,
+#         Timeline_settings=Timeline_settings, configFile=configFile,
+#         comment=comment,
+#     )
+
+
+# ################################################################################################
+
+# ################################################################################################
+
+
+# def Mode132(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
+#     """Mode132
+
+#     **Macro**: Operational_Limb_Pointing_macro. \n
+#     **CCD_Macro**: BinnedCalibration with changing exposure times for UV and IR CCDs. \n
+
+#     Look at fixed limb altitude in operational mode for a set duration with each exposure time.
+#     """
+
+#     CCD_settings = configFile.CCD_macro_settings("BinnedCalibration")
+#     Mode_settings_ConfigFile = configFile.Mode132_settings()
+
+#     Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
+
+#     Mode132_133(
+#         root,
+#         date,
+#         duration,
+#         relativeTime,
+#         Timeline_settings=Timeline_settings,
+#         Mode_settings=Mode_settings,
+#         configFile=configFile,
+#         CCD_settings=CCD_settings,
+#     )
+
+
+# ##############################################################################################
+
+# ################################################################################################
+
+
+# def Mode133(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
+#     """Mode133,
+
+#     **Macro**: Operational_Limb_Pointing_macro. \n
+#     **CCD_Macro**: LowPixel with changing exposure times for UV and IR CCDs. \n
+
+#     Look at fixed limb altitude in operational mode for a set duration with each exposure time.
+#     """
+
+#     CCD_settings = configFile.CCD_macro_settings("LowPixel")
+#     Mode_settings_ConfigFile = configFile.Mode133_settings()
+
+#     Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
+
+#     Mode132_133(
+#         root,
+#         date,
+#         duration,
+#         relativeTime,
+#         Timeline_settings=Timeline_settings,
+#         Mode_settings=Mode_settings,
+#         configFile=configFile,
+#         CCD_settings=CCD_settings,
+#     )
+
+
+# ##############################################################################################
+
+# ##############################################################################################
+
+
+# def Mode134(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
+#     """Mode134, Operational_Limb_Pointing_macro.
+
+#     **Macro**: Operational_Limb_Pointing_macro. \n
+#     **CCD_Macro**: CustomBinning \n
+
+#     Look at fixed limb altitude in Operational Mode.
+#     """
+
+#     CCD_settings = configFile.CCD_macro_settings("CustomBinning")
+#     PM_settings = configFile.PM_settings()
+#     Mode_settings_ConfigFile = configFile.Mode134_settings()
+
+#     Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
+
+#     Mode_name = sys._getframe(0).f_code.co_name
+#     comment = Mode_name + " starting date: " + str(date) + ", " + str(Mode_settings)
+
+#     pointing_altitude = Mode_settings["pointing_altitude"]
+#     relativeTimeEndOfMode = (
+#         relativeTime + duration - Timeline_settings["mode_separation"]
+#     )  # go to idle mode separation (s) before endDate
+
+#     "CMDs and Macros"
+#     Macros.Operational_Limb_Pointing_macro(
+#         root,
+#         round(relativeTime, 2),
+#         CCD_settings,
+#         PM_settings=PM_settings,
+#         pointing_altitude=pointing_altitude,
+#         Timeline_settings=Timeline_settings, configFile=configFile,
+#         comment=comment,
+#     )
+
+
+#     Commands.TC_pafMode(
+#         root,
+#         relativeTimeEndOfMode-Timeline_settings["pointing_stabilization"]-Timeline_settings["CMD_separation"],
+#         MODE=2,
+#         Timeline_settings=Timeline_settings, configFile=configFile,
+#         comment=comment,
+#     )
+
+#     Commands.TC_acfLimbPointingAltitudeOffset(
+#         root,
+#         relativeTimeEndOfMode-Timeline_settings["pointing_stabilization"],
+#         Initial=Timeline_settings["StandardPointingAltitude"],
+#         Final=Timeline_settings["StandardPointingAltitude"],
+#         Rate=0,
+#         Timeline_settings=Timeline_settings, configFile=configFile,
+#         comment=comment,
+#     )
     
 
 

@@ -98,11 +98,6 @@ def WDWJQ_3010(root, date, duration, relativeTime, Timeline_settings, configFile
 
     return relativeTime, current_time
 
-####################################################################################
-
-
-
-
 ###########################################################################################################
 def FFEXP_3000(root, date, duration, relativeTime, Timeline_settings, configFile, Test_settings):
     """FFEXP_3000. 

@@ -6,6 +6,7 @@ import json
 import xml.etree.ElementTree as ET
 import os
 import pandas as pd
+import ast
 
 def get_MATS_tle():
     query = 'https://celestrak.org/NORAD/elements/gp.php?CATNR=54227&FORMAT=tle'
@@ -81,7 +82,7 @@ def generate_star_staring_mode(startdate,duration,mode='3040',name='STAR',iterat
     return
 
 
-def generate_fullframe_snapshot(startdate,mode='3200',name='FFEXP',altitude=92500,json_gen=True,xml_gen=True):
+def generate_fullframe_snapshot(startdate, mode='3200',name='FFEXP' , snapshottimes = [], exptimes = [3000,3000], altitude=92500, iterate = None ):
 
     tle = get_MATS_tle()
 
@@ -93,7 +94,17 @@ def generate_fullframe_snapshot(startdate,mode='3200',name='FFEXP',altitude=9250
     )
     configfile.set_duration()
     configfile.output_dir = "data/Operational_dump/"
-    configfile.CheckConfigFile()    
+
+    configfile.SNAPSHOT_settings()['ExpTimes'] = exptimes
+    if len(snapshottimes)>0:
+        configfile.SNAPSHOT_settings()['SnapshotTimes'] = [DT.datetime.strftime(snapshottimes[0],"%Y/%m/%d %H:%M:%S")]
+
+    if iterate != None:
+        configfile.OPT_Config_File["name"] = configfile.OPT_Config_File["name"] + iterate
+
+    configfile.CheckConfigFile()
+    json_gen = True 
+    xml_gen = True   
     if json_gen:
         configfile.Timeline_gen()
     if xml_gen:
@@ -196,7 +207,10 @@ def generate_overview(folder: str):
     df = pd.DataFrame(all_timelines)
     df.to_csv(folder + start_date_initial.strftime('%Y%m%d') + '_timeline_schedule.csv',index=False)
 
+def read_snaptimes(filename):
+    data_frame = pd.read_csv(filename,header=0)
 
+    return data_frame
 # generate_operational_mode(DT.datetime(2022,12,21,18,00),6)
 # generate_operational_mode(DT.datetime(2022,12,22,18,00),9)
 # generate_operational_mode(DT.datetime(2022,12,23,18,00),9)
@@ -492,3 +506,46 @@ def generate_overview(folder: str):
 # generate_operational_mode(DT.datetime(2023,8,4,12,0),36,'1109',name='CROPFN')
 # generate_operational_mode(DT.datetime(2023,8,4,18,0),30,'1109',name='CROPFN',iterate="1")
 # generate_operational_mode(DT.datetime(2023,8,5,0,0),24,'1109',name='CROPFN',iterate="2")
+
+# snaptimes = [
+#     DT.datetime(2023,8,11,1,58,0),
+#     DT.datetime(2023,8,11,4,58,0),
+#     DT.datetime(2023,8,12,2,5,0),
+#     DT.datetime(2023,8,12,5,4,0),
+#     DT.datetime(2023,8,13,2,11,0),
+#     DT.datetime(2023,8,13,5,10,0),
+#     DT.datetime(2023,8,14,2,17,0),
+#     DT.datetime(2023,8,14,5,16,0),
+# ]
+
+
+# n = 0
+# for snaptime in snaptimes:
+#     starttime = snaptime - DT.timedelta(minutes=20)
+#     generate_fullframe_snapshot(starttime, mode='3204',name='RAD' , exptimes = [15000,15000],snapshottimes = [snaptime], altitude=-1 ,iterate=str(n))
+#     n = n+1
+
+# snaptimes = [
+#     DT.datetime(2023,8,11,9,7,0),
+#     DT.datetime(2023,8,12,9,13,0),
+#     DT.datetime(2023,8,13,9,19,0),
+#     DT.datetime(2023,8,14,9,26,0),
+# ]
+
+# for snaptime in snaptimes:
+#     starttime = snaptime - DT.timedelta(minutes=20)
+#     generate_fullframe_snapshot(starttime, mode='3204',name='RAD' , exptimes = [3000,3000],snapshottimes = [snaptime], altitude=-1 ,iterate=str(n))
+#     n = n+1
+
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+
+data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/predict_0815.txt')
+n = 0
+for row in range(len(data_frame)):
+    snaptime = DT.datetime.strptime(data_frame.iloc[row].date,"%Y-%m-%d %H:%M:%S")
+    exptimes = ast.literal_eval(data_frame.iloc[row].texpms)
+    starttime = snaptime - DT.timedelta(minutes=20)
+    generate_fullframe_snapshot(starttime, mode='3204',name='RAD' , exptimes = exptimes,snapshottimes = [snaptime], altitude=-1 ,iterate=str(n))
+    n = n+1
+
+generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
