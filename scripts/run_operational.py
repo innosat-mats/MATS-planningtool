@@ -1,3 +1,4 @@
+#%%
 from mats_planningtool import configFile as configFile
 import datetime as DT
 import requests as R
@@ -82,7 +83,7 @@ def generate_star_staring_mode(startdate,duration,mode='3040',name='STAR',iterat
     return
 
 
-def generate_fullframe_snapshot(startdate, mode='3200',name='FFEXP' , snapshottimes = [], exptimes = [3000,3000], altitude=92500, iterate = None ):
+def generate_fullframe_snapshot(startdate, mode='3200',name='FFEXP' , snapshottimes = [], exptimes = [3000,3000], altitude=92500, iterate = None):
 
     tle = get_MATS_tle()
 
@@ -92,12 +93,29 @@ def generate_fullframe_snapshot(startdate, mode='3200',name='FFEXP' , snapshotti
         TLE1=tle[0],
         TLE2=tle[1],
     )
+
+    time_after_last_snapshot = DT.timedelta(minutes=15)
+    endtime = snaptimes[-1] + time_after_last_snapshot
+    duration = endtime-startdate
+    
+    seconds_tot = duration.seconds
+
+    configfile.Timeline_settings()["duration"]["hours"] = 0
+    configfile.Timeline_settings()["duration"]["seconds"] = seconds_tot
     configfile.set_duration()
+    configfile.SNAPSHOT_settings()["duration"] = seconds_tot - time_after_last_snapshot.seconds + 120
+
+
     configfile.output_dir = "data/Operational_dump/"
 
     configfile.SNAPSHOT_settings()['ExpTimes'] = exptimes
-    if len(snapshottimes)>0:
+    if len(snapshottimes)==1:    
         configfile.SNAPSHOT_settings()['SnapshotTimes'] = [DT.datetime.strftime(snapshottimes[0],"%Y/%m/%d %H:%M:%S")]
+    else:
+        configfile.SNAPSHOT_settings()['SnapshotTimes'] = []
+        for i in range(len(snapshottimes)):
+            configfile.SNAPSHOT_settings()['SnapshotTimes'].append(DT.datetime.strftime(snapshottimes[i],"%Y/%m/%d %H:%M:%S"))
+
 
     if iterate != None:
         configfile.OPT_Config_File["name"] = configfile.OPT_Config_File["name"] + iterate
@@ -209,6 +227,7 @@ def generate_overview(folder: str):
 
 def read_snaptimes(filename):
     data_frame = pd.read_csv(filename,header=0)
+    data_frame['date'] = pd.to_datetime(data_frame['date'])
 
     return data_frame
 # generate_operational_mode(DT.datetime(2022,12,21,18,00),6)
@@ -539,13 +558,61 @@ def read_snaptimes(filename):
 
 #generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
 
-data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/predict_0815.txt')
+# data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/predict_0815.txt')
+# n = 0
+# for row in range(len(data_frame)):
+#     snaptime = DT.datetime.strptime(data_frame.iloc[row].date,"%Y-%m-%d %H:%M:%S")
+#     exptimes = ast.literal_eval(data_frame.iloc[row].texpms)
+#     starttime = snaptime - DT.timedelta(minutes=20)
+#     generate_fullframe_snapshot(starttime, mode='3204',name='RAD' , exptimes = exptimes,snapshottimes = [snaptime], altitude=-1 ,iterate=str(n))
+#     n = n+1
+
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+
+# generate_operational_mode(DT.datetime(2023,8,24,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2023,8,25,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2023,8,26,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2023,8,27,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2023,8,28,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2023,8,29,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2023,8,30,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2023,8,31,0,0),24,'1109',name='CROPFN')
+
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+
+# #%%
+# data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/predict_230823.txt')
+
+# n = 0
+# for row in range(len(data_frame)):
+#     snaptime = DT.datetime.strptime(data_frame.iloc[row].date,"%Y-%m-%d %H:%M:%S")
+#     exptimes = ast.literal_eval(data_frame.iloc[row].texpms)
+#     starttime = snaptime - DT.timedelta(minutes=20)
+#     generate_fullframe_snapshot(starttime, mode='3204',name='RAD' , exptimes = exptimes,snapshottimes = [snaptime], altitude=-1 ,iterate=str(n))
+#     n = n+1
+
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+
+#%%
+
+data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/predict_230823.txt')
+
+exptimes_current = ast.literal_eval(data_frame.iloc[0].texpms)
+snaptimes = [data_frame.iloc[0].date]
 n = 0
-for row in range(len(data_frame)):
-    snaptime = DT.datetime.strptime(data_frame.iloc[row].date,"%Y-%m-%d %H:%M:%S")
-    exptimes = ast.literal_eval(data_frame.iloc[row].texpms)
-    starttime = snaptime - DT.timedelta(minutes=20)
-    generate_fullframe_snapshot(starttime, mode='3204',name='RAD' , exptimes = exptimes,snapshottimes = [snaptime], altitude=-1 ,iterate=str(n))
-    n = n+1
+
+for row in range(1, len(data_frame)):
+    exptime = ast.literal_eval(data_frame.iloc[row].texpms)
+    if exptimes_current == exptime:
+        snaptimes.append(data_frame.iloc[row].date)
+    else:
+        starttime = snaptimes[0] - DT.timedelta(minutes=15)
+        n = n+1
+        generate_fullframe_snapshot(starttime, mode='3204',name='RAD' , exptimes = exptimes_current, snapshottimes = snaptimes, altitude=-1, iterate=str(n))
+        
+        snaptimes = []
+        snaptimes.append(data_frame.iloc[row].date)
+        exptimes_current = exptime
+
 
 generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
