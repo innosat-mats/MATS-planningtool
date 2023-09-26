@@ -95,7 +95,7 @@ def generate_fullframe_snapshot(startdate, mode='3200',name='FFEXP' , snapshotti
     )
 
     time_after_last_snapshot = DT.timedelta(minutes=15)
-    endtime = snaptimes[-1] + time_after_last_snapshot
+    endtime = snapshottimes[-1] + time_after_last_snapshot
     duration = endtime-startdate
     
     seconds_tot = duration.seconds
@@ -130,6 +130,25 @@ def generate_fullframe_snapshot(startdate, mode='3200',name='FFEXP' , snapshotti
     return configfile
 
 
+def generate_rad_measurements(data_frame):
+    exptimes_current = ast.literal_eval(data_frame.iloc[0].texpms)
+    snaptimes = [data_frame.iloc[0].date]
+    n = 0
+
+    for row in range(1, len(data_frame)):
+        exptime = ast.literal_eval(data_frame.iloc[row].texpms)
+        if exptimes_current == exptime:
+            snaptimes.append(data_frame.iloc[row].date)
+        else:
+            starttime = snaptimes[0] - DT.timedelta(minutes=15)
+            n = n+1
+            generate_fullframe_snapshot(starttime, mode='3204',name='RAD' , exptimes = exptimes_current, snapshottimes = snaptimes, altitude=-1, iterate=str(n))
+            
+            snaptimes = []
+            snaptimes.append(data_frame.iloc[row].date)
+            exptimes_current = exptime
+
+    return
 
 def generate_overview(folder: str):
 
@@ -595,24 +614,56 @@ def read_snaptimes(filename):
 
 #%%
 
-data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/predict_230823.txt')
+# data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/predict_230828.txt')
 
-exptimes_current = ast.literal_eval(data_frame.iloc[0].texpms)
-snaptimes = [data_frame.iloc[0].date]
-n = 0
+# exptimes_current = ast.literal_eval(data_frame.iloc[0].texpms)
+# snaptimes = [data_frame.iloc[0].date]
+# n = 0
 
-for row in range(1, len(data_frame)):
-    exptime = ast.literal_eval(data_frame.iloc[row].texpms)
-    if exptimes_current == exptime:
-        snaptimes.append(data_frame.iloc[row].date)
-    else:
-        starttime = snaptimes[0] - DT.timedelta(minutes=15)
-        n = n+1
-        generate_fullframe_snapshot(starttime, mode='3204',name='RAD' , exptimes = exptimes_current, snapshottimes = snaptimes, altitude=-1, iterate=str(n))
+# for row in range(1, len(data_frame)):
+#     exptime = ast.literal_eval(data_frame.iloc[row].texpms)
+#     if exptimes_current == exptime:
+#         snaptimes.append(data_frame.iloc[row].date)
+#     else:
+#         starttime = snaptimes[0] - DT.timedelta(minutes=15)
+#         n = n+1
+#         generate_fullframe_snapshot(starttime, mode='3204',name='RAD' , exptimes = exptimes_current, snapshottimes = snaptimes, altitude=-1, iterate=str(n))
         
-        snaptimes = []
-        snaptimes.append(data_frame.iloc[row].date)
-        exptimes_current = exptime
+#         snaptimes = []
+#         snaptimes.append(data_frame.iloc[row].date)
+#         exptimes_current = exptime
 
 
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+
+
+# #%%
+# data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/predict_mats_230905.txt')
+
+# exptimes_current = ast.literal_eval(data_frame.iloc[0].texpms)
+# snaptimes = [data_frame.iloc[0].date]
+# n = 0
+
+# for row in range(1, len(data_frame)):
+#     exptime = ast.literal_eval(data_frame.iloc[row].texpms)
+#     if exptimes_current == exptime:
+#         snaptimes.append(data_frame.iloc[row].date)
+#     else:
+#         starttime = snaptimes[0] - DT.timedelta(minutes=15)
+#         n = n+1
+#         generate_fullframe_snapshot(starttime, mode='3204',name='RAD' , exptimes = exptimes_current, snapshottimes = snaptimes, altitude=-1, iterate=str(n))
+        
+#         snaptimes = []
+#         snaptimes.append(data_frame.iloc[row].date)
+#         exptimes_current = exptime
+
+
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+
+
+#%%
+data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/predict_mats_230915.txt')
+generate_rad_measurements(data_frame)
 generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+
+# %%
