@@ -681,7 +681,8 @@ def read_snaptimes(filename):
 
 
 #%%
-generate_star_staring_mode(DT.datetime(2023,10,6,6,0),2,'3040',name='STARALL',iterate='2')
-#data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/predict_mats_231008.txt')
-#generate_rad_measurements(data_frame)
-#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+generate_star_staring_mode(DT.datetime(2023,10,18,0,0),2,'3040',name='STARALL')
+generate_star_staring_mode(DT.datetime(2023,10,18,18,0),2,'3040',name='STARALL',iterate='1')
+data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/predict_mats_231011.txt')
+generate_rad_measurements(data_frame)
+generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")

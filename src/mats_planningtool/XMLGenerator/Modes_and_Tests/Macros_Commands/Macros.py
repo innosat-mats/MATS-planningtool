@@ -422,7 +422,7 @@ def Snapshot_Inertial_macro(
         FreezeDuration (int): Duration of freeze [s].
         FreezeStabilization (int) : Time to wait after freeze has started before scheduling next command.
         pointing_altitude (int): The altitude of the tangential point [m].
-        pointing_altitude (int): The altitude of the final tangential point [m].
+        pointing_altitude_end (int): The altitude of the final tangential point [m].
         StandardPointingAltitude (int): The standard altitude of the LP  [m]. (Not used)
         SnapshotSpacing (int): The time in seconds inbetween snapshots of individual CCDs.
         Snapshot_relativeTime (float): The relativeTime (time from start of timeline) at which the first Snapshot is taken. (Not used)
@@ -455,16 +455,19 @@ def Snapshot_Inertial_macro(
         root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment
     )
 
-    relativeTime = Commands.TC_acfLimbPointingAltitudeOffset(
-        root,
-        relativeTime,
-        Initial=pointing_altitude,
-        Final=pointing_altitude,
-        Rate=0,
-        Timeline_settings=Timeline_settings,
-        configFile=configFile,
-        comment=comment,
-    )
+    if pointing_altitude > 0:
+        relativeTime = Commands.TC_acfLimbPointingAltitudeOffset(
+            root,
+            relativeTime,
+            Initial=pointing_altitude,
+            Final=pointing_altitude,
+            Rate=0,
+            Timeline_settings=Timeline_settings,
+            configFile=configFile,
+            comment=comment,
+        )
+    else: 
+        relativeTime = relativeTime + Timeline_settings["CMD_separation"]
 
     if len(dark_channels) == 0:
         relativeTime = SetCCDs_macro(
@@ -485,13 +488,16 @@ def Snapshot_Inertial_macro(
             comment=comment,
         )
 
-    relativeTime = Commands.TC_acsPayloadAttitudeFreeze(
-        root,
-        FreezeTime_rel,
-        FreezeDuration=FreezeDuration,
-        Timeline_settings=Timeline_settings, configFile=configFile,
-        comment=comment,
-    )
+    if pointing_altitude > 0:
+        relativeTime = Commands.TC_acsPayloadAttitudeFreeze(
+            root,
+            FreezeTime_rel,
+            FreezeDuration=FreezeDuration,
+            Timeline_settings=Timeline_settings, configFile=configFile,
+            comment=comment,
+        )
+    else: 
+        relativeTime = relativeTime + Timeline_settings["CMD_separation"]
 
     start_star_images = relativeTime - Timeline_settings["CMD_separation"]  + FreezeStabilization
 
