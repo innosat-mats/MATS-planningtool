@@ -542,7 +542,11 @@ def Snapshot_Inertial_macro(
             Timeline_settings=Timeline_settings, configFile=configFile,
             comment=comment,
         )
-        relativeTime += CCD_settings[CCDSEL]["TEXPMS"]/1000
+        if CCDSEL in [1, 2, 4, 8, 16, 32]:
+            relativeTime += CCD_settings[CCDSEL]["TEXPMS"]/1000
+        else: 
+            relativeTime += configFile.LargestSetTEXPMS/1000
+
         relativeTime += SnapshotSpacing
 
     configFile.current_pointing = pointing_altitude_end

@@ -71,7 +71,7 @@ def generate_star_staring_mode(startdate,duration,mode='3040',name='STAR',iterat
     configfile.Mode120_settings()['TimeToConsider']['TimeToConsider'] = hours*3600 + seconds_tot
 
     configfile.set_duration()
-    configfile.output_dir = "data/Operational_dump/"
+    configfile.output_dir = "data/Operational_dump"
 
     if iterate != None:
         configfile.OPT_Config_File["name"] = configfile.OPT_Config_File["name"] + iterate
@@ -667,6 +667,21 @@ def read_snaptimes(filename):
 # generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
 
 # %%
-data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/predict_mats_230925.txt')
-generate_rad_measurements(data_frame)
-generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+# data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/predict_mats_230925.txt')
+# generate_rad_measurements(data_frame)
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+
+
+#generate_star_staring_mode(DT.datetime(2023,10,6,0,0),2,'3040',name='STARALL')
+#generate_star_staring_mode(DT.datetime(2023,10,6,6,0),2,'3040',name='STARALL',iterate='1')
+#generate_star_staring_mode(DT.datetime(2023,10,6,6,0),2,'3040',name='STARALL',iterate='2')
+#data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/predict_mats_231008.txt')
+#generate_rad_measurements(data_frame)
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+
+
+#%%
+generate_star_staring_mode(DT.datetime(2023,10,6,6,0),2,'3040',name='STARALL',iterate='2')
+#data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/predict_mats_231008.txt')
+#generate_rad_measurements(data_frame)
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")

@@ -398,10 +398,10 @@ def CheckConfigFile(configFile):
             "Mode120_settings['SnapshotSpacing'] * (len(Mode120_settings['CCDSELs'])-1) + Mode120_settings['SnapshotTime'] > Mode120_settings['freeze_duration'] or Mode120_settings['freeze_duration'] > 3600"
         )
         raise ValueError
-    for CCDSEL in Mode120_settings["CCDSELs"]:
-        if not (CCDSEL in [1, 2, 4, 8, 16, 32]):
-            Logger.error("Mode120_settings['CCDSELs'] element != [1,2,4,8,16,32]")
-            raise ValueError
+    # for CCDSEL in Mode120_settings["CCDSELs"]:
+    #     if not (CCDSEL in [1, 2, 4, 8, 16, 32]):
+    #         Logger.error("Mode120_settings['CCDSELs'] element != [1,2,4,8,16,32]")
+    #         raise ValueError
 
     # if not (
     #     -60000 <= Mode121_122_123_settings["pointing_altitude"] <= 230000
