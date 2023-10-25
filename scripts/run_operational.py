@@ -680,9 +680,15 @@ def read_snaptimes(filename):
 #generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
 
 
-#%%
-generate_star_staring_mode(DT.datetime(2023,10,18,0,0),2,'3040',name='STARALL')
-generate_star_staring_mode(DT.datetime(2023,10,18,18,0),2,'3040',name='STARALL',iterate='1')
-data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/predict_mats_231011.txt')
-generate_rad_measurements(data_frame)
-generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+# #%%
+# generate_operational_mode(DT.datetime(2023,10,30,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2023,10,31,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2023,11,1,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2023,11,2,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2023,11,3,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2023,11,4,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2023,11,5,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2023,11,6,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2023,11,7,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2023,11,8,0,0),24,'1109',name='CROPFS')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
