@@ -67,7 +67,7 @@ def write_comment(current_state,current_time,Mode_settings,lat_LP,sun_angle):
 def check_lat(lat_position,lat_limit):
 
     if lat_limit == -999:
-        return False
+        return True
     if lat_limit<0:
         return lat_position<lat_limit
     return lat_position>lat_limit

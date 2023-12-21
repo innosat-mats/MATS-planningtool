@@ -204,7 +204,7 @@ def CheckConfigFile(configFile):
                     Logger.error('Operational_Science_Mode_settings["timestep"]')
                     raise ValueError
             elif key == "lat":
-                if not (-90 <= Operational_Science_Mode_settings[key] <= 90):
+                if (not (-90 <= Operational_Science_Mode_settings[key] <= 90)) and (Operational_Science_Mode_settings[key] != -999):
                     Logger.error('Operational_Science_Mode_settings["lat"]')
                     raise ValueError
             elif key == 'TEXPIMS':
