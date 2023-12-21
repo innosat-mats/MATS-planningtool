@@ -14,6 +14,8 @@ def get_MATS_tle():
     celestrak = R.session()
     tle = celestrak.get(query).text.split('\r\n')[1:3]
     print('using Mats tle \n',tle)
+    if tle[0][1:5] == 'html':
+        raise LookupError('Could not get TLE. Probably too many queries to celestrack, please wait 2 hours and try again.')
     return tle
 
 def generate_operational_mode(startdate,duration,mode='1100',name='MODE1y',iterate=None,tle=None):
@@ -131,23 +133,20 @@ def generate_fullframe_snapshot(startdate, mode='3200',name='FFEXP' , snapshotti
 
 
 def generate_rad_measurements(data_frame):
-    exptimes_current = ast.literal_eval(data_frame.iloc[0].texpms)
-    snaptimes = [data_frame.iloc[0].date]
     n = 0
 
-    for row in range(1, len(data_frame)):
+    for row in range(0, len(data_frame)):
         exptime = ast.literal_eval(data_frame.iloc[row].texpms)
-        if exptimes_current == exptime:
-            snaptimes.append(data_frame.iloc[row].date)
-        else:
-            starttime = snaptimes[0] - DT.timedelta(minutes=15)
-            n = n+1
-            generate_fullframe_snapshot(starttime, mode='3204',name='RAD' , exptimes = exptimes_current, snapshottimes = snaptimes, altitude=-1, iterate=str(n))
-            
-            snaptimes = []
-            snaptimes.append(data_frame.iloc[row].date)
-            exptimes_current = exptime
+        snaptimes = []
+        snaptimes.append(data_frame.iloc[row].date)
 
+        #if exptimes_current == exptime:
+        #    snaptimes.append(data_frame.iloc[row].date)
+        #else:
+        starttime = snaptimes[0] - DT.timedelta(minutes=15)
+        n = n+1
+        generate_fullframe_snapshot(starttime, mode='3204',name='RAD' , exptimes = exptime, snapshottimes = snaptimes, altitude=-1, iterate=str(n))
+        
     return
 
 def generate_overview(folder: str):
@@ -748,11 +747,32 @@ def read_snaptimes(filename):
 # generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
 
 #%%
-generate_operational_mode(DT.datetime(2023,12,16,0,0),24,'1109',name='CROPFS')
-generate_operational_mode(DT.datetime(2023,12,17,0,0),24,'1109',name='CROPFS')
-generate_operational_mode(DT.datetime(2023,12,18,0,0),24,'1109',name='CROPFS')
-generate_operational_mode(DT.datetime(2023,12,19,0,0),24,'1109',name='CROPFS')
-generate_operational_mode(DT.datetime(2023,12,20,0,0),24,'1109',name='CROPFS')
-generate_operational_mode(DT.datetime(2023,12,21,0,0),24,'1109',name='CROPFS')
-generate_operational_mode(DT.datetime(2023,12,22,0,0),24,'1109',name='CROPFS')
-generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+#generate_operational_mode(DT.datetime(2023,12,16,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2023,12,17,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2023,12,18,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2023,12,19,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2023,12,20,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2023,12,21,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2023,12,22,0,0),24,'1109',name='CROPFS')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+
+
+#data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational/predict_mats_231212.txt')
+#generate_rad_measurements(data_frame)
+# generate_operational_mode(DT.datetime(2023,12,24,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2023,12,28,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2023,12,30,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,1,2,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,1,5,0,0),24,'1109',name='CROPFS')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+
+
+
+#data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational/predict_mats_231212.txt')
+#generate_rad_measurements(data_frame)
+generate_operational_mode(DT.datetime(2024,1,8,0,0),24,'1109',name='CROPFA')
+generate_operational_mode(DT.datetime(2024,1,9,0,0),24,'1109',name='CROPFA')
+generate_operational_mode(DT.datetime(2024,1,10,0,0),24,'1109',name='CROPFA')
+generate_operational_mode(DT.datetime(2024,1,11,0,0),24,'1109',name='CROPFA')
+generate_operational_mode(DT.datetime(2024,1,12,0,0),24,'1109',name='CROPFA')
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")

@@ -65,11 +65,12 @@ def write_comment(current_state,current_time,Mode_settings,lat_LP,sun_angle):
     return comment
 
 def check_lat(lat_position,lat_limit):
+
+    if lat_limit == -999:
+        return False
     if lat_limit<0:
         return lat_position<lat_limit
-    else:
-        return lat_position>lat_limit 
-
+    return lat_position>lat_limit
 
 def Mode5(root, date, duration, relativeTime, Timeline_settings, configFile, Mode_settings={}):
     """Mode5
@@ -1072,7 +1073,6 @@ def SNAPSHOT(root, date, duration, relativeTime, Timeline_settings, configFile, 
             Final=pointing_altitude,
             Rate=0,
             Timeline_settings=Timeline_settings, configFile=configFile,
-            comment=comment,
         )
     
     relativeTime = Macros.SetCCDs_macro(
