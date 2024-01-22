@@ -768,11 +768,25 @@ def read_snaptimes(filename):
 
 
 
-#data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational/predict_mats_231212.txt')
-#generate_rad_measurements(data_frame)
-generate_operational_mode(DT.datetime(2024,1,8,0,0),24,'1109',name='CROPFA')
-# generate_operational_mode(DT.datetime(2024,1,9,0,0),24,'1109',name='CROPFA')
+# data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational/predict_mats_240102.txt')
+# generate_rad_measurements(data_frame)
+# generate_operational_mode(DT.datetime(2024,1,8,0,0),24,'1109',name='CROPFA')
 # generate_operational_mode(DT.datetime(2024,1,10,0,0),24,'1109',name='CROPFA')
-# generate_operational_mode(DT.datetime(2024,1,11,0,0),24,'1109',name='CROPFA')
 # generate_operational_mode(DT.datetime(2024,1,12,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,1,14,0,0),24,'1109',name='CROPFA')
 #generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+
+#data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational/predict_mats_240105.txt')
+#generate_rad_measurements(data_frame)
+#generate_operational_mode(DT.datetime(2024,1,16,0,0),24,'1109',name='CROPFA')
+#generate_operational_mode(DT.datetime(2024,1,17,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,1,19,0,0),23.95,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,1,20,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,1,22,0,0),24,'1109',name='CROPFA')
+generate_operational_mode(DT.datetime(2024,1,23,0,0),24,'1109',name='CROPFA')
+generate_operational_mode(DT.datetime(2024,1,25,0,0),24,'1109',name='CROPFA')
+generate_operational_mode(DT.datetime(2024,1,26,0,0),24,'1109',name='CROPFA')
+generate_operational_mode(DT.datetime(2024,1,28,0,0),24,'1109',name='CROPFA')
+generate_operational_mode(DT.datetime(2024,1,29,0,0),24,'1109',name='CROPFA')
+generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+
