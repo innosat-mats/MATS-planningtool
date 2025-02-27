@@ -804,13 +804,429 @@ def read_snaptimes(filename):
 # generate_operational_mode(DT.datetime(2024,2,8,0,0),24,'1109',name='CROPFA')
 # generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
 
+# data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational/predict_mats_240205.txt')
+# generate_rad_measurements(data_frame)
+# generate_operational_mode(DT.datetime(2024,2,10,0,0),23.95,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,2,13,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,2,16,0,0),24,'1109',name='CROPFA')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+
+#data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational/predict_mats_240220.txt')
+# #generate_rad_measurements(data_frame)
+# generate_operational_mode(DT.datetime(2024,2,24,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,2,27,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,3,4,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,3,7,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,3,10,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,3,13,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,3,16,0,0),24,'1109',name='CROPFA')
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+#%%
+
+# data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational/predict_mats_240318.txt')
+# generate_rad_measurements(data_frame)
+# generate_operational_mode(DT.datetime(2024,3,30,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,4,2,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,4,5,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,4,8,0,0),24,'1109',name='CROPFA')
+#generate_operational_mode(DT.datetime(2024,4,11,0,0),24,'1109',name='CROPFA')
+#generate_operational_mode(DT.datetime(2024,4,14,0,0),24,'1109',name='CROPFA')
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
 
 
-data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational/predict_mats_240205.txt')
-generate_rad_measurements(data_frame)
-generate_operational_mode(DT.datetime(2024,2,10,0,0),23.95,'1109',name='CROPFA')
-generate_operational_mode(DT.datetime(2024,2,13,0,0),24,'1109',name='CROPFA')
-generate_operational_mode(DT.datetime(2024,2,16,0,0),24,'1109',name='CROPFA')
-generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool/data/Operational_dump/")
+#%%
+# data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational/predict_mats_240425.txt')
+# generate_rad_measurements(data_frame)
+# generate_operational_mode(DT.datetime(2024,4,27,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,4,30,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,5,3,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,5,6,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,5,9,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,5,12,0,0),24,'1109',name='CROPFA')
+
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+#%%
+# generate_operational_mode(DT.datetime(2024,5,20,18,0),6,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,5,21,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,5,22,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,5,23,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,5,24,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,5,25,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,5,26,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,5,27,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,5,28,0,0),24,'1109',name='CROPFA')
+
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
 
 # %%
+# generate_operational_mode(DT.datetime(2024,5,29,0,0),6,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,5,30,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,5,31,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,6,1,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,6,2,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,6,3,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,6,4,0,0),24,'1109',name='CROPFA')
+# generate_operational_mode(DT.datetime(2024,6,5,0,0),24,'1109',name='CROPFA')
+
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+# %%
+# generate_operational_mode(DT.datetime(2024,6,8,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,6,9,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,6,10,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,6,11,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,6,12,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,6,13,0,0),24,'1109',name='CROPFN')
+
+# %%
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+# %%
+# # %%
+# generate_operational_mode(DT.datetime(2024,6,14,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,6,15,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,6,16,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,6,17,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,6,18,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,6,19,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,6,20,0,0),24,'1109',name='CROPFN')
+
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+# # %%
+# generate_operational_mode(DT.datetime(2024,6,21,0,0),24,'1109',name='CROPFN')
+# #generate_operational_mode(DT.datetime(2024,6,22,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,6,23,0,0),24,'1109',name='CROPFN')
+# #generate_operational_mode(DT.datetime(2024,6,24,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,6,25,0,0),24,'1109',name='CROPFN')
+# #generate_operational_mode(DT.datetime(2024,6,26,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,6,27,0,0),24,'1109',name='CROPFN')
+
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+# # %%
+# #generate_operational_mode(DT.datetime(2024,6,28,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,6,29,0,0),24,'1109',name='CROPFN')
+# #generate_operational_mode(DT.datetime(2024,6,30,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,7,1,0,0),24,'1109',name='CROPFN')
+# #generate_operational_mode(DT.datetime(2024,7,2,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,7,3,0,0),24,'1109',name='CROPFN')
+# #generate_operational_mode(DT.datetime(2024,7,4,0,0),24,'1109',name='CROPFN')
+
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+# # %%
+# generate_operational_mode(DT.datetime(2024,7,5,0,0),24,'1109',name='CROPFN')
+# #generate_operational_mode(DT.datetime(2024,7,6,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,7,7,0,0),24,'1109',name='CROPFN')
+# #generate_operational_mode(DT.datetime(2024,7,8,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,7,9,0,0),24,'1109',name='CROPFN')
+# #generate_operational_mode(DT.datetime(2024,7,10,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,7,11,0,0),24,'1109',name='CROPFN')
+
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+# %%
+#generate_operational_mode(DT.datetime(2024,7,13,0,0),24,'1109',name='CROPFN')
+#generate_operational_mode(DT.datetime(2024,7,15,0,0),24,'1109',name='CROPFN')
+#generate_operational_mode(DT.datetime(2024,7,17,0,0),24,'1109',name='CROPFN')
+#generate_operational_mode(DT.datetime(2024,7,19,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,7,21,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,7,23,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,7,25,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,7,27,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,7,29,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,7,31,0,0),24,'1109',name='CROPFN')
+
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+# %%
+# generate_operational_mode(DT.datetime(2024,8,2,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,8,4,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,8,6,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,8,8,0,0),24,'1109',name='CROPFN')
+
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+# #%%
+# generate_operational_mode(DT.datetime(2024,8,10,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,8,11,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,8,12,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,8,13,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,8,14,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,8,15,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,8,16,0,0),24,'1109',name='CROPFN')
+
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+# #%%
+# generate_operational_mode(DT.datetime(2024,8,17,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,8,18,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,8,19,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,8,20,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,8,21,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,8,22,0,0),24,'1109',name='CROPFN')
+
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+# generate_operational_mode(DT.datetime(2024,8,24,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,8,25,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,8,26,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,8,27,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,8,28,0,0),24,'1109',name='CROPFN')
+
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+# generate_operational_mode(DT.datetime(2024,8,29,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,8,30,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,8,31,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,9,1,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,9,2,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,9,3,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,9,4,0,0),24,'1109',name='CROPFN')
+
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+# generate_operational_mode(DT.datetime(2024,9,12,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,9,13,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,9,14,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,9,15,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,9,16,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,9,17,0,0),24,'1109',name='CROPFN')
+
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+
+# generate_operational_mode(DT.datetime(2024,9,21,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,9,22,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,9,23,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,9,24,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,9,25,0,0),24,'1109',name='CROPFN')
+# generate_operational_mode(DT.datetime(2024,9,26,0,0),24,'1109',name='CROPFN')
+
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+# generate_operational_mode(DT.datetime(2024,9,28,10,0),12,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,9,29,10,0),12,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,9,30,10,0),12,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,10,1,10,0),12,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,10,2,10,0),12,'1209',name='ALTTEST')
+
+
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+# generate_operational_mode(DT.datetime(2024,10,3,10,0),12,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,10,4,10,0),12,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,10,5,10,0),12,'1209',name='ALTTEST')
+
+
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+# generate_operational_mode(DT.datetime(2024,10,6,10,0),12,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,10,7,10,0),12,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,10,8,10,0),12,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,10,9,10,0),12,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,10,10,10,0),12,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,10,11,10,0),12,'1209',name='ALTTEST')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+# generate_operational_mode(DT.datetime(2024,10,12,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,10,13,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,10,14,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,10,15,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,10,16,8,0),16,'1209',name='ALTTEST')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+#generate_operational_mode(DT.datetime(2024,10,17,8,0),16,'1209',name='ALTTEST')
+#generate_operational_mode(DT.datetime(2024,10,18,8,0),16,'1209',name='ALTTEST')
+#generate_operational_mode(DT.datetime(2024,10,19,8,0),16,'1209',name='ALTTEST')
+#generate_operational_mode(DT.datetime(2024,10,20,8,0),16,'1209',name='ALTTEST')
+#generate_operational_mode(DT.datetime(2024,10,21,8,0),16,'1209',name='ALTTEST')
+#generate_operational_mode(DT.datetime(2024,10,22,8,0),16,'1209',name='ALTTEST')
+#generate_operational_mode(DT.datetime(2024,10,23,8,0),16,'1209',name='ALTTEST')
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+#generate_operational_mode(DT.datetime(2024,10,24,8,0),24,'1109',name='CROPFS')
+#generate_operational_mode(DT.datetime(2024,10,25,8,0),24,'1109',name='CROPFS')
+#generate_operational_mode(DT.datetime(2024,10,26,8,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,10,27,8,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,10,28,8,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,10,29,8,0),24,'1109',name='CROPFS')
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+# generate_operational_mode(DT.datetime(2024,11,1,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,2,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,3,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,4,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,5,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,6,8,0),16,'1209',name='ALTTEST')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+# generate_operational_mode(DT.datetime(2024,11,7,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,8,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,9,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,10,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,11,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,12,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,13,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,14,8,0),16,'1209',name='ALTTEST')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+#%% generate overview of entire mission (operational)
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational/")
+
+
+# generate_operational_mode(DT.datetime(2024,11,15,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,16,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,17,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,18,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,19,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,20,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,21,8,0),16,'1209',name='ALTTEST')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+
+# generate_operational_mode(DT.datetime(2024,11,22,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,23,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,24,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,25,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,26,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,27,8,0),16,'1209',name='ALTTEST')
+# generate_operational_mode(DT.datetime(2024,11,28,8,0),16,'1209',name='ALTTEST')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+# generate_operational_mode(DT.datetime(2024,11,29,8,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,11,30,8,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,1,8,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,2,8,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,3,8,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,4,8,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,5,8,0),24,'1109',name='CROPFS')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+# generate_operational_mode(DT.datetime(2024,12,6,8,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,7,8,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,8,8,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,9,8,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,10,8,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,11,8,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,12,8,0),24,'1109',name='CROPFS')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+# data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/rad_measurements_24_12_13.txt')
+# generate_rad_measurements(data_frame)
+# generate_operational_mode(DT.datetime(2024,12,14,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,15,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,16,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,17,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,18,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,19,0,0),24,'1109',name='CROPFS')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+#data_frame = read_snaptimes('/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/rad_measurements_24_12_13.txt')
+# generate_rad_measurements(data_frame)
+# generate_operational_mode(DT.datetime(2024,12,14,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,15,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,16,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,17,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,18,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,19,0,0),24,'1109',name='CROPFS')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+
+
+#generate_operational_mode(DT.datetime(2024,12,24,0,0),24,'1109',name='CROPFS')
+#generate_operational_mode(DT.datetime(2024,12,25,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,26,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,28,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,29,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,30,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2024,12,31,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,1,2,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,1,3,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,1,4,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,1,6,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,1,7,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,1,8,0,0),24,'1109',name='CROPFS')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+# generate_operational_mode(DT.datetime(2025,1,16,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,1,17,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,1,18,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,1,19,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,1,20,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,1,21,0,0),24,'1109',name='CROPFS')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+#generate_operational_mode(DT.datetime(2025,1,23,10,30),19,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,1,24,8,30),23,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,1,25,8,30),23,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,1,26,8,30),23,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,1,27,8,30),23,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,1,28,8,30),23,'1109',name='CROPFS')
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+# generate_operational_mode(DT.datetime(2025,1,30,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,1,31,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,2,1,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,2,2,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,2,3,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,2,4,0,0),24,'1109',name='CROPFS')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+#generate_operational_mode(DT.datetime(2025,2,6,0,0),24,'1109',name='CROPFS')
+#generate_operational_mode(DT.datetime(2025,2,7,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,2,8,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,2,9,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,2,10,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,2,11,0,0),24,'1109',name='CROPFS')
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+
+# generate_operational_mode(DT.datetime(2025,2,15,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,2,16,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,2,17,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,2,18,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,2,19,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,2,20,0,0),24,'1109',name='CROPFS')
+#generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+# generate_operational_mode(DT.datetime(2025,2,24,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,2,25,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,2,26,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,2,27,0,0),24,'1109',name='CROPFS')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+generate_operational_mode(DT.datetime(2025,3,3,0,0),24,'1109',name='CROPFS')
+generate_operational_mode(DT.datetime(2025,3,4,0,0),24,'1109',name='CROPFS')
+generate_operational_mode(DT.datetime(2025,3,5,0,0),24,'1109',name='CROPFS')
+generate_operational_mode(DT.datetime(2025,3,6,0,0),24,'1109',name='CROPFS')
+generate_operational_mode(DT.datetime(2025,3,7,0,0),24,'1109',name='CROPFS')
+generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
