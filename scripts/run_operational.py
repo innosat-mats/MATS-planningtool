@@ -18,7 +18,7 @@ def get_MATS_tle():
         raise LookupError('Could not get TLE. Probably too many queries to celestrack, please wait 2 hours and try again.')
     return tle
 
-def generate_operational_mode(startdate,duration,mode='1100',name='MODE1y',iterate=None,tle=None):
+def generate_operational_mode(startdate,duration,mode='1100',name='MODE1y',iterate=None,tle=None, yaw=True):
 
     if tle == None:
         tle = get_MATS_tle()
@@ -41,7 +41,10 @@ def generate_operational_mode(startdate,duration,mode='1100',name='MODE1y',itera
     configfile.output_dir = "data/Operational_dump/"
 
     if iterate != None:
-        configfile.OPT_Config_File["name"] = configfile.OPT_Config_File["name"] + iterate
+        configfile.OPT_Config_File["name"] = configfile.OPT_Config_File["name"] + str(iterate)
+
+    if configfile.Timeline_settings()["yaw_correction"] != yaw:
+        configfile.Timeline_settings()["yaw_correction"] = yaw
 
     configfile.CheckConfigFile()    
     configfile.Timeline_gen()
@@ -1224,9 +1227,19 @@ def read_snaptimes(filename):
 # generate_operational_mode(DT.datetime(2025,2,27,0,0),24,'1109',name='CROPFS')
 # generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
 
-generate_operational_mode(DT.datetime(2025,3,3,0,0),24,'1109',name='CROPFS')
-generate_operational_mode(DT.datetime(2025,3,4,0,0),24,'1109',name='CROPFS')
-generate_operational_mode(DT.datetime(2025,3,5,0,0),24,'1109',name='CROPFS')
-generate_operational_mode(DT.datetime(2025,3,6,0,0),24,'1109',name='CROPFS')
-generate_operational_mode(DT.datetime(2025,3,7,0,0),24,'1109',name='CROPFS')
-generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+# generate_operational_mode(DT.datetime(2025,3,3,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,3,4,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,3,5,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,3,6,0,0),24,'1109',name='CROPFS')
+# generate_operational_mode(DT.datetime(2025,3,7,0,0),24,'1109',name='CROPFS')
+# generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
+
+
+tle = get_MATS_tle()
+
+generate_operational_mode(DT.datetime(2026,6,25,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,6,26,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,6,27,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,6,28,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+
+generate_overview("/home/olemar/Projects/MATS/MATS-planningtool/data/Operational_dump/")    
