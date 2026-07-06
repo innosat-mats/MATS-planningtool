@@ -1237,9 +1237,11 @@ def read_snaptimes(filename):
 
 tle = get_MATS_tle()
 
-generate_operational_mode(DT.datetime(2026,6,25,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,6,26,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,6,27,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,6,28,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,7,3,12,0),6,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,7,3,18,0),6,'1109',name='CROPFN',yaw=True,iterate=1,tle = tle)
+generate_operational_mode(DT.datetime(2026,7,4,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,7,5,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,7,6,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+
 
 generate_overview("/home/olemar/Projects/MATS/MATS-planningtool/data/Operational_dump/")    
