@@ -88,9 +88,10 @@ def generate_star_staring_mode(startdate,duration,mode='3040',name='STAR',iterat
     return
 
 
-def generate_fullframe_snapshot(startdate, mode='3200',name='FFEXP' , snapshottimes = [], exptimes = [3000,3000], altitude=92500, iterate = None):
+def generate_fullframe_snapshot(startdate, mode='3200',name='FFEXP' , snapshottimes = [], exptimes = [3000,3000], altitude=92500, iterate = None, tle=None):
 
-    tle = get_MATS_tle()
+    if tle == None:
+        tle = get_MATS_tle()
 
     configfile = configFile.configFile(
         "data/Operational/configfile_" + mode + "_" + name + ".json",
@@ -113,6 +114,7 @@ def generate_fullframe_snapshot(startdate, mode='3200',name='FFEXP' , snapshotti
 
     configfile.output_dir = "data/Operational_dump/"
 
+    configfile.SNAPSHOT_settings()['pointing_altitude'] = altitude
     configfile.SNAPSHOT_settings()['ExpTimes'] = exptimes
     if len(snapshottimes)==1:    
         configfile.SNAPSHOT_settings()['SnapshotTimes'] = [DT.datetime.strftime(snapshottimes[0],"%Y/%m/%d %H:%M:%S")]
@@ -1234,14 +1236,60 @@ def read_snaptimes(filename):
 # generate_operational_mode(DT.datetime(2025,3,7,0,0),24,'1109',name='CROPFS')
 # generate_overview("/home/olemar/Projects/Universitetet/MATS/MATS-planningtool-bak/data/Operational_dump/")
 
+# generate_operational_mode(DT.datetime(2026,7,3,12,0),6,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+# generate_operational_mode(DT.datetime(2026,7,3,18,0),6,'1109',name='CROPFN',yaw=True,iterate=1,tle = tle)
+# generate_operational_mode(DT.datetime(2026,7,4,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+# generate_operational_mode(DT.datetime(2026,7,5,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+# generate_operational_mode(DT.datetime(2026,7,6,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+# generate_overview("/home/olemar/Projects/MATS/MATS-planningtool/data/Operational_dump/")    
+
+
+# generate_operational_mode(DT.datetime(2026,7,7,0,0),24,'3066',name='DRKBNF',yaw=True,iterate=0,tle = tle)
+# generate_operational_mode(DT.datetime(2026,7,10,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+# generate_overview("/home/olemar/Projects/MATS/MATS-planningtool/data/Operational_dump/")    
+
+# # celestrak was unreachable - using TLE extracted from data/Operational_dump timelines
+# # generated 2026-07-09 (epoch 2026-07-08 ~23:36 UTC). Switch back to get_MATS_tle() once
+# # celestrak is back up.
+# tle = [
+#     '1 54227U 22147A   26189.98353321  .00001175  00000+0  85959-4 0  9999',
+#     '2 54227  97.6828 191.4875 0014196 121.6076 238.6538 15.05484214201047',
+# ]
+
+# snapshottimes = [
+#     DT.datetime(2026,7,11,1,0),
+#     DT.datetime(2026,7,11,2,30),
+#     DT.datetime(2026,7,11,4,0),
+#     DT.datetime(2026,7,11,13,0),
+#     DT.datetime(2026,7,11,14,30),
+#     DT.datetime(2026,7,11,16,0),
+# ]
+# startdate = snapshottimes[0] - DT.timedelta(minutes=45)
+
+# generate_fullframe_snapshot(
+#    startdate,
+#    mode='3205', name='FFEXP',
+#    snapshottimes=snapshottimes,
+#    exptimes=[3000, 3000],
+#    altitude=220000,
+#    tle=tle,
+# )
+
+
+# generate_operational_mode(DT.datetime(2026,7,12,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+# generate_operational_mode(DT.datetime(2026,7,13,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+# generate_operational_mode(DT.datetime(2026,7,14,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+# generate_operational_mode(DT.datetime(2026,7,15,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+
+# generate_overview("/home/olemar/Projects/MATS/MATS-planningtool/data/Operational_dump/")    
 
 tle = get_MATS_tle()
 
-generate_operational_mode(DT.datetime(2026,7,3,12,0),6,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,7,3,18,0),6,'1109',name='CROPFN',yaw=True,iterate=1,tle = tle)
-generate_operational_mode(DT.datetime(2026,7,4,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,7,5,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,7,6,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
-
+generate_operational_mode(DT.datetime(2026,7,16,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,7,17,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,7,18,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,7,19,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,7,20,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,7,21,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
 
 generate_overview("/home/olemar/Projects/MATS/MATS-planningtool/data/Operational_dump/")    
