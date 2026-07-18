@@ -9,6 +9,8 @@ import os
 import pandas as pd
 import ast
 
+os.chdir("/home/julie/nadir/MATS-planningtool/")
+
 def get_MATS_tle():
     query = 'https://celestrak.org/NORAD/elements/gp.php?CATNR=54227&FORMAT=tle'
     celestrak = R.session()
@@ -1283,13 +1285,22 @@ def read_snaptimes(filename):
 
 # generate_overview("/home/olemar/Projects/MATS/MATS-planningtool/data/Operational_dump/")    
 
+#tle = get_MATS_tle()
+
+#generate_operational_mode(DT.datetime(2026,7,16,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,7,17,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,7,18,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,7,19,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,7,20,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,7,21,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+
 tle = get_MATS_tle()
 
-generate_operational_mode(DT.datetime(2026,7,16,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,7,17,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,7,18,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,7,19,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,7,20,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,7,21,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,7,22,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,7,23,0,0),23.9,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,7,24,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,7,25,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,7,26,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,7,27,0,0),24,'1109',name='CROPFN',yaw=True,iterate=0,tle = tle)
 
-generate_overview("/home/olemar/Projects/MATS/MATS-planningtool/data/Operational_dump/")    
+generate_overview("/home/julie/nadir/MATS-planningtool/data/Operational_dump/")
