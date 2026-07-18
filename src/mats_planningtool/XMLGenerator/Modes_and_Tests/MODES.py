@@ -439,7 +439,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
             correct_state = (sattelite_state["UV_on"] == uv_on) and (sattelite_state["Nadir_on"] == nadir_on)
             #print('change state %s ' % (not correct_state))
 
-            if (not correct_state):
+            if (not correct_state) and (relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
                 print('Changing state')
                 changetime.append(t)
 
@@ -450,7 +450,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                     current_state = "Mode1_day_UV_on"
                 elif nadir_on and ~uv_on:
                     current_state = "Mode1_night_UV_off"
-                elif ~nadir_on and ~uv_on: 
+                elif ~nadir_on and ~uv_on:
                     current_state = "Mode1_day_UV_off"
                 else:
                     raise Exception
@@ -473,7 +473,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                 Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
                 Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
                 Logger.debug("")
-            
+
             all_states.append(current_state)
             ############### End of SCI-mode operation planner #################
 
