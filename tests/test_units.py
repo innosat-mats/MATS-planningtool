@@ -10,6 +10,7 @@ from mats_planningtool.Library import utc_to_onboardTime
 from mats_planningtool.OrbitSimulator.MatsBana import Satellite_Simulator
 from mats_planningtool.OrbitSimulator.MatsBana import findpitch
 from mats_planningtool.XMLGenerator.Modes_and_Tests.MODES import check_lat
+from mats_planningtool.XMLGenerator.Modes_and_Tests.MODES import check_lon
 import ephem
 from skyfield import api
 import skyfield.sgp4lib as sgp4lib
@@ -122,6 +123,36 @@ def test_check_lat():
     assert check_lat(60,lat_limit) == False
 
 
+def test_check_lon():
+    # disabled gate never idles
+    assert check_lon(0, [-999, -999]) == False
+    assert check_lon(179, [-999, -999]) == False
+    assert check_lon(-179, [-999, -999]) == False
+
+    # direct band (lon_min <= lon_max): idle strictly between the two values
+    lon_gate = [-100, 100]
+    assert check_lon(-100, lon_gate) == True
+    assert check_lon(0, lon_gate) == True
+    assert check_lon(100, lon_gate) == True
+    assert check_lon(-101, lon_gate) == False
+    assert check_lon(101, lon_gate) == False
+    assert check_lon(180, lon_gate) == False
+    assert check_lon(-180, lon_gate) == False
+
+    # wrapped band (lon_min > lon_max): idle across the +/-180 antimeridian
+    lon_gate = [100, -100]
+    assert check_lon(150, lon_gate) == True
+    assert check_lon(180, lon_gate) == True
+    assert check_lon(-180, lon_gate) == True
+    assert check_lon(-150, lon_gate) == True
+    assert check_lon(100, lon_gate) == True
+    assert check_lon(-100, lon_gate) == True
+    assert check_lon(0, lon_gate) == False
+    assert check_lon(99, lon_gate) == False
+    assert check_lon(-99, lon_gate) == False
+
+
 if __name__ == "__main__":
 
     test_check_lat()
+    test_check_lon()

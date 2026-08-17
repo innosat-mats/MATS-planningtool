@@ -207,6 +207,23 @@ def CheckConfigFile(configFile):
                 if (not (-90 <= Operational_Science_Mode_settings[key] <= 90)) and (Operational_Science_Mode_settings[key] != -999):
                     Logger.error('Operational_Science_Mode_settings["lat"]')
                     raise ValueError
+            elif key == "lon_gate":
+                lon_gate = Operational_Science_Mode_settings[key]
+                # -999 disables the gate, but only as a matched pair — check_lon() (MODES.py)
+                # only treats [-999, -999] as disabled, so a lone -999 in one slot would
+                # otherwise silently fall into the direct-band branch there and idle the
+                # payload almost globally (-999 <= real longitude is always true).
+                if not (
+                    isinstance(lon_gate, list)
+                    and len(lon_gate) == 2
+                    and all(type(v) in (int, float) for v in lon_gate)
+                    and (
+                        lon_gate == [-999, -999]
+                        or all(-180 <= v <= 180 for v in lon_gate)
+                    )
+                ):
+                    Logger.error('Operational_Science_Mode_settings["lon_gate"]')
+                    raise ValueError
             elif key == 'TEXPIMS':
                 if not (type(Operational_Science_Mode_settings[key]) == int):
                     Logger.error('Operational_Science_Mode_settings["TEXPIMS"]')

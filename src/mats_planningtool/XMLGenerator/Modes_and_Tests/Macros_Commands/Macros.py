@@ -31,6 +31,7 @@ def Mode1(
     UV_on, Nadir_on,
     Timeline_settings, configFile,
     comment="",
+    already_idle=False,
 ):
     """ Macro that corresponds to pointing towards a Limb altitude in Operational Mode.
 
@@ -47,6 +48,9 @@ def Mode1(
         Nadir_on: whether to turn on Nadir camera.
         Timeline_settings (dict): Dictionary containing the settings of the Timeline given in either the *Science_Mode_Timeline* or the *Configuration File*.
         comment (str): A comment for the macro. Will be printed in the genereated XML-file.
+        already_idle (bool): Set True when the payload is already known to be in idle mode
+            (e.g. resuming from a longitude idle-gate), to skip the otherwise-redundant
+            leading TC_pafMODE=2 command.
 
     Returns:
         relativeTime (float): Time in seconds equal to the input "relativeTime" with added delay from the scheduling of commands.
@@ -55,9 +59,10 @@ def Mode1(
     comment = comment + ", Operational_Limb_Pointing_macro"
 
 
-    relativeTime = Commands.TC_pafMode(
-        root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment
-    )
+    if not already_idle:
+        relativeTime = Commands.TC_pafMode(
+            root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment
+        )
 
     #Change UV
     if UV_on and (sattelite_state["UV_on"]):
@@ -149,6 +154,7 @@ def Operational_Limb_Pointing_macro(
     Timeline_settings, configFile,
     TEXPIMS_fixed = 0,
     comment="",
+    already_idle=False,
 ):
     """ Macro that corresponds to pointing towards a Limb altitude in Operational Mode.
 
@@ -166,6 +172,9 @@ def Operational_Limb_Pointing_macro(
         pointing_altitude (int): The altitude of the tangential point [m].
         Timeline_settings (dict): Dictionary containing the settings of the Timeline given in either the *Science_Mode_Timeline* or the *Configuration File*.
         comment (str): A comment for the macro. Will be printed in the genereated XML-file.
+        already_idle (bool): Set True when the payload is already known to be in idle mode
+            (e.g. resuming from a longitude idle-gate), to skip the otherwise-redundant
+            leading TC_pafMODE=2 command.
 
     Returns:
         relativeTime (float): Time in seconds equal to the input "relativeTime" with added delay from the scheduling of commands.
@@ -182,9 +191,10 @@ def Operational_Limb_Pointing_macro(
         TEXPIMS = TEXPIMS_fixed
 
 
-    relativeTime = Commands.TC_pafMode(
-        root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment
-    )
+    if not already_idle:
+        relativeTime = Commands.TC_pafMode(
+            root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment
+        )
 
     # relativeTime_OperationalMode = relativeTime+Timeline_settings['pointing_stabilization']
     relativeTime = Commands.TC_acfLimbPointingAltitudeOffset(

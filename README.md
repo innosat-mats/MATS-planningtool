@@ -96,6 +96,8 @@ The programme name after the underscore (e.g. `CROPFN`, `CROPFS`, `STAR`) is a f
 
 Inside the config JSON, `version_ID` (e.g. `"02"`) acts as a **minor version** tag — incremented when settings are tweaked without changing the major version. Both are embedded in output filenames so any generated timeline can be traced back to the exact config revision that produced it:
 
+**Bump the major version (last two digits) whenever a config's behaviour changes in a way that affects the generated commands** — e.g. enabling `lon_gate` (see below) on a programme that previously ran without it. The science mode type digit (second digit) stays the same, since the underlying Mode (1, 2, 5, …) hasn't changed — only the major version changes, so `1109_CROPFN` (no gate) becomes e.g. `1110_CROPFN` (gate enabled) rather than silently editing the `1109` config in place.
+
 ```
 Science_Mode_Timeline_<ID>_<start_date><generation_date><version_ID><programme>.json
 Science_Mode_Timeline_1109_23103023102502CROPFS.json
@@ -230,6 +232,14 @@ The four possible states in the XML comments are:
 | `Mode1_night_UV_off` | OFF | ON |
 | `Mode1_day_UV_on` | ON | OFF |
 | `Mode1_day_UV_off` | OFF | OFF |
+
+**Longitude idle gate** — optional, applies to Mode1, Mode2, and Mode5. Set `lon_gate: [lon_min, lon_max]` (degrees) in `Operational_Science_Mode_settings` to put the payload in idle mode (`TC_pafMODE=2`) whenever the estimated LP longitude falls inside the band, resuming normal operation once it exits. Defaults to `[-999, -999]` (disabled) if omitted, so existing configs are unaffected. Per the versioning convention above, turning this on for a programme should bump the config's major version (new 4-digit ID) rather than editing the existing one in place.
+
+**Which side is idle is not symmetric in the two numbers** — the idle band is the arc swept going from `lon_min` to `lon_max` in the increasing/eastward direction, wrapping across the ±180° antimeridian if `lon_min > lon_max`:
+- `lon_gate: [-100, 100]` → `lon_min <= lon_max`, so idle is the *direct* interval −100° to 100° (200° wide — Americas/Atlantic/Europe/Africa/Middle East). Active is the 160° Pacific/East-Asia complement.
+- `lon_gate: [100, -100]` → `lon_min > lon_max`, so idle *wraps*: 100° → 180° → −180° → −100° (160° wide — Pacific/East Asia). Active is the 200° complement above.
+
+To make the resolved band unambiguous at generation time, `XML_gen` logs a line like `lon_gate [100, -100] -> idle 160.0° (100 to -100, wraps antimeridian), active 200.0°` whenever the gate is enabled. Use `scripts/plot_longitude_gate.py` to visualise it on a world map before committing to a config.
 
 ### Calibration and Special Modes
 

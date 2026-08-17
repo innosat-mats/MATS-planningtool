@@ -219,6 +219,7 @@ class configFile:
             'log_timestep': Used only in *XML_gen*. Sets the frequency of data being logged [s] for Mode1-2. Only determines how much of simulated data is logged for debugging purposes. (int) \n
             'timestep': Sets the timestep [s] of the XML generator simulation of Mode1-2. Will impact accuracy of command generation but also drastically changes the runtime of XML-gen. (int) \n
             'Choose_Mode5CCDMacro': Applies only to Mode5! Sets the CCD macro to be used by Mode5. Used as input to *CCD_macro_settings* in the ConfigFile (str).
+            'lon_gate': Optional. Applies to Mode1, Mode2, and Mode5. [lon_min, lon_max] in degrees defining a longitude band (based on the estimated LP longitude) in which the payload is put in idle mode. lon_min > lon_max means the band wraps across +/-180 degrees. Defaults to [-999, -999] (disabled) if omitted. (list of int/float) \n
 
         Returns:
             (:obj:`dict`): settings
