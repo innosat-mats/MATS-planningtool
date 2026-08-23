@@ -118,8 +118,11 @@ def Mode5(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
     **CCD_Macro:** Chosen in the settings of the Mode. \n
 
     If *Operational_Science_Mode_settings['lon_gate']* is set (not [-999, -999]), the payload
-    is put in idle mode (TC_pafMODE=2) whenever the estimated LP longitude falls inside the
-    gate, and resumed (TC_pafMODE=1, via Operational_Limb_Pointing_macro) once it leaves.
+    idles inside the gate. By default this puts the whole payload in idle mode (TC_pafMODE=2),
+    resumed (TC_pafMODE=1, via Operational_Limb_Pointing_macro) once it leaves. If
+    *Operational_Science_Mode_settings['lon_gate_limb_only']* is also set to True, only the
+    limb channels (CCDSEL 1, 2, 4, 8, 16, 32) are idled (TEXPMS=0) while Nadir and the
+    photometers keep running.
 
     """
 
@@ -129,17 +132,22 @@ def Mode5(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
 
     Mode_settings = dict_comparator(Mode_settings, Mode_settings_ConfigFile, Logger)
 
-    CCD_settings = configFile.CCD_macro_settings(
+    CCD_settings = copy.deepcopy(configFile.CCD_macro_settings(
         Mode_settings["Choose_Mode5CCDMacro"]
-    )
+    ))
     PM_settings = configFile.PM_settings()
 
     Mode_name = sys._getframe(0).f_code.co_name.replace("", "")
     comment = Mode_name + " starting date: " + str(date) + ", " + str(Mode_settings)
 
     lon_gate = Mode_settings.get("lon_gate", [-999, -999])
+    lon_gate_limb_only = Mode_settings.get("lon_gate_limb_only", False)
     if lon_gate != [-999, -999]:
         Logger.info(describe_lon_gate(lon_gate))
+        Logger.info("lon_gate_limb_only: " + str(lon_gate_limb_only))
+
+    LIMB_CCDSELS = (1, 2, 4, 8, 16, 32)
+    original_limb_TEXPMS = {ccdsel: CCD_settings[ccdsel]["TEXPMS"] for ccdsel in LIMB_CCDSELS}
 
     # pointing_altitude = Mode_settings['pointing_altitude']
 
@@ -166,6 +174,48 @@ def Mode5(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
     MATS_skyfield = skyfield.api.EarthSatellite(TLE[0], TLE[1])
 
     lon_LP = zeros((duration, 1))
+
+    def enter_limb_idle(relativeTime, comment_t):
+        """Idle only the limb channels: zero their TEXPMS, leaving Nadir and the
+        photometers running on their existing (unchanged) configuration."""
+        CCDSEL, NCCD, TEXPIOFS, TEXPIMS_sync = SyncArgCalculator(
+            CCD_settings,
+            Timeline_settings["CCDSYNC_ExtraOffset"],
+            Timeline_settings["CCDSYNC_ExtraIntervalTime"],
+        )
+        if Mode_settings['TEXPIMS'] != 0:
+            TEXPIMS_sync = Mode_settings['TEXPIMS']
+        relativeTime = Commands.TC_pafMode(
+            root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment_t,
+        )
+        for ccdsel in LIMB_CCDSELS:
+            CCD_settings[ccdsel]["TEXPMS"] = 0
+        relativeTime = Macros.SetCCDs_macro(
+            root, relativeTime, CCD_settings=CCD_settings, TEXPIMS=TEXPIMS_sync,
+            CCDList=list(LIMB_CCDSELS),
+            Timeline_settings=Timeline_settings, configFile=configFile, comment=comment_t,
+        )
+        relativeTime = Commands.TC_pafMode(
+            root, relativeTime, MODE=1, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment_t,
+        )
+        return relativeTime
+
+    def exit_limb_idle(relativeTime):
+        """Restore the limb channels to their normal exposure settings via the usual
+        Operational_Limb_Pointing_macro (Nadir/PM were never touched, so re-sending
+        their settings here is harmless)."""
+        for ccdsel in LIMB_CCDSELS:
+            CCD_settings[ccdsel]["TEXPMS"] = original_limb_TEXPMS[ccdsel]
+        return Macros.Operational_Limb_Pointing_macro(
+            root,
+            relativeTime,
+            CCD_settings,
+            PM_settings=PM_settings,
+            pointing_altitude=pointing_altitude,
+            Timeline_settings=Timeline_settings, configFile=configFile,
+            TEXPIMS_fixed=Mode_settings['TEXPIMS'],
+            comment=comment,
+        )
 
     t = -1
     new_relativeTime = relativeTime
@@ -203,7 +253,11 @@ def Mode5(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
         idle_target = check_lon(lon_LP[t], lon_gate)
 
         if t == 0:
-            if idle_target:
+            if idle_target and lon_gate_limb_only:
+                comment_t = comment + ", Mode5_limb_idle (longitude gate): " + str(current_time)
+                new_relativeTime = enter_limb_idle(relativeTime, comment_t)
+                idle_on = True
+            elif idle_target:
                 comment_t = comment + ", Mode5_idle (longitude gate): " + str(current_time)
                 new_relativeTime = Commands.TC_pafMode(
                     root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment_t,
@@ -223,12 +277,21 @@ def Mode5(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                 idle_on = False
             continue
 
-        if idle_target and (not idle_on) and (relativeTime + mode_change_time) <= Timeline_settings["duration"]["duration"]:
+        if idle_target and lon_gate_limb_only and (not idle_on) and (relativeTime + mode_change_time) <= Timeline_settings["duration"]["duration"]:
+            comment_t = comment + ", Mode5_limb_idle (longitude gate): " + str(current_time)
+            new_relativeTime = enter_limb_idle(relativeTime, comment_t)
+            idle_on = True
+
+        elif idle_target and (not idle_on) and (relativeTime + mode_change_time) <= Timeline_settings["duration"]["duration"]:
             comment_t = comment + ", Mode5_idle (longitude gate): " + str(current_time)
             new_relativeTime = Commands.TC_pafMode(
                 root, relativeTime, MODE=2, Timeline_settings=Timeline_settings, configFile=configFile, comment=comment_t,
             )
             idle_on = True
+
+        elif (not idle_target) and idle_on and lon_gate_limb_only and (relativeTime + mode_change_time) <= Timeline_settings["duration"]["duration"]:
+            new_relativeTime = exit_limb_idle(relativeTime)
+            idle_on = False
 
         elif (not idle_target) and idle_on and (relativeTime + mode_change_time) <= Timeline_settings["duration"]["duration"]:
             new_relativeTime = Macros.Operational_Limb_Pointing_macro(
@@ -327,6 +390,12 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
     Stop/Start Nadir at dusk/dawn below MATS.
     Simulates MATS and the LP with or without yaw movement to be able to predict and schedule commands in the XML-file.
 
+    If *Operational_Science_Mode_settings['lon_gate']* is set (not [-999, -999]), the payload
+    idles inside the gate. By default this puts the whole payload in idle mode (TC_pafMODE=2).
+    If *Operational_Science_Mode_settings['lon_gate_limb_only']* is also set to True, only the
+    limb channels (UV1, UV2, IR1-4) are idled (TEXPMS=0) while Nadir and the photometers keep
+    running per their usual day/night schedule.
+
     """
 
     zeros = pylab.zeros
@@ -364,8 +433,10 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
     pointing_altitude = Timeline_settings["StandardPointingAltitude"]
     lat = Mode_settings["lat"]
     lon_gate = Mode_settings.get("lon_gate", [-999, -999])
+    lon_gate_limb_only = Mode_settings.get("lon_gate_limb_only", False)
     if lon_gate != [-999, -999]:
         Logger.info(describe_lon_gate(lon_gate))
+        Logger.info("lon_gate_limb_only: " + str(lon_gate_limb_only))
 
     # Altitude in km where sun is deemed to reflect in atmosphere, determining night and day below satellite"
     heightAboveSurface = 35000
@@ -490,7 +561,23 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
 
         if t == 0:
 
-            if check_lon(lon_LP[t], lon_gate):
+            if check_lon(lon_LP[t], lon_gate) and lon_gate_limb_only:
+                current_state = "Mode1_limb_idle"
+                nadir_on = sun_angle[t] > MATS_nadir_eclipse_angle
+                comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
+                new_relativeTime = Macros.Mode1(
+                    root,
+                    relativeTime,
+                    CCD_settings,
+                    TEXPIMS,
+                    sattelite_state,
+                    UV_on = False, Nadir_on = nadir_on, IR_on = False,
+                    Timeline_settings=Timeline_settings, configFile=configFile,
+                    comment=comment,
+                )
+                sattelite_state["idle_on"] = False
+
+            elif check_lon(lon_LP[t], lon_gate):
                 current_state = "Mode1_idle"
                 comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
                 new_relativeTime = Commands.TC_pafMode(
@@ -582,7 +669,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
 
             idle_target = check_lon(lon_LP[t], lon_gate)
 
-            if idle_target and (not sattelite_state["idle_on"]) and (relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
+            if idle_target and (not lon_gate_limb_only) and (not sattelite_state["idle_on"]) and (relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
                 print('Changing state')
                 changetime.append(t)
 
@@ -602,7 +689,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                 Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
                 Logger.debug("")
 
-            elif (not idle_target) and sattelite_state["idle_on"] and (relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
+            elif (not idle_target) and (not lon_gate_limb_only) and sattelite_state["idle_on"] and (relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
                 print('Changing state')
                 changetime.append(t)
 
@@ -641,7 +728,7 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                 Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
                 Logger.debug("")
 
-            elif not sattelite_state["idle_on"]:
+            elif (not lon_gate_limb_only) and not sattelite_state["idle_on"]:
 
                 #Check status
                 nadir_on = sun_angle[t] > MATS_nadir_eclipse_angle
@@ -685,6 +772,57 @@ def Mode1(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                     Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
                     Logger.debug("")
 
+            elif lon_gate_limb_only:
+
+                #Check status: fold the longitude gate into the desired UV/IR state — the
+                #gate forces both limb groups off, Nadir keeps following the day/night check
+                #regardless, since it's not a limb channel.
+                nadir_on = sun_angle[t] > MATS_nadir_eclipse_angle
+                uv_on = check_lat(lat_LP[t],lat) and (not idle_target)
+                ir_on = not idle_target
+                current_uv_on = sattelite_state.get("UV_on", True)
+                current_ir_on = sattelite_state.get("IR_on", True)
+                current_nadir_on = sattelite_state.get("Nadir_on", True)
+                correct_state = (current_uv_on == uv_on) and (current_ir_on == ir_on) and (current_nadir_on == nadir_on)
+
+                if (not correct_state) and (relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
+                    print('Changing state')
+                    changetime.append(t)
+
+                    Logger.debug("")
+                    if idle_target:
+                        current_state = "Mode1_limb_idle"
+                    elif nadir_on and uv_on:
+                        current_state = "Mode1_night_UV_on"
+                    elif ~nadir_on and uv_on:
+                        current_state = "Mode1_day_UV_on"
+                    elif nadir_on and ~uv_on:
+                        current_state = "Mode1_night_UV_off"
+                    elif ~nadir_on and ~uv_on:
+                        current_state = "Mode1_day_UV_off"
+                    else:
+                        raise Exception
+                    comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
+
+                    new_relativeTime = Macros.Mode1(
+                        root,
+                        relativeTime,
+                        CCD_settings,
+                        TEXPIMS,
+                        sattelite_state,
+                        UV_on = uv_on, Nadir_on = nadir_on, IR_on = ir_on,
+                        Timeline_settings=Timeline_settings, configFile=configFile,
+                        comment=comment,
+                    )
+                    sattelite_state["idle_on"] = False
+
+                    Logger.debug(current_state)
+                    Logger.debug("current_time: " + str(current_time))
+                    Logger.debug("lat_MATS [degrees]: " + str(lat_MATS[t]))
+                    Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
+                    Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
+                    Logger.debug("")
+
             all_states.append(current_state)
             ############### End of SCI-mode operation planner #################
 
@@ -705,6 +843,12 @@ def Mode2(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
 
     Stop/Start Nadir at dusk/dawn below MATS.
     Simulates MATS and the LP with or without yaw movement to be able to predict and schedule commands in the XML-file.
+
+    If *Operational_Science_Mode_settings['lon_gate']* is set (not [-999, -999]), the payload
+    idles inside the gate. By default this puts the whole payload in idle mode (TC_pafMODE=2).
+    If *Operational_Science_Mode_settings['lon_gate_limb_only']* is also set to True, only the
+    IR limb channels are idled (TEXPMS=0) while Nadir and the photometers keep running per
+    their usual day/night schedule.
 
     """
 
@@ -743,8 +887,10 @@ def Mode2(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
     pointing_altitude = Timeline_settings["StandardPointingAltitude"]
     lat = Mode_settings["lat"]
     lon_gate = Mode_settings.get("lon_gate", [-999, -999])
+    lon_gate_limb_only = Mode_settings.get("lon_gate_limb_only", False)
     if lon_gate != [-999, -999]:
         Logger.info(describe_lon_gate(lon_gate))
+        Logger.info("lon_gate_limb_only: " + str(lon_gate_limb_only))
 
     # Altitude in km where sun is deemed to reflect in atmosphere, determining night and day below satellite"
     heightAboveSurface = 35000
@@ -868,7 +1014,23 @@ def Mode2(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
 
         if t == 0:
 
-            if check_lon(lon_LP[t], lon_gate):
+            if check_lon(lon_LP[t], lon_gate) and lon_gate_limb_only:
+                current_state = "Mode2_limb_idle"
+                nadir_on = sun_angle[t] > MATS_nadir_eclipse_angle
+                comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
+                new_relativeTime = Macros.Mode1(
+                    root,
+                    relativeTime,
+                    CCD_settings,
+                    TEXPIMS,
+                    sattelite_state,
+                    UV_on = False, Nadir_on = nadir_on, IR_on = False,
+                    Timeline_settings=Timeline_settings, configFile=configFile,
+                    comment=comment,
+                )
+                sattelite_state["idle_on"] = False
+
+            elif check_lon(lon_LP[t], lon_gate):
                 current_state = "Mode2_idle"
                 comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
                 new_relativeTime = Commands.TC_pafMode(
@@ -920,7 +1082,7 @@ def Mode2(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
 
             idle_target = check_lon(lon_LP[t], lon_gate)
 
-            if idle_target and (not sattelite_state["idle_on"]) and (new_relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
+            if idle_target and (not lon_gate_limb_only) and (not sattelite_state["idle_on"]) and (new_relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
 
                 Logger.debug("")
                 current_state = "Mode2_idle"
@@ -938,7 +1100,7 @@ def Mode2(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                 Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
                 Logger.debug("")
 
-            elif (not idle_target) and sattelite_state["idle_on"] and (new_relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
+            elif (not idle_target) and (not lon_gate_limb_only) and sattelite_state["idle_on"] and (new_relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
 
                 Logger.debug("")
                 nadir_on = sun_angle[t] > MATS_nadir_eclipse_angle
@@ -964,6 +1126,45 @@ def Mode2(root, date, duration, relativeTime, Timeline_settings, configFile, Mod
                 Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
                 Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
                 Logger.debug("")
+
+            elif lon_gate_limb_only:
+
+                # Fold the longitude gate into the desired IR state — the gate forces IR
+                # off, Nadir keeps following the day/night check regardless, since it's
+                # not a limb channel. UV is never used in Mode2.
+                nadir_on = sun_angle[t] > MATS_nadir_eclipse_angle
+                ir_on = not idle_target
+                current_ir_on = sattelite_state.get("IR_on", True)
+                current_nadir_on = sattelite_state.get("Nadir_on", True)
+                correct_state = (current_ir_on == ir_on) and (current_nadir_on == nadir_on)
+
+                if (not correct_state) and (new_relativeTime+mode_change_time) <= Timeline_settings["duration"]["duration"]:
+
+                    Logger.debug("")
+                    if idle_target:
+                        current_state = "Mode2_limb_idle"
+                    else:
+                        current_state = "Mode2_night" if nadir_on else "Mode2_day"
+                    comment = write_comment(current_state,current_time,Mode_settings,lat_LP[t],sun_angle[t])
+
+                    new_relativeTime = Macros.Mode1(
+                        root,
+                        relativeTime,
+                        CCD_settings,
+                        TEXPIMS,
+                        sattelite_state,
+                        UV_on = False, Nadir_on = nadir_on, IR_on = ir_on,
+                        Timeline_settings=Timeline_settings, configFile=configFile,
+                        comment=comment,
+                    )
+                    sattelite_state["idle_on"] = False
+
+                    Logger.debug(current_state)
+                    Logger.debug("current_time: " + str(current_time))
+                    Logger.debug("lat_MATS [degrees]: " + str(lat_MATS[t]))
+                    Logger.debug("lat_LP [degrees]: " + str(lat_LP[t]))
+                    Logger.debug("sun_angle [degrees]: " + str(sun_angle[t]))
+                    Logger.debug("")
 
             elif not sattelite_state["idle_on"]:
 

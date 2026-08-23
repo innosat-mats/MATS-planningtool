@@ -241,6 +241,8 @@ The four possible states in the XML comments are:
 
 To make the resolved band unambiguous at generation time, `XML_gen` logs a line like `lon_gate [100, -100] -> idle 160.0° (100 to -100, wraps antimeridian), active 200.0°` whenever the gate is enabled. Use `scripts/plot_longitude_gate.py` to visualise it on a world map before committing to a config.
 
+**Limb-only idle gate** — optional, applies to Mode1, Mode2, and Mode5, and only has an effect when `lon_gate` is enabled. Set `lon_gate_limb_only: true` in `Operational_Science_Mode_settings` to idle only the limb channels (UV1, UV2, IR1-4 — CCDSEL 1, 2, 4, 8, 16, 32) inside the gate, instead of putting the whole payload in idle mode. Nadir and the photometers keep running per their usual day/night schedule the whole time, in and out of the gate. Defaults to `false` (whole-payload idle, as before) if omitted. Entering/leaving the gate still briefly cycles `TC_pafMODE` 2→1 to reconfigure the limb CCDs' exposure settings — the same brief pulse already used elsewhere (e.g. the UV day/night toggle) to apply `TC_pafCCDMain` changes — so Nadir/PM see a momentary interruption at each gate boundary, not for the whole time inside the gate.
+
 ### Calibration and Special Modes
 
 | Mode | Purpose |

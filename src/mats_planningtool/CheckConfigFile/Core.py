@@ -224,6 +224,10 @@ def CheckConfigFile(configFile):
                 ):
                     Logger.error('Operational_Science_Mode_settings["lon_gate"]')
                     raise ValueError
+            elif key == "lon_gate_limb_only":
+                if not isinstance(Operational_Science_Mode_settings[key], bool):
+                    Logger.error('Operational_Science_Mode_settings["lon_gate_limb_only"]')
+                    raise ValueError
             elif key == 'TEXPIMS':
                 if not (type(Operational_Science_Mode_settings[key]) == int):
                     Logger.error('Operational_Science_Mode_settings["TEXPIMS"]')

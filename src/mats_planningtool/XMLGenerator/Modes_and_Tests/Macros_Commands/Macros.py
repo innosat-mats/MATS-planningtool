@@ -32,6 +32,7 @@ def Mode1(
     Timeline_settings, configFile,
     comment="",
     already_idle=False,
+    IR_on=True,
 ):
     """ Macro that corresponds to pointing towards a Limb altitude in Operational Mode.
 
@@ -51,6 +52,8 @@ def Mode1(
         already_idle (bool): Set True when the payload is already known to be in idle mode
             (e.g. resuming from a longitude idle-gate), to skip the otherwise-redundant
             leading TC_pafMODE=2 command.
+        IR_on (bool): whether to turn on the IR limb channels (CCDSEL 1, 2, 4, 8). Defaults to
+            True so existing callers (which never pass it) keep IR always on, unaffected.
 
     Returns:
         relativeTime (float): Time in seconds equal to the input "relativeTime" with added delay from the scheduling of commands.
@@ -89,7 +92,7 @@ def Mode1(
     elif UV_on and (not sattelite_state["UV_on"]):
         #Turn on UV
         sattelite_state["UV_on"] = True
-        
+
         CCD_settings[16]["TEXPMS"] = configFile.CCD_macro_settings("HighResUV")[16]["TEXPMS"]
         CCD_settings[32]["TEXPMS"] = configFile.CCD_macro_settings("HighResUV")[32]["TEXPMS"]
 
@@ -102,6 +105,47 @@ def Mode1(
             Timeline_settings=Timeline_settings, configFile=configFile,
             comment=comment,
         )
+
+    #Change IR
+    current_IR_on = sattelite_state.get("IR_on", True)
+    if IR_on and current_IR_on:
+        pass
+    elif (not IR_on) and (not current_IR_on):
+        pass
+    elif (not IR_on) and current_IR_on:
+        #Turn off IR
+        sattelite_state["IR_on"] = False
+
+        for CCDSEL in (1, 2, 4, 8):
+            CCD_settings[CCDSEL]["TEXPMS"] = 0
+
+        relativeTime = SetCCDs_macro(
+            root,
+            relativeTime,
+            CCD_settings=CCD_settings,
+            TEXPIMS=TEXPIMS,
+            CCDList=[1, 2, 4, 8],
+            Timeline_settings=Timeline_settings, configFile=configFile,
+            comment=comment,
+        )
+
+    elif IR_on and (not current_IR_on):
+        #Turn on IR
+        sattelite_state["IR_on"] = True
+
+        for CCDSEL in (1, 2, 4, 8):
+            CCD_settings[CCDSEL]["TEXPMS"] = configFile.CCD_macro_settings("HighResUV")[CCDSEL]["TEXPMS"]
+
+        relativeTime = SetCCDs_macro(
+            root,
+            relativeTime,
+            CCD_settings=CCD_settings,
+            TEXPIMS=TEXPIMS,
+            CCDList=[1, 2, 4, 8],
+            Timeline_settings=Timeline_settings, configFile=configFile,
+            comment=comment,
+        )
+
     #Change Nadir
     if Nadir_on and (sattelite_state["Nadir_on"]):
         pass

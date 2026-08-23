@@ -220,6 +220,7 @@ class configFile:
             'timestep': Sets the timestep [s] of the XML generator simulation of Mode1-2. Will impact accuracy of command generation but also drastically changes the runtime of XML-gen. (int) \n
             'Choose_Mode5CCDMacro': Applies only to Mode5! Sets the CCD macro to be used by Mode5. Used as input to *CCD_macro_settings* in the ConfigFile (str).
             'lon_gate': Optional. Applies to Mode1, Mode2, and Mode5. [lon_min, lon_max] in degrees defining a longitude band (based on the estimated LP longitude) in which the payload is put in idle mode. lon_min > lon_max means the band wraps across +/-180 degrees. Defaults to [-999, -999] (disabled) if omitted. (list of int/float) \n
+            'lon_gate_limb_only': Optional. Applies to Mode1, Mode2, and Mode5. Only has an effect when 'lon_gate' is enabled. If True, idles only the limb channels (UV1, UV2, IR1-4) inside the gate, leaving Nadir and the photometers running as usual. If False (default), the whole payload is put in idle mode inside the gate, as before. (bool) \n
 
         Returns:
             (:obj:`dict`): settings
