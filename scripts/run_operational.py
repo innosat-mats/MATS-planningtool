@@ -1358,16 +1358,25 @@ def read_snaptimes(filename):
 #generate_operational_mode(DT.datetime(2026,9,15,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
 #generate_operational_mode(DT.datetime(2026,9,16,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
 
+#generate_operational_mode(DT.datetime(2026,9,17,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,9,18,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,9,19,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,9,20,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,9,21,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,9,22,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,9,23,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+
 tle = get_MATS_tle()
 
-generate_operational_mode(DT.datetime(2026,9,17,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,9,18,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,9,19,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,9,20,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,9,21,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,9,22,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,9,23,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,9,24,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,9,25,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,9,26,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,9,27,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,9,28,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,9,29,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,9,30,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
 
 generate_overview("/home/julie/nadir/MATS-planningtool/data/Operational_dump/")
+
 
 
