@@ -3,7 +3,7 @@ from mats_planningtool import configFile as configFile
 import datetime as DT
 import requests as R
 import glob
-import json 
+import json
 import xml.etree.ElementTree as ET
 import os
 import pandas as pd
@@ -1374,15 +1374,44 @@ def read_snaptimes(filename):
 #generate_operational_mode(DT.datetime(2026,9,29,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
 #generate_operational_mode(DT.datetime(2026,9,30,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
 
+
+#generate_operational_mode(DT.datetime(2026,10,1,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,10,2,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,10,3,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,10,4,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,10,5,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,10,6,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,10,7,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+
+
 tle = get_MATS_tle()
 
-generate_operational_mode(DT.datetime(2026,10,1,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,10,2,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,10,3,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,10,4,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,10,5,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,10,6,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,10,7,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+
+snapshottimes = [
+     DT.datetime(2026,10,8,1,0),
+     DT.datetime(2026,10,8,2,30),
+     DT.datetime(2026,10,8,4,0),
+     DT.datetime(2026,10,8,13,0),
+     DT.datetime(2026,10,8,14,30),
+     DT.datetime(2026,10,8,16,0),
+]
+startdate = snapshottimes[0] - DT.timedelta(minutes=45)
+
+generate_fullframe_snapshot(
+    startdate,
+    mode='3205', name='FFEXP',
+    snapshottimes=snapshottimes,
+    exptimes=[3000, 3000],
+    altitude=220000,
+    tle=tle,
+)
+
+generate_operational_mode(DT.datetime(2026,10,9,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,10,10,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,10,11,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,10,12,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,10,13,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,10,14,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
 
 generate_overview("/home/julie/nadir/MATS-planningtool/data/Operational_dump/")
 
