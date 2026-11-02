@@ -1425,14 +1425,44 @@ def read_snaptimes(filename):
 #generate_operational_mode(DT.datetime(2026,10,27,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
 #generate_operational_mode(DT.datetime(2026,10,28,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
 
-tle = get_MATS_tle()
+#generate_operational_mode(DT.datetime(2026,10,29,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,10,30,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,10,31,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,11,1,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,11,2,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,11,3,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+#generate_operational_mode(DT.datetime(2026,11,4,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
 
-generate_operational_mode(DT.datetime(2026,10,29,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,10,30,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,10,31,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,11,1,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,11,2,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,11,3,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
-generate_operational_mode(DT.datetime(2026,11,4,0,0),24,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+tle = get_MATS_tle()
+#SORT OUT THE TIMES AND THE TIME FOR BINNED SEQUENCE
+
+snapshottimes = [
+     DT.datetime(2026,11,5,1,0),
+     DT.datetime(2026,11,5,2,30),
+     DT.datetime(2026,11,5,4,0),
+     DT.datetime(2026,11,5,13,0),
+     DT.datetime(2026,11,5,14,30),
+     DT.datetime(2026,11,5,16,0),
+]
+startdate = snapshottimes[0] - DT.timedelta(minutes=45)
+
+generate_fullframe_snapshot(
+    startdate,
+    mode='3205', name='FFEXP',
+    snapshottimes=snapshottimes,
+    exptimes=[3000, 3000],
+    altitude=220000,
+    tle=tle,
+)
+
+#BINNED SEQUENCE
+generate_operational_mode(DT.datetime(2026,11,5,16,40),0.3,'3067',name='DRKBNF', yaw=True, iterate=0, tle=tle)
+
+generate_operational_mode(DT.datetime(2026,11,6,6,0),12,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,11,7,6,0),12,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,11,8,6,0),12,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,11,9,6,0),12,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,11,10,6,0),12,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
+generate_operational_mode(DT.datetime(2026,11,11,6,0),12,'1209',name='CROPF',yaw=True,iterate=0,tle = tle)
 
 generate_overview("/home/julie/nadir/MATS-planningtool/data/Operational_dump/")
